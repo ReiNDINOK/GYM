@@ -218,6 +218,10 @@
                     <label for="squat">🦵 Приседания (кг):</label>
                     <input type="number" id="squat" placeholder="0" min="20" max="400">
                 </div>
+                <div class="input-group">
+                    <label for="biceps">💪 Подъём на бицепс (кг):</label>
+                    <input type="number" id="biceps" placeholder="0" min="5" max="100">
+                </div>
             </div>
             <button class="calculate-btn" onclick="calculateWeights()">
                 Рассчитать веса
@@ -225,6 +229,7 @@
         </div>
 
         <div class="results" id="results">
+            <!-- Становая -->
             <div class="exercise-result" id="deadlift-result">
                 <div class="exercise-header deadlift-header">
                     <span class="emoji">🔥</span>ТРЕНИРОВКА A - СТАНОВАЯ ТЯГА
@@ -232,33 +237,16 @@
                 <div class="weight-tables">
                     <div class="weight-table">
                         <h4>Разминочные веса</h4>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Вес (кг)</th>
-                                    <th>Повторения</th>
-                                </tr>
-                            </thead>
-                            <tbody id="deadlift-warmup">
-                            </tbody>
-                        </table>
+                        <table><thead><tr><th>Вес (кг)</th><th>Повторения</th></tr></thead><tbody id="deadlift-warmup"></tbody></table>
                     </div>
                     <div class="weight-table">
                         <h4>Рабочие веса</h4>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Вес (кг)</th>
-                                    <th>% от 1ПМ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="deadlift-working">
-                            </tbody>
-                        </table>
+                        <table><thead><tr><th>Вес (кг)</th><th>% от 1ПМ</th></tr></thead><tbody id="deadlift-working"></tbody></table>
                     </div>
                 </div>
             </div>
 
+            <!-- Жим -->
             <div class="exercise-result" id="bench-result">
                 <div class="exercise-header bench-header">
                     <span class="emoji">💪</span>ТРЕНИРОВКА B - ЖИМ ЛЕЖА
@@ -266,33 +254,16 @@
                 <div class="weight-tables">
                     <div class="weight-table">
                         <h4>Разминочные веса</h4>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Вес (кг)</th>
-                                    <th>Повторения</th>
-                                </tr>
-                            </thead>
-                            <tbody id="bench-warmup">
-                            </tbody>
-                        </table>
+                        <table><thead><tr><th>Вес (кг)</th><th>Повторения</th></tr></thead><tbody id="bench-warmup"></tbody></table>
                     </div>
                     <div class="weight-table">
                         <h4>Рабочие веса</h4>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Вес (кг)</th>
-                                    <th>% от 1ПМ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="bench-working">
-                            </tbody>
-                        </table>
+                        <table><thead><tr><th>Вес (кг)</th><th>% от 1ПМ</th></tr></thead><tbody id="bench-working"></tbody></table>
                     </div>
                 </div>
             </div>
 
+            <!-- Присед -->
             <div class="exercise-result" id="squat-result">
                 <div class="exercise-header squat-header">
                     <span class="emoji">🦵</span>ТРЕНИРОВКА C - ПРИСЕДАНИЯ
@@ -300,112 +271,124 @@
                 <div class="weight-tables">
                     <div class="weight-table">
                         <h4>Разминочные веса</h4>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Вес (кг)</th>
-                                    <th>Повторения</th>
-                                </tr>
-                            </thead>
-                            <tbody id="squat-warmup">
-                            </tbody>
-                        </table>
+                        <table><thead><tr><th>Вес (кг)</th><th>Повторения</th></tr></thead><tbody id="squat-warmup"></tbody></table>
                     </div>
                     <div class="weight-table">
                         <h4>Рабочие веса</h4>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Вес (кг)</th>
-                                    <th>% от 1ПМ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="squat-working">
-                            </tbody>
-                        </table>
+                        <table><thead><tr><th>Вес (кг)</th><th>% от 1ПМ</th></tr></thead><tbody id="squat-working"></tbody></table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Бицепс -->
+            <div class="exercise-result" id="biceps-result">
+                <div class="exercise-header" style="background: linear-gradient(135deg, #fbc531, #e1b12c); color:#333;">
+                    <span class="emoji">💪</span>ТРЕНИРОВКА D - ПОДЪЁМ НА БИЦЕПС
+                </div>
+                <div class="weight-tables">
+                    <div class="weight-table">
+                        <h4>Разминочные веса</h4>
+                        <table><thead><tr><th>Вес (кг)</th><th>Повторения</th></tr></thead><tbody id="biceps-warmup"></tbody></table>
+                    </div>
+                    <div class="weight-table">
+                        <h4>Рабочие веса</h4>
+                        <table><thead><tr><th>Вес (кг)</th><th>% от 1ПМ</th></tr></thead><tbody id="biceps-working"></tbody></table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        function calculateWeights() {
-            const deadlift = parseFloat(document.getElementById('deadlift').value);
-            const bench = parseFloat(document.getElementById('bench').value);
-            const squat = parseFloat(document.getElementById('squat').value);
+<script>
+function calculateWeights() {
+    const deadlift = parseFloat(document.getElementById('deadlift').value);
+    const bench = parseFloat(document.getElementById('bench').value);
+    const squat = parseFloat(document.getElementById('squat').value);
+    const biceps = parseFloat(document.getElementById('biceps').value);
 
-            if (!deadlift || !bench || !squat) {
-                alert('Пожалуйста, заполните все поля!');
-                return;
-            }
+    // Проверка: хотя бы одно значение заполнено
+    if (isNaN(deadlift) && isNaN(bench) && isNaN(squat) && isNaN(biceps)) {
+        alert('Введите хотя бы одно значение!');
+        return;
+    }
 
-            // Расчет для становой тяги
-            calculateExercise('deadlift', deadlift, [
-                {percent: 43, reps: 8},
-                {percent: 57, reps: 5},
-                {percent: 64, reps: 3}
-            ], [
-                {percent: 70, label: '70% (6-10 повт.)'},
-                {percent: 75, label: '75% (6-8 повт.)'},
-                {percent: 80, label: '80% (6 повт.)'},
-                {percent: 82, label: '82% (максимум)'}
-            ]);
+    // Становая
+    if (!isNaN(deadlift)) {
+        calculateExercise('deadlift', deadlift, [
+            {percent: 43, reps: 8},
+            {percent: 57, reps: 5},
+            {percent: 64, reps: 3}
+        ], [
+            {percent: 70, label: '70% (6-10 повт.)'},
+            {percent: 75, label: '75% (6-8 повт.)'},
+            {percent: 80, label: '80% (6 повт.)'},
+            {percent: 82, label: '82% (максимум)'}
+        ]);
+        document.getElementById('deadlift-result').style.display = 'block';
+    } else document.getElementById('deadlift-result').style.display = 'none';
 
-            // Расчет для жима лежа
-            calculateExercise('bench', bench, [
-                {percent: 40, reps: 10},
-                {percent: 60, reps: 6},
-                {percent: 70, reps: 3}
-            ], [
-                {percent: 70, label: '70% (8-12 повт.)'},
-                {percent: 75, label: '75% (8-10 повт.)'},
-                {percent: 80, label: '80% (8 повт.)'}
-            ]);
+    // Жим
+    if (!isNaN(bench)) {
+        calculateExercise('bench', bench, [
+            {percent: 40, reps: 10},
+            {percent: 60, reps: 6},
+            {percent: 70, reps: 3}
+        ], [
+            {percent: 70, label: '70% (8-12 повт.)'},
+            {percent: 75, label: '75% (8-10 повт.)'},
+            {percent: 80, label: '80% (8 повт.)'}
+        ]);
+        document.getElementById('bench-result').style.display = 'block';
+    } else document.getElementById('bench-result').style.display = 'none';
 
-            // Расчет для приседаний
-            calculateExercise('squat', squat, [
-                {percent: 40, reps: 10},
-                {percent: 60, reps: 6},
-                {percent: 70, reps: 3}
-            ], [
-                {percent: 70, label: '70% (8-12 повт.)'},
-                {percent: 75, label: '75% (8-10 повт.)'},
-                {percent: 80, label: '80% (8 повт.)'}
-            ]);
+    // Присед
+    if (!isNaN(squat)) {
+        calculateExercise('squat', squat, [
+            {percent: 40, reps: 10},
+            {percent: 60, reps: 6},
+            {percent: 70, reps: 3}
+        ], [
+            {percent: 70, label: '70% (8-12 повт.)'},
+            {percent: 75, label: '75% (8-10 повт.)'},
+            {percent: 80, label: '80% (8 повт.)'}
+        ]);
+        document.getElementById('squat-result').style.display = 'block';
+    } else document.getElementById('squat-result').style.display = 'none';
 
-            document.getElementById('results').style.display = 'block';
-            document.getElementById('results').scrollIntoView({behavior: 'smooth'});
-        }
+    // Бицепс
+    if (!isNaN(biceps)) {
+        calculateExercise('biceps', biceps, [
+            {percent: 40, reps: 10},
+            {percent: 60, reps: 6},
+            {percent: 70, reps: 3}
+        ], [
+            {percent: 65, label: '65% (10-12 повт.)'},
+            {percent: 70, label: '70% (8-10 повт.)'},
+            {percent: 75, label: '75% (6-8 повт.)'}
+        ]);
+        document.getElementById('biceps-result').style.display = 'block';
+    } else document.getElementById('biceps-result').style.display = 'none';
 
-        function calculateExercise(exercise, oneRM, warmupData, workingData) {
-            // Разминочные веса
-            const warmupTableBody = document.getElementById(exercise + '-warmup');
-            warmupTableBody.innerHTML = '';
-            
-            warmupData.forEach(data => {
-                const weight = Math.round((oneRM * data.percent / 100) / 2.5) * 2.5;
-                const row = `<tr><td>${weight} кг</td><td>${data.reps}</td></tr>`;
-                warmupTableBody.innerHTML += row;
-            });
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('results').scrollIntoView({behavior: 'smooth'});
+}
 
-            // Рабочие веса
-            const workingTableBody = document.getElementById(exercise + '-working');
-            workingTableBody.innerHTML = '';
-            
-            workingData.forEach(data => {
-                const weight = Math.round((oneRM * data.percent / 100) / 2.5) * 2.5;
-                const row = `<tr><td>${weight} кг</td><td>${data.label}</td></tr>`;
-                workingTableBody.innerHTML += row;
-            });
-        }
+function calculateExercise(exercise, oneRM, warmupData, workingData) {
+    const warmupTableBody = document.getElementById(exercise + '-warmup');
+    warmupTableBody.innerHTML = '';
+    warmupData.forEach(data => {
+        const weight = Math.round((oneRM * data.percent / 100) / 2.5) * 2.5;
+        warmupTableBody.innerHTML += `<tr><td>${weight} кг</td><td>${data.reps}</td></tr>`;
+    });
 
-        // Автоматический расчет при вводе (опционально)
-        document.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                calculateWeights();
-            }
-        });
-    </script>
+    const workingTableBody = document.getElementById(exercise + '-working');
+    workingTableBody.innerHTML = '';
+    workingData.forEach(data => {
+        const weight = Math.round((oneRM * data.percent / 100) / 2.5) * 2.5;
+        workingTableBody.innerHTML += `<tr><td>${weight} кг</td><td>${data.label}</td></tr>`;
+    });
+}
+</script>
+
 </body>
 </html>
