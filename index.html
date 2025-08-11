@@ -1,207 +1,200 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятор рабочих весов</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #333 0%, #1c1c1c 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #ddd;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: #212121;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #444 0%, #333 100%);
-            color: #ecf0f1;
-            padding: 30px;
-            text-align: center;
-            border-bottom: 2px solid #555;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .input-section {
-            padding: 30px;
-            background: #282828;
-        }
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Калькулятор рабочих весов</title>
+<style>
+    /* Твои стили без изменений */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #333 0%, #1c1c1c 100%);
+        min-height: 100vh;
+        padding: 20px;
+        color: #ddd;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: #212121;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        overflow: hidden;
+    }
+    .header {
+        background: linear-gradient(135deg, #444 0%, #333 100%);
+        color: #ecf0f1;
+        padding: 30px;
+        text-align: center;
+        border-bottom: 2px solid #555;
+    }
+    .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+    .header p {
+        font-size: 1.2em;
+        opacity: 0.9;
+    }
+    .input-section {
+        padding: 30px;
+        background: #282828;
+    }
+    .input-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    .input-group {
+        background: #333;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+    .input-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #aaa;
+        font-size: 1.1em;
+    }
+    .input-group input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #666;
+        border-radius: 8px;
+        font-size: 16px;
+        background: #333;
+        color: #ecf0f1;
+        transition: border-color 0.3s;
+    }
+    .input-group input:focus {
+        outline: none;
+        border-color: #7f8c8d;
+    }
+    .calculate-btn {
+        background: linear-gradient(135deg, #7f8c8d 0%, #5f6a6a 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.2s;
+        display: block;
+        margin: 0 auto;
+    }
+    .calculate-btn:hover {
+        transform: translateY(-2px);
+    }
+    .results {
+        padding: 30px;
+        display: none;
+        background: #333;
+        border-radius: 10px;
+    }
+    .exercise-result {
+        margin-bottom: 40px;
+        background: #444;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+    .exercise-header {
+        padding: 20px;
+        font-size: 1.5em;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+    }
+    .deadlift-header {
+        background: linear-gradient(135deg, #7f8c8d, #5f6a6a);
+    }
+    .bench-header {
+        background: linear-gradient(135deg, #34495e, #2c3e50);
+    }
+    .squat-header {
+        background: linear-gradient(135deg, #3a3a3a, #2d3436);
+        color: #ddd;
+    }
+    .weight-tables {
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    .weight-table {
+        background: #444;
+        border-radius: 8px;
+        padding: 15px;
+    }
+    .weight-table h4 {
+        margin-bottom: 15px;
+        color: #ddd;
+        text-align: center;
+    }
+    .weight-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .weight-table th,
+    .weight-table td {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 1px solid #666;
+    }
+    .weight-table th {
+        background: #555;
+        color: white;
+        font-weight: bold;
+    }
+    .weight-table tr:hover {
+        background: #666;
+    }
+    .emoji {
+        font-size: 1.2em;
+        margin-right: 10px;
+    }
+    @media (max-width: 768px) {
         .input-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: 1fr;
         }
-
-        .input-group {
-            background: #333;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .input-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #aaa;
-            font-size: 1.1em;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #666;
-            border-radius: 8px;
-            font-size: 16px;
-            background: #333;
-            color: #ecf0f1;
-            transition: border-color 0.3s;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: #7f8c8d;
-        }
-
-        .calculate-btn {
-            background: linear-gradient(135deg, #7f8c8d 0%, #5f6a6a 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            display: block;
-            margin: 0 auto;
-        }
-
-        .calculate-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .results {
-            padding: 30px;
-            display: none;
-            background: #333;
-            border-radius: 10px;
-        }
-
-        .exercise-result {
-            margin-bottom: 40px;
-            background: #444;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .exercise-header {
-            padding: 20px;
-            font-size: 1.5em;
-            font-weight: bold;
-            color: white;
-            text-align: center;
-        }
-
-        .deadlift-header {
-            background: linear-gradient(135deg, #7f8c8d, #5f6a6a);
-        }
-
-        .bench-header {
-            background: linear-gradient(135deg, #34495e, #2c3e50);
-        }
-
-        .squat-header {
-            background: linear-gradient(135deg, #3a3a3a, #2d3436);
-            color: #ddd;
-        }
-
         .weight-tables {
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            grid-template-columns: 1fr;
         }
+        .header h1 {
+            font-size: 2em;
+        }
+    }
 
-        .weight-table {
-            background: #444;
-            border-radius: 8px;
-            padding: 15px;
-        }
-
-        .weight-table h4 {
-            margin-bottom: 15px;
-            color: #ddd;
-            text-align: center;
-        }
-
-        .weight-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .weight-table th,
-        .weight-table td {
-            padding: 10px;
-            text-align: center;
-            border-bottom: 1px solid #666;
-        }
-
-        .weight-table th {
-            background: #555;
-            color: white;
-            font-weight: bold;
-        }
-
-        .weight-table tr:hover {
-            background: #666;
-        }
-
-        .emoji {
-            font-size: 1.2em;
-            margin-right: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .input-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .weight-tables {
-                grid-template-columns: 1fr;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-        }
-    </style>
+    /* Плавное уведомление об ошибке */
+    #error-message {
+        opacity: 0;
+        background: #88ff4d;
+        color: white;
+        padding: 12px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        text-align: center;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        transition: opacity 0.4s ease-in-out;
+        pointer-events: none;
+        user-select: none;
+    }
+    #error-message.show {
+        opacity: 1;
+        pointer-events: auto;
+        user-select: auto;
+    }
+</style>
 </head>
 <body>
     <div class="container">
@@ -211,94 +204,133 @@
         </div>
 
         <div class="input-section">
+            <div id="error-message">Ошибка: вес не может быть нулевым или пустым!</div>
             <div class="input-grid">
                 <div class="input-group">
                     <label for="deadlift">🔥 Становая тяга (кг):</label>
-                    <input type="number" id="deadlift" placeholder="0" min="20" max="500">
+                    <input type="number" id="deadlift" placeholder="0" min="1" max="505" />
                 </div>
                 <div class="input-group">
                     <label for="bench">💪 Жим лежа (кг):</label>
-                    <input type="number" id="bench" placeholder="0" min="20" max="300">
+                    <input type="number" id="bench" placeholder="0" min="1" max="335" />
                 </div>
                 <div class="input-group">
                     <label for="squat">🦵 Приседания (кг):</label>
-                    <input type="number" id="squat" placeholder="0" min="20" max="400">
+                    <input type="number" id="squat" placeholder="0" min="1" max="525" />
                 </div>
                 <div class="input-group">
                     <label for="biceps">💪 Подъём на бицепс (кг):</label>
-                    <input type="number" id="biceps" placeholder="0" min="5" max="100">
+                    <input type="number" id="biceps" placeholder="0" min="1" max="150" />
                 </div>
             </div>
-            <button class="calculate-btn" onclick="calculateWeights()">
-                Рассчитать веса
-            </button>
+            <button class="calculate-btn" onclick="calculateWeights()">Рассчитать веса</button>
         </div>
 
         <div class="results" id="results">
             <!-- Становая -->
-            <div class="exercise-result" id="deadlift-result">
+            <div class="exercise-result" id="deadlift-result" style="display:none;">
                 <div class="exercise-header deadlift-header">
                     <span class="emoji">🔥</span>ТРЕНИРОВКА A - СТАНОВАЯ ТЯГА
                 </div>
                 <div class="weight-tables">
                     <div class="weight-table">
                         <h4>Разминочные веса</h4>
-                        <table><thead><tr><th>Вес (кг)</th><th>Повторения</th></tr></thead><tbody id="deadlift-warmup"></tbody></table>
+                        <table>
+                            <thead>
+                                <tr><th>Вес (кг)</th><th>Повторения</th></tr>
+                            </thead>
+                            <tbody id="deadlift-warmup"></tbody>
+                        </table>
                     </div>
                     <div class="weight-table">
                         <h4>Рабочие веса</h4>
-                        <table><thead><tr><th>Вес (кг)</th><th>% от 1ПМ</th></tr></thead><tbody id="deadlift-working"></tbody></table>
+                        <table>
+                            <thead>
+                                <tr><th>Вес (кг)</th><th>% от 1ПМ</th></tr>
+                            </thead>
+                            <tbody id="deadlift-working"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
             <!-- Жим -->
-            <div class="exercise-result" id="bench-result">
+            <div class="exercise-result" id="bench-result" style="display:none;">
                 <div class="exercise-header bench-header">
                     <span class="emoji">💪</span>ТРЕНИРОВКА B - ЖИМ ЛЕЖА
                 </div>
                 <div class="weight-tables">
                     <div class="weight-table">
                         <h4>Разминочные веса</h4>
-                        <table><thead><tr><th>Вес (кг)</th><th>Повторения</th></tr></thead><tbody id="bench-warmup"></tbody></table>
+                        <table>
+                            <thead>
+                                <tr><th>Вес (кг)</th><th>Повторения</th></tr>
+                            </thead>
+                            <tbody id="bench-warmup"></tbody>
+                        </table>
                     </div>
                     <div class="weight-table">
                         <h4>Рабочие веса</h4>
-                        <table><thead><tr><th>Вес (кг)</th><th>% от 1ПМ</th></tr></thead><tbody id="bench-working"></tbody></table>
+                        <table>
+                            <thead>
+                                <tr><th>Вес (кг)</th><th>% от 1ПМ</th></tr>
+                            </thead>
+                            <tbody id="bench-working"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
             <!-- Присед -->
-            <div class="exercise-result" id="squat-result">
+            <div class="exercise-result" id="squat-result" style="display:none;">
                 <div class="exercise-header squat-header">
                     <span class="emoji">🦵</span>ТРЕНИРОВКА C - ПРИСЕДАНИЯ
                 </div>
                 <div class="weight-tables">
                     <div class="weight-table">
                         <h4>Разминочные веса</h4>
-                        <table><thead><tr><th>Вес (кг)</th><th>Повторения</th></tr></thead><tbody id="squat-warmup"></tbody></table>
+                        <table>
+                            <thead>
+                                <tr><th>Вес (кг)</th><th>Повторения</th></tr>
+                            </thead>
+                            <tbody id="squat-warmup"></tbody>
+                        </table>
                     </div>
                     <div class="weight-table">
                         <h4>Рабочие веса</h4>
-                        <table><thead><tr><th>Вес (кг)</th><th>% от 1ПМ</th></tr></thead><tbody id="squat-working"></tbody></table>
+                        <table>
+                            <thead>
+                                <tr><th>Вес (кг)</th><th>% от 1ПМ</th></tr>
+                            </thead>
+                            <tbody id="squat-working"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
             <!-- Бицепс -->
-            <div class="exercise-result" id="biceps-result">
+            <div class="exercise-result" id="biceps-result" style="display:none;">
                 <div class="exercise-header" style="background: linear-gradient(135deg, #fbc531, #e1b12c); color:#333;">
                     <span class="emoji">💪</span>ТРЕНИРОВКА D - ПОДЪЁМ НА БИЦЕПС
                 </div>
                 <div class="weight-tables">
                     <div class="weight-table">
                         <h4>Разминочные веса</h4>
-                        <table><thead><tr><th>Вес (кг)</th><th>Повторения</th></tr></thead><tbody id="biceps-warmup"></tbody></table>
+                        <table>
+                            <thead>
+                                <tr><th>Вес (кг)</th><th>Повторения</th></tr>
+                            </thead>
+                            <tbody id="biceps-warmup"></tbody>
+                        </table>
                     </div>
                     <div class="weight-table">
                         <h4>Рабочие веса</h4>
-                        <table><thead><tr><th>Вес (кг)</th><th>% от 1ПМ</th></tr></thead><tbody id="biceps-working"></tbody></table>
+                        <table>
+                            <thead>
+                                <tr><th>Вес (кг)</th><th>% от 1ПМ</th></tr>
+                            </thead>
+                            <tbody id="biceps-working"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -306,72 +338,74 @@
     </div>
 
 <script>
-function calculateWeights() {
-    const deadlift = parseFloat(document.getElementById('deadlift').value);
-    const bench = parseFloat(document.getElementById('bench').value);
-    const squat = parseFloat(document.getElementById('squat').value);
-    const biceps = parseFloat(document.getElementById('biceps').value);
+window.onload = function() {
+    ["deadlift", "bench", "squat", "biceps"].forEach(id => {
+        const saved = localStorage.getItem(id);
+        if (saved !== null) {
+            document.getElementById(id).value = saved;
+        }
+    });
+};
 
-    // Проверка: хотя бы одно значение заполнено
-    if (isNaN(deadlift) && isNaN(bench) && isNaN(squat) && isNaN(biceps)) {
-        alert('Введите хотя бы одно значение!');
+function calculateWeights() {
+    const exercises = ["deadlift", "bench", "squat", "biceps"];
+    let allEmpty = true;
+    let hasZero = false;
+    const values = {};
+
+    exercises.forEach(id => {
+        const val = parseFloat(document.getElementById(id).value);
+        if (!isNaN(val) && val > 0) {
+            allEmpty = false;
+            values[id] = val;
+        } else if (val === 0) {
+            hasZero = true;
+        }
+    });
+
+    if (allEmpty) {
+        showError("Дорогой, нехой пустоту тягать!");
+        return;
+    }
+    if (hasZero) {
+        showError("Дорогой, нехой пустоту тягать!");
         return;
     }
 
-    // Становая
-    if (!isNaN(deadlift)) {
-        calculateExercise('deadlift', deadlift, [
-            {percent: 43, reps: 8},
-            {percent: 57, reps: 5},
-            {percent: 64, reps: 3}
-        ], [
-            {percent: 70, label: '70% (6-10 повт.)'},
-            {percent: 75, label: '75% (6-8 повт.)'},
-            {percent: 80, label: '80% (6 повт.)'},
-            {percent: 82, label: '82% (максимум)'}
-        ]);
+    exercises.forEach(id => {
+        localStorage.setItem(id, document.getElementById(id).value);
+    });
+
+    // Расчёт и отображение результатов
+    if (values.deadlift) {
+        calculateExercise('deadlift', values.deadlift,
+            [{percent: 43, reps: 8},{percent: 57, reps: 5},{percent: 64, reps: 3}],
+            [{percent: 70, label: '70% (6-10 повт.)'},{percent: 75, label: '75% (6-8 повт.)'},{percent: 80, label: '80% (6 повт.)'},{percent: 82, label: '82% (максимум)'}]
+        );
         document.getElementById('deadlift-result').style.display = 'block';
     } else document.getElementById('deadlift-result').style.display = 'none';
 
-    // Жим
-    if (!isNaN(bench)) {
-        calculateExercise('bench', bench, [
-            {percent: 40, reps: 10},
-            {percent: 60, reps: 6},
-            {percent: 70, reps: 3}
-        ], [
-            {percent: 70, label: '70% (8-12 повт.)'},
-            {percent: 75, label: '75% (8-10 повт.)'},
-            {percent: 80, label: '80% (8 повт.)'}
-        ]);
+    if (values.bench) {
+        calculateExercise('bench', values.bench,
+            [{percent: 40, reps: 10},{percent: 60, reps: 6},{percent: 70, reps: 3}],
+            [{percent: 70, label: '70% (8-12 повт.)'},{percent: 75, label: '75% (8-10 повт.)'},{percent: 80, label: '80% (8 повт.)'}]
+        );
         document.getElementById('bench-result').style.display = 'block';
     } else document.getElementById('bench-result').style.display = 'none';
 
-    // Присед
-    if (!isNaN(squat)) {
-        calculateExercise('squat', squat, [
-            {percent: 40, reps: 10},
-            {percent: 60, reps: 6},
-            {percent: 70, reps: 3}
-        ], [
-            {percent: 70, label: '70% (8-12 повт.)'},
-            {percent: 75, label: '75% (8-10 повт.)'},
-            {percent: 80, label: '80% (8 повт.)'}
-        ]);
+    if (values.squat) {
+        calculateExercise('squat', values.squat,
+            [{percent: 40, reps: 10},{percent: 60, reps: 6},{percent: 70, reps: 3}],
+            [{percent: 70, label: '70% (8-12 повт.)'},{percent: 75, label: '75% (8-10 повт.)'},{percent: 80, label: '80% (8 повт.)'}]
+        );
         document.getElementById('squat-result').style.display = 'block';
     } else document.getElementById('squat-result').style.display = 'none';
 
-    // Бицепс
-    if (!isNaN(biceps)) {
-        calculateExercise('biceps', biceps, [
-            {percent: 40, reps: 10},
-            {percent: 60, reps: 6},
-            {percent: 70, reps: 3}
-        ], [
-            {percent: 65, label: '65% (10-12 повт.)'},
-            {percent: 70, label: '70% (8-10 повт.)'},
-            {percent: 75, label: '75% (6-8 повт.)'}
-        ]);
+    if (values.biceps) {
+        calculateExercise('biceps', values.biceps,
+            [{percent: 40, reps: 10},{percent: 60, reps: 6},{percent: 70, reps: 3}],
+            [{percent: 65, label: '65% (10-12 повт.)'},{percent: 70, label: '70% (8-10 повт.)'},{percent: 75, label: '75% (6-8 повт.)'}]
+        );
         document.getElementById('biceps-result').style.display = 'block';
     } else document.getElementById('biceps-result').style.display = 'none';
 
@@ -393,6 +427,15 @@ function calculateExercise(exercise, oneRM, warmupData, workingData) {
         const weight = Math.round((oneRM * data.percent / 100) / 2.5) * 2.5;
         workingTableBody.innerHTML += `<tr><td>${weight} кг</td><td>${data.label}</td></tr>`;
     });
+}
+
+function showError(message) {
+    const errorDiv = document.getElementById("error-message");
+    errorDiv.innerText = message;
+    errorDiv.classList.add("show");
+    setTimeout(() => {
+        errorDiv.classList.remove("show");
+    }, 3000);
 }
 </script>
 </body>
