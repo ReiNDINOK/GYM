@@ -200,10 +200,31 @@
     }
 
     @media (max-width: 768px) {
+  body {
+    flex-direction: column;
+    padding: 10px; /* чуть меньше отступов на телефоне */
+  }
+
+  .sidebar {
+    width: 100%;
+    margin: 0 0 20px;
+    position: static;
+  }
+
+  header h1 {
+    font-size: 1.6em;
+  }
+
   header .chip {
     position: static;
     display: block;
-    margin: 10px auto 0;
+    margin: 8px auto 0;
+    text-align: center;
+  }
+
+  footer {
+    flex-direction: column;
+    gap: 8px;
     text-align: center;
   }
 }
