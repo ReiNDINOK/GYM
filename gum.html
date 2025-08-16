@@ -98,7 +98,29 @@ body {
   transition: opacity .4s ease-in-out; pointer-events:none; user-select:none; box-shadow:0 0 15px rgba(180,0,0,0.9);
   position:relative;
 }
-#error-message.show { opacity:1; pointer-events:auto; user-select:auto; }</style>
+#error-message.show { opacity:1; pointer-events:auto; user-select:auto; }
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+    position: static; /* убираем липкость на мобильных */
+  }
+
+  .container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .header h1 {
+    font-size: 1.6em; /* чуть меньше заголовок для телефона */
+  }
+}
+</style>
 </head>
 <body>
 <!-- Боковое меню -->
@@ -200,3 +222,4 @@ function calculate() {
 </script>
 </body>
 </html>
+
