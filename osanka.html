@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Чек-лист упражнений: осанка · сутулость · поперечная</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg,#333 0%,#1c1c1c 100%);
+      min-height:100vh; padding:20px; color:#ddd;
+      display:flex;
+    }
+
+      .sidebar {
+      width:220px;
+      background:#1b1b1b;
+      border-radius:10px;
+      box-shadow:0 0 15px rgba(0,0,0,0.5);
+      padding:15px;
+      margin-right:20px;
+      height:fit-content;
+      position:sticky;
+      top:20px;
+    }
+    .sidebar h2 {
+      font-size:1.3em;
+      margin-bottom:10px;
+      color:#f0f0f0;
+      text-align:center;
+    }
+    .sidebar ul { list-style:none; }
+    .sidebar li { margin:8px 0; position:relative; }
+    .sidebar a {
+      display:block;
+      padding:10px 12px;
+      text-decoration:none;
+      color:#ddd;
+      border-radius:8px;
+      transition:background .3s, color .3s;
+    }
+    .sidebar a:hover {
+      background:#333;
+      color:#fff;
+    }
+    /* выпадающий список */
+    .dropdown > a::after {
+      content:"▼";
+      float:right;
+      font-size:0.8em;
+      transition:transform .3s;
+    }
+    .dropdown.open > a::after {
+      transform:rotate(-180deg);
+    }
+    .dropdown ul {
+      display:none;
+      margin-left:10px;
+    }
+    .dropdown.open ul {
+      display:block;
+    }
+    .dropdown ul a {
+      font-size:0.9em;
+      background:#262626;
+    }
+
+    /* === Основное приложение === */
+    .app {
+      flex:1;
+      max-width:1000px;
+      background:#212121;
+      border-radius:15px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.7);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+    header {
+      background: linear-gradient(135deg,#444 0%,#333 100%);
+      color:#ecf0f1;
+      padding:30px;
+      text-align:center;
+      border-bottom:2px solid #555;
+      position:relative;
+    }
+    header h1 {
+      font-size:2.2em;
+      margin:0 0 10px;
+    }
+    header .chip {
+      position:absolute;
+      right:20px; top:30px;
+      background:#333;
+      color:#c3e9ff;
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:0.9em;
+      border:1px solid #555;
+    }
+
+    .content {
+      padding:30px;
+      background:#282828;
+      flex:1;
+    }
+    .controls {
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      justify-content:center;
+      margin-bottom:20px;
+    }
+    button {
+      border:none;
+      padding:14px 24px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:16px;
+      transition:transform .2s, background .3s;
+    }
+    #generate {
+      background: linear-gradient(135deg,#7f8c8d,#5f6a6a);
+      color:white;
+    }
+    #save {
+      background:#333;
+      color:#ecf0f1;
+      border:2px solid #555;
+    }
+    #clear {
+      background: linear-gradient(135deg,#a60000,#6b0000);
+      color:white;
+    }
+    button:hover { transform:translateY(-2px); }
+    .hint {
+      color:#aaa;
+      font-size:14px;
+      text-align:center;
+      margin-bottom:20px;
+    }
+
+    /* === Список упражнений === */
+    ul {
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:grid;
+      gap:20px;
+    }
+    li {
+      background:#333;
+      border-radius:10px;
+      padding:18px;
+      box-shadow:0 2px 10px rgba(0,0,0,0.5);
+      display:grid;
+      gap:10px;
+    }
+    .title {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:bold;
+      font-size:1.1em;
+      color:#f0f0f0;
+    }
+    .badge {
+      font-size:12px;
+      padding:4px 10px;
+      border-radius:999px;
+      background:#555;
+      color:#ddd;
+    }
+    label.exercise {
+      display:grid;
+      grid-template-columns:24px 1fr;
+      gap:12px;
+      cursor:pointer;
+    }
+    input[type="checkbox"] {
+      width:20px; height:20px; margin-top:2px;
+      accent-color:#34d399;
+    }
+    .desc { color:#ccc; font-size:14px; }
+    .meta { color:#888; font-size:12px; }
+
+    footer {
+      padding:20px;
+      background:#282828;
+      border-top:2px solid #555;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:13px;
+      color:#aaa;
+    }
+
+    @media (max-width:768px) {
+      body { flex-direction:column; }
+      .sidebar { width:100%; margin-bottom:20px; position:static; }
+      header h1 { font-size:1.8em; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Боковое меню -->
+  <div class="sidebar">
+    <h2>Меню</h2>
+    <ul>
+      <li><a href="index.html">🏠 Главная</a></li>
+    </ul>
+  </div>
+
+  <!-- Основное приложение -->
+  <div class="app" role="application" aria-label="Чек-лист упражнений">
+    <header>
+      <h1>📋 Чек-лист на сегодня</h1>
+      <span class="chip" id="dateChip"></span>
+    </header>
+
+    <div class="content">
+      <div class="controls">
+        <button id="generate">Сгенерировать новые</button>
+        <button id="save">Сохранить список</button>
+        <button id="clear" title="Очистить состояние и начать заново">Сбросить</button>
+      </div>
+      <p class="hint">Каждый раз генерируется <strong>1 упражнение на осанку</strong>, <strong>1 — против сутулости</strong> и <strong>1 — для поперечной мышцы живота</strong>.</p>
+      <ul id="list" aria-live="polite"></ul>
+    </div>
+
+    <footer>
+      <span>Подсказка: сохраняй список, чтобы он остался после перезагрузки страницы.</span>
+      <span id="progress">0 / 3 выполнено</span>
+    </footer>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'coreChecklistV1';
+    const POOLS = {
+      posture: [
+        { name: 'Стена-ангелы', desc: 'Спиной к стене, руки от «W» к «Y», поясница прижата.', meta: '2×8–12 медленно' },
+        { name: 'Подбородок к горлу', desc: 'Втягивай подбородок назад, держи 2–3 сек.', meta: '2×10–12' },
+        { name: 'Удлинение позвоночника сидя', desc: 'Сидя, вытягивайся макушкой вверх.', meta: '2×60 сек' },
+      ],
+      antiSlouch: [
+        { name: 'Распаковка лопаток', desc: 'Своди лопатки вниз и внутрь.', meta: '3×12–15' },
+        { name: 'YTW лёжа', desc: 'Подними руки в формы Y, T, W.', meta: '2×6 каждого' },
+      ],
+      transverse: [
+        { name: 'Вакуум живота', desc: 'Выдох → подтяни живот внутрь и вверх.', meta: '3×10–20 сек' },
+        { name: 'Dead Bug', desc: 'Поясница прижата, медленно опускай руку и ногу.', meta: '2×10/сторона' },
+      ]
+    };
+
+    const listEl = document.getElementById('list');
+    const progressEl = document.getElementById('progress');
+    const dateChip = document.getElementById('dateChip');
+    dateChip.textContent = new Date().toLocaleDateString('ru-RU', { day: '2-digit', month: 'long' });
+
+    const randPick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+    function buildItem(ex, category) {
+      const li = document.createElement('li');
+      const title = document.createElement('div');
+      title.className = 'title';
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.textContent = category === 'posture' ? 'Осанка' : category === 'antiSlouch' ? 'Против сутулости' : 'Поперечная';
+      const span = document.createElement('span');
+      span.textContent = ex.name;
+      title.appendChild(badge);
+      title.appendChild(span);
+
+      const label = document.createElement('label');
+      label.className = 'exercise';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.addEventListener('change', () => saveProgress());
+
+      const descWrap = document.createElement('div');
+      const desc = document.createElement('div');
+      desc.className = 'desc';
+      desc.textContent = ex.desc;
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.textContent = ex.meta;
+
+      descWrap.appendChild(desc);
+      descWrap.appendChild(meta);
+      label.appendChild(cb);
+      label.appendChild(descWrap);
+
+      li.appendChild(title);
+      li.appendChild(label);
+      return li;
+    }
+
+    function generateNew() {
+      const selected = [ randPick(POOLS.posture), randPick(POOLS.antiSlouch), randPick(POOLS.transverse) ];
+      renderList(selected);
+      persist({ items: selected, checks: [false, false, false] });
+    }
+
+    function renderList(items, checks = []) {
+      listEl.innerHTML = '';
+      items.forEach((ex, idx) => {
+        const category = idx === 0 ? 'posture' : idx === 1 ? 'antiSlouch' : 'transverse';
+        const el = buildItem(ex, category);
+        const cb = el.querySelector('input[type="checkbox"]');
+        cb.checked = !!checks[idx];
+        listEl.appendChild(el);
+      });
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const boxes = listEl.querySelectorAll('input[type="checkbox"]');
+      const done = Array.from(boxes).filter(b => b.checked).length;
+      progressEl.textContent = `${done} / ${boxes.length} выполнено`;
+    }
+
+    function getState() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || null; } catch { return null; }
+    }
+
+    function persist(state) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function saveProgress() {
+      const state = getState();
+      if (!state) return;
+      const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb => cb.checked);
+      persist({ ...state, checks });
+      updateProgress();
+    }
+
+    document.getElementById('generate').addEventListener('click', generateNew);
+    document.getElementById('save').addEventListener('click', saveProgress);
+    document.getElementById('clear').addEventListener('click', () => {
+      localStorage.removeItem(STORAGE_KEY);
+      listEl.innerHTML = '';
+      progressEl.textContent = '0 / 3 выполнено';
+    });
+
+    const saved = getState();
+    if (saved?.items?.length === 3) {
+      renderList(saved.items, saved.checks);
+    } else {
+      generateNew();
+    }
+
+    // выпадающее меню
+    document.querySelectorAll(".dropdown > a").forEach(el=>{
+      el.addEventListener("click",e=>{
+        e.preventDefault();
+        el.parentElement.classList.toggle("open");
+      });
+    });
+  </script>
+</body>
+</html>
