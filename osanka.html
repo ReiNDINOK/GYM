@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -13,7 +14,7 @@
       display:flex;
     }
 
-    .sidebar {
+      .sidebar {
       width:220px;
       background:#1b1b1b;
       border-radius:10px;
@@ -44,7 +45,6 @@
       background:#333;
       color:#fff;
     }
-
     /* выпадающий список */
     .dropdown > a::after {
       content:"▼";
@@ -210,7 +210,7 @@
   <div class="sidebar">
     <h2>Меню</h2>
     <ul>
-      <li><a href="index.html">🏠 Главная</a></li>
+      <li><a href='/'>🏠 Главная</a></li>
     </ul>
   </div>
 
@@ -218,6 +218,7 @@
   <div class="app" role="application" aria-label="Чек-лист упражнений">
     <header>
       <h1>📋 Чек-лист на сегодня</h1>
+      <span class="chip" id="dateChip"></span>
     </header>
 
     <div class="content">
