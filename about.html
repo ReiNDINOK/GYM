@@ -12,7 +12,13 @@ body {
   min-height:100vh; padding:20px; color:#ddd;
   display:flex;
 }
-
+.header-img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin-top: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
 /* === Боковое меню === */
 .sidebar {
   width:220px;
@@ -154,11 +160,12 @@ body {
     </ul>
   </div>
   <div class="container">
-    <div class="header">
-      <h1>🏋🏻 Данный сайт создан для помощи себе и парей близких друзей</h1>
-      <p>P.S. Make love, not war</p>
-      <img src="https://avatars.mds.yandex.net/get-entity_search/2363292/1057020936/S600xU_2x" alt="IMAGE">
-    </div>
+    <<div class="header">
+  <h1>🏋🏻 Данный сайт создан для помощи себе и парей близких друзей</h1>
+  <p>P.S. Make love, not war</p>
+  <img src="https://avatars.mds.yandex.net/get-entity_search/2363292/1057020936/S600xU_2x" 
+       alt="IMAGE" class="header-img">
+</div>
 <script>
 
 window.onload = function() {
@@ -312,5 +319,4 @@ document.querySelectorAll(".dropdown > a").forEach(el=>{
 
 </script>
 </body>
-
 </html>
