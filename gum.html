@@ -31,8 +31,13 @@ body {
   color:#f0f0f0;
   text-align:center;
 }
-.sidebar ul { list-style:none; }
-.sidebar li { margin:8px 0; }
+.sidebar ul {
+  list-style:none;
+}
+.sidebar li {
+  margin:8px 0;
+  position:relative;
+}
 .sidebar a {
   display:block;
   padding:10px 12px;
@@ -41,7 +46,31 @@ body {
   border-radius:8px;
   transition:background .3s, color .3s;
 }
-.sidebar a:hover { background:#333; color:#fff; }
+.sidebar a:hover {
+  background:#333;
+  color:#fff;
+}
+/* выпадающий список */
+.dropdown > a::after {
+  content:"▼";
+  float:right;
+  font-size:0.8em;
+  transition:transform .3s;
+}
+.dropdown.open > a::after {
+  transform:rotate(-180deg);
+}
+.dropdown ul {
+  display:none;
+  margin-left:10px;
+}
+.dropdown.open ul {
+  display:block;
+}
+.dropdown ul a {
+  font-size:0.9em;
+  background:#262626;
+}
 
 /* === Контейнер контента === */
 .container {
@@ -229,5 +258,6 @@ function calculate() {
 </script>
 </body>
 </html>
+
 
 
