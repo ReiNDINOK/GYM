@@ -13,6 +13,7 @@
       display:flex;
     }
 
+    /* === Боковое меню === */
     .sidebar {
       width:220px;
       background:#1b1b1b;
@@ -30,8 +31,15 @@
       color:#f0f0f0;
       text-align:center;
     }
-    .sidebar ul { list-style:none; }
-    .sidebar li { margin:8px 0; position:relative; }
+    .sidebar ul {
+      list-style:none;
+      padding:0;
+      margin:0;
+    }
+    .sidebar li {
+      margin:8px 0;
+      position:relative;
+    }
     .sidebar a {
       display:block;
       padding:10px 12px;
@@ -44,7 +52,6 @@
       background:#333;
       color:#fff;
     }
-
     /* выпадающий список */
     .dropdown > a::after {
       content:"▼";
@@ -58,6 +65,8 @@
     .dropdown ul {
       display:none;
       margin-left:10px;
+      list-style:none;
+      padding:0;
     }
     .dropdown.open ul {
       display:block;
@@ -134,14 +143,14 @@
     }
 
     /* === Список упражнений === */
-    ul {
+    .exercise-list {
       list-style:none;
       padding:0;
       margin:0;
       display:grid;
       gap:20px;
     }
-    li {
+    .exercise-list li {
       background:#333;
       border-radius:10px;
       padding:18px;
@@ -216,6 +225,14 @@
     <h2>Меню</h2>
     <ul>
       <li><a href='/'>🏠 Главная</a></li>
+      <li class="dropdown">
+        <a href="#">📂 Разделы</a>
+        <ul>
+          <li><a href='gum.html'>Моё тело - железо</a></li>
+          <li><a href='osanka.html'>Позвоночник - титан</a></li>
+        </ul>
+      </li>
+      <li><a href='about.html'>ℹ️ О проекте</a></li>
     </ul>
   </div>
 
@@ -232,7 +249,7 @@
         <button id="clear" title="Очистить состояние и начать заново">Сбросить</button>
       </div>
       <p class="hint">Каждый раз генерируется <strong>1 упражнение на осанку</strong>, <strong>1 — против сутулости</strong> и <strong>1 — для поперечной мышцы живота</strong>.</p>
-      <ul id="list" aria-live="polite"></ul>
+      <ul id="list" class="exercise-list" aria-live="polite"></ul>
     </div>
 
     <footer>
