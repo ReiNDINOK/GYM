@@ -146,16 +146,16 @@ body {
       <li class="dropdown">
         <a href="#">📂 Разделы</a>
         <ul>
-          <li><a href='/gum'>Моё тело - железо</a></li>
-          <li><a href='/osanka'>Позвоночник - титан</a></li>
+          <li><a href='gum.html'>Моё тело - железо</a></li>
+          <li><a href='osanka.html'>Позвоночник - титан</a></li>
         </ul>
       </li>
-      <li><a href='/about'>ℹ️ О проекте</a></li>
+      <li><a href='about.html'>ℹ️ О проекте</a></li>
     </ul>
   </div>
   <div class="container">
     <div class="header">
-      <h1>🏋🏻 Калькулятор рабочих весов (v.4.1.1)</h1>
+      <h1>🏋🏻 Калькулятор рабочих весов (v.4.1.2)</h1>
       <p>Введите ваши лучшие результаты</p>
       <p>Подсказка: m(Fe) = 20 кг</p>
     </div>
@@ -180,11 +180,13 @@ body {
           <label for="biceps">🦾 Подъём на бицепс (кг):</label>
           <input type="number" id="biceps" placeholder="0" min="0" max="150" />
         </div>
-
-        <!-- === ARMYPRESS: добавленное поле ввода === -->
         <div class="input-group">
           <label for="armypress">🎖️ Армейский жим (кг):</label>
           <input type="number" id="armypress" placeholder="0" min="0" max="200" />
+        </div>
+        <div class="input-group">
+          <label for="deadlift">🤔 Скоро...</label>
+          <input type="number" id="deadlift"/>
         </div>
       </div>
 
@@ -256,8 +258,6 @@ body {
           </div>
         </div>
       </div>
-
-      <!-- === ARMYPRESS: блок результатов === -->
       <div class="exercise-result" id="armypress-result" style="display:none;">
         <div class="exercise-header" style="background: linear-gradient(135deg,#8e44ad,#5e3370); color:white;">
           <span class="emoji">🎖️</span>ТРЕНИРОВКА E - АРМЕЙСКИЙ ЖИМ
@@ -385,7 +385,7 @@ function calculateExercise(exercise, oneRM, warmupData, workingData) {
   });
 }
 
-/* WebAudio: синтетический смех (необязательный, но забавный) */
+/* WebAudio: синтетический смех*/
 let audioCtx = null;
 function ensureAudioContext() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -435,7 +435,6 @@ function showError(message) {
   setTimeout(()=>{ errorDiv.classList.remove("show"); }, 1400);
 }
 
-// выпадающее меню
 document.querySelectorAll(".dropdown > a").forEach(el=>{
   el.addEventListener("click",e=>{
     e.preventDefault();
@@ -446,4 +445,3 @@ document.querySelectorAll(".dropdown > a").forEach(el=>{
 </script>
 </body>
 </html>
-
