@@ -141,6 +141,50 @@ body {
   position:relative;
 }
 #error-message.show { opacity:1; pointer-events:auto; user-select:auto; }
+#notify-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #444;
+  color: #fff;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  transition: background 0.3s;
+  z-index: 1000;
+}
+#notify-btn:hover {
+  background: #666;
+}
+
+#notify-box {
+  position: fixed;
+  right: 20px;
+  bottom: 80px;
+  background: #222;
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  max-width: 250px;
+  display: none;
+  z-index: 999;
+}
+#notify-box.show {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 </style>
 </head>
 <body>
@@ -160,12 +204,18 @@ body {
     </ul>
   </div>
   <div class="container">
-    <div class="header">
-  <h1>Данный сайт создан для помощи себе и паре близких друзей</h1>
-  <p>P.S.</p>
+    <<div class="header">
+  <h1>🏋🏻 Данный сайт создан для помощи себе и парей близких друзей</h1>
+  <p>P.S. Make love, not war</p>
   <img src="https://avatars.mds.yandex.net/get-entity_search/2363292/1057020936/S600xU_2x" 
        alt="IMAGE" class="header-img">
 </div>
+<!-- Кнопка-иконка -->
+<div id="notify-btn">💡</div>
+
+<!-- Уведомление -->
+<div id="notify-box">Если у тебя есть доступ к данному сайту - его автора ты знаешь. Найдёшь ошибки - сообщи, не будь бякой! 
+😉</div>
 <script>
 
 window.onload = function() {
@@ -316,10 +366,12 @@ document.querySelectorAll(".dropdown > a").forEach(el=>{
     el.parentElement.classList.toggle("open");
   });
 });
+const notifyBtn = document.getElementById("notify-btn");
+const notifyBox = document.getElementById("notify-box");
 
+notifyBtn.addEventListener("click", () => {
+  notifyBox.classList.toggle("show");
+});
 </script>
 </body>
 </html>
-
-
-
