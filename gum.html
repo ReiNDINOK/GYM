@@ -254,10 +254,16 @@ function calculate() {
   resultsDiv.style.display = "block";
   resultsDiv.scrollIntoView({behavior: "smooth"});
 }
-
+document.querySelectorAll(".dropdown > a").forEach(el=>{
+  el.addEventListener("click",e=>{
+    e.preventDefault();
+    el.parentElement.classList.toggle("open");
+  });
+});
 </script>
 </body>
 </html>
+
 
 
 
