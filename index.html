@@ -142,20 +142,20 @@ body {
   <div class="sidebar">
     <h2>Меню</h2>
     <ul>
-      <li><a href="index.html">🏠 Главная</a></li>
+      <li><a href='/'>🏠 Главная</a></li>
       <li class="dropdown">
         <a href="#">📂 Разделы</a>
         <ul>
-          <li><a href="gum.html">Моё тело - железо</a></li>
-          <li><a href="osanka.html">Позвоночник - титан</a></li>
+          <li><a href='/gum'>Моё тело - железо</a></li>
+          <li><a href='/osanka'>Позвоночник - титан</a></li>
         </ul>
       </li>
-      <li><a href="about.html">ℹ️ О проекте</a></li>
+      <li><a href='/about'>ℹ️ О проекте</a></li>
     </ul>
   </div>
   <div class="container">
     <div class="header">
-      <h1>🏋🏻 Калькулятор рабочих весов (v.4.1.1)</h1>
+      <h1>🏋🏻 Калькулятор рабочих весов (v.4.2)</h1>
       <p>Введите ваши лучшие результаты</p>
       <p>Подсказка: m(Fe) = 20 кг</p>
     </div>
@@ -179,6 +179,12 @@ body {
         <div class="input-group">
           <label for="biceps">🦾 Подъём на бицепс (кг):</label>
           <input type="number" id="biceps" placeholder="0" min="0" max="150" />
+        </div>
+
+        <!-- === ARMYPRESS: добавленное поле ввода === -->
+        <div class="input-group">
+          <label for="armypress">🎖️ Армейский жим (кг):</label>
+          <input type="number" id="armypress" placeholder="0" min="0" max="200" />
         </div>
       </div>
 
@@ -250,27 +256,46 @@ body {
           </div>
         </div>
       </div>
+
+      <!-- === ARMYPRESS: блок результатов === -->
+      <div class="exercise-result" id="armypress-result" style="display:none;">
+        <div class="exercise-header" style="background: linear-gradient(135deg,#8e44ad,#5e3370); color:white;">
+          <span class="emoji">🎖️</span>ТРЕНИРОВКА E - АРМЕЙСКИЙ ЖИМ
+        </div>
+        <div class="weight-tables">
+          <div class="weight-table">
+            <h4>Разминочные веса</h4>
+            <table><thead><tr><th>Вес (кг)</th><th>Повторения</th></tr></thead><tbody id="armypress-warmup"></tbody></table>
+          </div>
+          <div class="weight-table">
+            <h4>Рабочие веса</h4>
+            <table><thead><tr><th>Вес (кг)</th><th>% от 1ПМ</th></tr></thead><tbody id="armypress-working"></tbody></table>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
 <script>
 
 window.onload = function() {
-  ["deadlift","bench","squat","biceps"].forEach(id=>{
+  ["deadlift","bench","squat","biceps","armypress"].forEach(id=>{
     const saved = localStorage.getItem(id);
     if (saved !== null) document.getElementById(id).value = saved;
   });
 };
 
 function calculateWeights() {
-  const exercises = ["deadlift","bench","squat","biceps"];
+  const exercises = ["deadlift","bench","squat","biceps","armypress"];
   let allEmpty = true;
   let hasZero = false;
   let below20 = false;
   const values = {};
 
   exercises.forEach(id => {
-    const val = parseFloat(document.getElementById(id).value);
+    const inputEl = document.getElementById(id);
+    const val = parseFloat(inputEl.value);
     if (!isNaN(val) && val > 0) {
       allEmpty = false;
       values[id] = val;
@@ -327,6 +352,17 @@ function calculateWeights() {
     document.getElementById('biceps-result').style.display='block';
   } else document.getElementById('biceps-result').style.display='none';
 
+  // === ARMYPRESS: логика расчёта разминочных и рабочих весов ===
+  if (values.armypress) {
+    calculateExercise('armypress', values.armypress,
+      // Разминка: лёгче, чтобы плечи не обиделись
+      [{percent:40,reps:8},{percent:55,reps:5},{percent:65,reps:3}],
+      // Рабочие: классический диапазон для Оверхэда
+      [{percent:70,label:'70% (8-10 повт.)'},{percent:75,label:'75% (6-8 повт.)'},{percent:80,label:'80% (5-6 повт.)'},{percent:85,label:'85% (3-5 повт.)'}]
+    );
+    document.getElementById('armypress-result').style.display='block';
+  } else document.getElementById('armypress-result').style.display='none';
+
   document.getElementById('results').style.display='block';
   document.getElementById('results').scrollIntoView({behavior:'smooth'});
 }
@@ -335,19 +371,21 @@ function calculateExercise(exercise, oneRM, warmupData, workingData) {
   const warmupTableBody = document.getElementById(exercise + '-warmup');
   warmupTableBody.innerHTML = '';
   warmupData.forEach(data=>{
-    const weight = Math.round((oneRM * data.percent / 100) / 2.5) * 2.5;
+    const raw = oneRM * data.percent / 100;
+    const weight = Math.round(raw / 2.5) * 2.5;
     warmupTableBody.innerHTML += `<tr><td>${weight} кг</td><td>${data.reps}</td></tr>`;
   });
 
   const workingTableBody = document.getElementById(exercise + '-working');
   workingTableBody.innerHTML = '';
   workingData.forEach(data=>{
-    const weight = Math.round((oneRM * data.percent / 100) / 2.5) * 2.5;
+    const raw = oneRM * data.percent / 100;
+    const weight = Math.round(raw / 2.5) * 2.5;
     workingTableBody.innerHTML += `<tr><td>${weight} кг</td><td>${data.label}</td></tr>`;
   });
 }
 
-/* WebAudio: синтетический смех */
+/* WebAudio: синтетический смех (необязательный, но забавный) */
 let audioCtx = null;
 function ensureAudioContext() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -396,6 +434,7 @@ function showError(message) {
   try { playDuckLikeLaugh(); } catch (e) {}
   setTimeout(()=>{ errorDiv.classList.remove("show"); }, 1400);
 }
+
 // выпадающее меню
 document.querySelectorAll(".dropdown > a").forEach(el=>{
   el.addEventListener("click",e=>{
@@ -407,5 +446,3 @@ document.querySelectorAll(".dropdown > a").forEach(el=>{
 </script>
 </body>
 </html>
-
-
