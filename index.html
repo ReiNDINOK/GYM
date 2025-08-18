@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -228,14 +229,16 @@ body {
   background: #444;
   color: white;
   border: none;
-  border-radius: 30px;
-  padding: 8px 16px;
+  border-radius: 50%;
+  width: 50px; height: 50px;
   cursor: pointer;
-  font-size: 0.9em;
+  font-size: 1.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-shadow: 0 0 8px rgba(0,0,0,0.4);
   transition: background .3s, transform .2s;
-  z-index: 1000;
-}
+  z-index: 1000;}
 body.light-theme .theme-toggle {
   background: #ddd;
   color: #222;
@@ -253,11 +256,11 @@ body.light-theme .theme-toggle {
       <li class="dropdown">
         <a href="#">📂 Разделы</a>
         <ul>
-          <li><a href='gum.html'>Моё тело - железо</a></li>
-          <li><a href='osanka.html'>Позвоночник - титан</a></li>
+          <li><a href='/gum'>Моё тело - железо</a></li>
+          <li><a href='/osanka'>Позвоночник - титан</a></li>
         </ul>
       </li>
-      <li><a href='about.html'>ℹ️ О проекте</a></li>
+      <li><a href='/about'>ℹ️ О проекте</a></li>
     </ul>
   </div>
   <div class="container">
@@ -384,7 +387,7 @@ body.light-theme .theme-toggle {
     </div>
   </div>
 <!-- Кнопка переключения темы -->
-<button class="theme-toggle" onclick="toggleTheme()">Тема</button>
+<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
 <script>
 /* переключение темы */
