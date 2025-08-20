@@ -80,7 +80,7 @@ body {
 /* === Боковое меню === */
 .sidebar {
   width:220px;
-  background:var(--bg-sidebar);
+  background: var(--bg-sidebar);
   border-radius:10px;
   box-shadow:0 0 15px rgba(0,0,0,0.5);
   padding:15px;
@@ -92,7 +92,7 @@ body {
 .sidebar h2 {
   font-size:1.3em;
   margin-bottom:10px;
-  color:var(--text-title);
+  color: var(--text-title);
   text-align:center;
 }
 .sidebar ul { list-style:none; }
@@ -101,11 +101,14 @@ body {
   display:block;
   padding:10px 12px;
   text-decoration:none;
-  color:var(--text-main);
+  color: var(--text-main);
   border-radius:8px;
   transition:background .3s, color .3s;
 }
-.sidebar a:hover { background:#333; color:#fff; }
+.sidebar a:hover {
+  background: var(--bg-card);
+  color: var(--text-contrast);
+}
 
 /* выпадающий список */
 .dropdown > a::after {
@@ -119,19 +122,14 @@ body {
 .dropdown.open ul { display:block; }
 .dropdown ul a {
   font-size:0.9em;
-  background: var(--bg-dropdown);
+  background: var(--bg-section);
   border-radius:6px;
   padding:8px 10px;
   display:block;
   transition: background .3s, color .3s;
 }
-.dropdown ul a:hover,
-.dropdown ul a:focus {
-  background: var(--bg-dropdown-hover);
-  color: var(--text-contrast);
-}
-.dropdown ul a:active {
-  background: var(--bg-dropdown-active);
+.dropdown ul a:hover {
+  background: var(--bg-card);
   color: var(--text-contrast);
 }
 
@@ -357,6 +355,7 @@ notifyBtn.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
 
 
 
