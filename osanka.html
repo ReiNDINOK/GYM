@@ -260,7 +260,23 @@ body.light-theme .theme-toggle {
   color: #222;
 }
 .theme-toggle:hover { transform: translateY(-2px); }
+@media (max-width: 768px) {
+  body {
+    flex-direction: column; /* вместо горизонтального флекса */
+    padding: 10px;
+  }
 
+  .sidebar {
+    width: 100%;
+    margin: 0 0 15px 0;
+    position: relative;
+    top: auto;
+  }
+
+  .app {
+    max-width: 100%;
+  }
+}
   </style>
 </head>
 <body>
