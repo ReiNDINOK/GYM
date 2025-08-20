@@ -5,6 +5,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Чек-лист упражнений: осанка · сутулость · поперечная</title>
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "light") {
+        document.documentElement.classList.add("light-theme");
+      }
+    })();
+  </script>
   <style>
 :root {
   /* === Тёмная тема (по умолчанию) === */
@@ -467,5 +475,6 @@ window.onload = function() {
   </script>
 </body>
 </html>
+
 
 
