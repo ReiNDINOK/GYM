@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -167,14 +166,19 @@ body {
 .calculate-btn:hover { transform:translateY(-2px); }
 .results { padding:30px; display:none; background: var(--bg-card); border-radius:10px; }
 .exercise-result {
-  margin-bottom:40px;
+  margin-bottom:24px;
   background: var(--bg-table);
   border-radius:10px; overflow:hidden;
   box-shadow:0 2px 10px rgba(0,0,0,0.5);
 }
 .exercise-header {
-  padding:20px; font-size:1.5em; font-weight:bold;
-  color: var(--text-contrast); text-align:center;
+  padding:14px 20px; font-size:1.1em; font-weight:bold;
+  color: var(--text-contrast); display:flex; align-items:center; justify-content:space-between;
+}
+.header-left { display:flex; align-items:center; gap:10px; }
+.header-actions { display:flex; gap:8px; align-items:center; }
+.small-btn {
+  background:transparent; border:1px solid rgba(255,255,255,0.12); padding:6px 10px; border-radius:6px; color:inherit; cursor:pointer;
 }
 .weight-tables {
   padding:20px; display:grid;
@@ -244,6 +248,36 @@ body.light-theme .theme-toggle {
   color: #222;
 }
 .theme-toggle:hover { transform: translateY(-2px); }
+
+/* custom form styles */
+#custom-exercise-form input { margin-bottom:10px; padding:10px; border-radius:6px; border:1px solid var(--border-color); }
+#custom-exercise-form { box-shadow:0 5px 20px rgba(0,0,0,0.6); }
+.remove-btn { font-size:0.9em; padding:6px 8px; border-radius:6px; cursor:pointer; background:transparent; border:1px solid rgba(255,255,255,0.08); }
+.add-exercise-btn {
+  background: linear-gradient(135deg, #7f8c8d, #bdc3c7); 
+  color: #fff;
+  border: none;
+  padding: 12px 22px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .3s, opacity .3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+}
+.add-exercise-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  opacity: 0.95;
+}
+
+/* Светлая тема — мягче оттенки зелёного */
+body.light-theme .add-exercise-btn {
+  background: linear-gradient(135deg, #2ecc71, #58d68d);
+  color: #fff;
+}
 </style>
 
 </head>
@@ -252,20 +286,20 @@ body.light-theme .theme-toggle {
   <div class="sidebar">
     <h2>Меню</h2>
     <ul>
-      <li><a href='index.html'>🏠 Главная</a></li>
+      <li><a href='/'>🏠 Главная</a></li>
       <li class="dropdown">
         <a href="#">📂 Разделы</a>
         <ul>
-          <li><a href='gum.html'>Моё тело - железо</a></li>
-          <li><a href='osanka.html'>Позвоночник - титан</a></li>
+          <li><a href='/gum'>Моё тело - железо</a></li>
+          <li><a href='/osanka'>Позвоночник - титан</a></li>
         </ul>
       </li>
-      <li><a href='about.html'>ℹ️ О проекте</a></li>
+      <li><a href='/about'>ℹ️ О проекте</a></li>
     </ul>
   </div>
   <div class="container">
     <div class="header">
-      <h1>🏋🏻 Калькулятор рабочих весов (v.4.1.3)</h1>
+      <h1>🏋🏻 Калькулятор рабочих весов (v.4.1.4)</h1>
       <p>Введите ваши лучшие результаты</p>
       <p>Подсказка: m(Fe) = 20 кг</p>
     </div>
@@ -294,20 +328,37 @@ body.light-theme .theme-toggle {
           <label for="armypress">🎖️ Армейский жим (кг):</label>
           <input type="number" id="armypress" placeholder="0" min="0" max="200" />
         </div>
-        <div class="input-group">
-          <label for="deadlift">🤔 Скоро...</label>
-          <input type="number" id="deadlift"/>
+
+        <div class="input-group" style="display:flex; align-items:center; justify-content:center;">
+  <button type="button" class="add-exercise-btn" onclick="openCustomExerciseForm()">➕ Добавить упражнение</button>
+</div>
+      </div>
+
+      <!-- Форма добавления нового упражнения -->
+      <div id="custom-exercise-form" style="display:none; margin-top:20px; background:var(--bg-card); padding:20px; border-radius:10px;">
+        <label>Название упражнения:</label>
+        <input type="text" id="custom-name" placeholder="Например: Тяга в наклоне" style="width:100%;">
+        <label>Эмодзи (опционально):</label>
+        <input type="text" id="custom-emoji" placeholder="🏹" style="width:100%;">
+        <label>1ПМ (кг):</label>
+        <input type="number" id="custom-max" placeholder="0" min="0" style="width:100%;">
+        <div style="display:flex; gap:10px; margin-top:8px;">
+          <button class="calculate-btn" onclick="addCustomExercise()">Добавить</button>
+          <button class="small-btn" onclick="closeCustomExerciseForm()" type="button">Отмена</button>
         </div>
       </div>
 
-      <button class="calculate-btn" onclick="calculateWeights()">Рассчитать</button>
+      <div style="margin-top:18px; text-align:center;">
+        <button class="calculate-btn" onclick="calculateWeights()">Рассчитать</button>
+      </div>
 
     </div>
 
     <div class="results" id="results">
       <div class="exercise-result" id="deadlift-result" style="display:none;">
         <div class="exercise-header deadlift-header">
-          <span class="emoji">🥵</span>ТРЕНИРОВКА A - СТАНОВАЯ ТЯГА
+          <div class="header-left"><span class="emoji">🥵</span>ТРЕНИРОВКА A - СТАНОВАЯ ТЯГА</div>
+          <div class="header-actions"></div>
         </div>
         <div class="weight-tables">
           <div class="weight-table">
@@ -323,7 +374,8 @@ body.light-theme .theme-toggle {
 
       <div class="exercise-result" id="bench-result" style="display:none;">
         <div class="exercise-header bench-header">
-          <span class="emoji">💪</span>ТРЕНИРОВКА B - ЖИМ ЛЕЖА
+          <div class="header-left"><span class="emoji">💪</span>ТРЕНИРОВКА B - ЖИМ ЛЕЖА</div>
+          <div class="header-actions"></div>
         </div>
         <div class="weight-tables">
           <div class="weight-table">
@@ -339,7 +391,8 @@ body.light-theme .theme-toggle {
 
       <div class="exercise-result" id="squat-result" style="display:none;">
         <div class="exercise-header squat-header">
-          <span class="emoji">🦵</span>ТРЕНИРОВКА C - ПРИСЕДАНИЯ
+          <div class="header-left"><span class="emoji">🦵</span>ТРЕНИРОВКА C - ПРИСЕДАНИЯ</div>
+          <div class="header-actions"></div>
         </div>
         <div class="weight-tables">
           <div class="weight-table">
@@ -355,7 +408,8 @@ body.light-theme .theme-toggle {
 
       <div class="exercise-result" id="biceps-result" style="display:none;">
         <div class="exercise-header" style="background: linear-gradient(135deg,#fbc531,#e1b12c); color:#333;">
-          <span class="emoji">🦾</span>ТРЕНИРОВКА D - ПОДЪЁМ НА БИЦЕПС
+          <div class="header-left"><span class="emoji">🦾</span>ТРЕНИРОВКА D - ПОДЪЁМ НА БИЦЕПС</div>
+          <div class="header-actions"></div>
         </div>
         <div class="weight-tables">
           <div class="weight-table">
@@ -370,7 +424,8 @@ body.light-theme .theme-toggle {
       </div>
       <div class="exercise-result" id="armypress-result" style="display:none;">
         <div class="exercise-header" style="background: linear-gradient(135deg,#8e44ad,#5e3370); color:white;">
-          <span class="emoji">🎖️</span>ТРЕНИРОВКА E - АРМЕЙСКИЙ ЖИМ
+          <div class="header-left"><span class="emoji">🎖️</span>ТРЕНИРОВКА E - АРМЕЙСКИЙ ЖИМ</div>
+          <div class="header-actions"></div>
         </div>
         <div class="weight-tables">
           <div class="weight-table">
@@ -384,127 +439,243 @@ body.light-theme .theme-toggle {
         </div>
       </div>
 
+      <!-- кастомные блоки будут добавляться сюда -->
     </div>
   </div>
 <!-- Кнопка переключения темы -->
 <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
 <script>
+/* ===================== Логика темы ===================== */
 function toggleTheme() {
   document.body.classList.toggle("light-theme");
   const isLight = document.body.classList.contains("light-theme");
   localStorage.setItem("theme", isLight ? "light" : "dark");
-
   document.querySelector(".theme-toggle").textContent = isLight ? "☀️" : "🌙";
 }
 
-window.onload = function() {
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "light") {
-    document.body.classList.add("light-theme");
-    document.querySelector(".theme-toggle").textContent = "☀️"; 
+/* ===================== Утилиты для localStorage и id ===================== */
+const defaultIds = ["deadlift","bench","squat","biceps","armypress"];
+function saveDefaultInputs() {
+  defaultIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) localStorage.setItem(id, el.value || "");
+  });
+}
+function restoreDefaultInputs() {
+  defaultIds.forEach(id => {
+    const el = document.getElementById(id);
+    const val = localStorage.getItem(id);
+    if (el && val !== null) el.value = val;
+  });
+}
+function saveCustomList(list) {
+  try { localStorage.setItem("customExercises", JSON.stringify(list)); } catch(e){}
+}
+function loadCustomList() {
+  try {
+    const raw = localStorage.getItem("customExercises");
+    return raw ? JSON.parse(raw) : [];
+  } catch(e){ return []; }
+}
+function sanitizeId(name) {
+  // Оставляем латиницу, кириллицу и цифры, заменяем прочее на _
+  let base = name.toLowerCase().trim().replace(/[^a-z0-9а-яё]+/gi, '_');
+  base = base.replace(/^_+|_+$/g, '');
+  if (!base) base = 'exercise';
+  let id = base;
+  let i = 1;
+  while (document.getElementById(id + '-result')) {
+    id = base + "_" + i;
+    i++;
   }
-};
-function calculateWeights() {
-  const exercises = ["deadlift","bench","squat","biceps","armypress"];
-  let allEmpty = true;
-  let hasZero = false;
-  let below20 = false;
-  const values = {};
+  return id;
+}
 
-  exercises.forEach(id => {
-    const inputEl = document.getElementById(id);
-    const val = parseFloat(inputEl.value);
+/* ===================== Работа с формой добавления ===================== */
+function openCustomExerciseForm() {
+  document.getElementById("custom-exercise-form").style.display = "block";
+  document.getElementById("custom-exercise-form").scrollIntoView({behavior:'smooth'});
+}
+function closeCustomExerciseForm() {
+  document.getElementById("custom-exercise-form").style.display = "none";
+  document.getElementById("custom-name").value = "";
+  document.getElementById("custom-emoji").value = "";
+  document.getElementById("custom-max").value = "";
+}
+
+/* ===================== Добавление / удаление кастомных упражнений ===================== */
+function addCustomExercise() {
+  const name = document.getElementById("custom-name").value.trim();
+  const emoji = document.getElementById("custom-emoji").value.trim() || "🏋️";
+  const oneRM = parseFloat(document.getElementById("custom-max").value);
+
+  if (!name || isNaN(oneRM) || oneRM <= 0) {
+    showError("Введите корректное название и вес!");
+    return;
+  }
+
+  const id = sanitizeId(name);
+
+  const newEx = { id, name, emoji, oneRM };
+  // Сохраняем в localStorage
+  const list = loadCustomList();
+  list.push(newEx);
+  saveCustomList(list);
+
+  // Создаём визуальный блок
+  createCustomResultBlock(newEx);
+
+  closeCustomExerciseForm();
+  document.getElementById('results').style.display = 'block';
+  document.getElementById(id + '-result').scrollIntoView({behavior:'smooth'});
+}
+
+function createCustomResultBlock(ex) {
+  const resultsDiv = document.getElementById("results");
+
+  // если уже есть такой блок (на всякий случай), ничего не делаем
+  if (document.getElementById(ex.id + "-result")) return;
+
+  const exerciseDiv = document.createElement("div");
+  exerciseDiv.className = "exercise-result";
+  exerciseDiv.id = ex.id + "-result";
+  exerciseDiv.innerHTML = `
+    <div class="exercise-header" style="background:linear-gradient(135deg,#2980b9,#2c3e50); color:white;">
+      <div class="header-left"><span class="emoji">${ex.emoji}</span>${escapeHtml(ex.name.toUpperCase())}</div>
+      <div class="header-actions">
+        <button class="small-btn" title="Удалить" onclick="removeCustomExercise('${ex.id}')">Удалить</button>
+      </div>
+    </div>
+    <div class="weight-tables">
+      <div class="weight-table">
+        <h4>Разминочные веса</h4>
+        <table><thead><tr><th>Вес (кг)</th><th>Повторения</th></tr></thead><tbody id="${ex.id}-warmup"></tbody></table>
+      </div>
+      <div class="weight-table">
+        <h4>Рабочие веса</h4>
+        <table><thead><tr><th>Вес (кг)</th><th>% от 1ПМ</th></tr></thead><tbody id="${ex.id}-working"></tbody></table>
+      </div>
+    </div>
+  `;
+  resultsDiv.appendChild(exerciseDiv);
+
+  // рассчитаем по универсальному шаблону
+  calculateExercise(ex.id, ex.oneRM,
+    [{percent:40,reps:10},{percent:60,reps:6},{percent:70,reps:3}],
+    [{percent:65,label:'65% (10-12 повт.)'},{percent:70,label:'70% (8-10 повт.)'},{percent:75,label:'75% (6-8 повт.)'}]
+  );
+}
+
+function removeCustomExercise(id) {
+  if (!confirm("Удалить упражнение?")) return;
+  // удалить из DOM
+  const el = document.getElementById(id + "-result");
+  if (el) el.remove();
+  // удалить из localStorage
+  const list = loadCustomList().filter(x => x.id !== id);
+  saveCustomList(list);
+}
+
+/* ===================== Расчёты ===================== */
+function calculateWeights() {
+  // Берём значения из стандартных полей
+  const inputs = {};
+  let anyNonEmpty = false;
+  let hasZero = false;
+
+  defaultIds.forEach(id => {
+    const el = document.getElementById(id);
+    const val = el ? parseFloat(el.value) : NaN;
     if (!isNaN(val) && val > 0) {
-      allEmpty = false;
-      values[id] = val;
-      if (val < 20) below20 = true;
+      inputs[id] = val;
+      anyNonEmpty = true;
     } else if (val === 0) {
       hasZero = true;
     }
   });
 
-  if (allEmpty) {
+  if (!anyNonEmpty && loadCustomList().length === 0) {
     showError("Дорогой, нехой пустоту тягать!");
     return;
   }
-  if (hasZero) return;
-
-  if (below20) {
-    showError("Хотя бы гриф подними!");
+  if (hasZero) {
+    showError("Ноль — это не вес, ага?");
     return;
   }
 
-  exercises.forEach(id => {
-    localStorage.setItem(id, document.getElementById(id).value);
-  });
+  // Сохраняем стандартные поля
+  saveDefaultInputs();
 
-  if (values.deadlift) {
-    calculateExercise('deadlift', values.deadlift,
+  // Обновляем стандартные результаты (если задан 1ПМ — показываем блок)
+  if (inputs.deadlift) {
+    calculateExercise('deadlift', inputs.deadlift,
       [{percent:43,reps:8},{percent:57,reps:5},{percent:64,reps:3}],
       [{percent:70,label:'70% (6-10 повт.)'},{percent:75,label:'75% (6-8 повт.)'},{percent:80,label:'80% (6 повт.)'},{percent:82,label:'82% (максимум)'}]
     );
     document.getElementById('deadlift-result').style.display='block';
   } else document.getElementById('deadlift-result').style.display='none';
 
-  if (values.bench) {
-    calculateExercise('bench', values.bench,
+  if (inputs.bench) {
+    calculateExercise('bench', inputs.bench,
       [{percent:40,reps:10},{percent:60,reps:6},{percent:70,reps:3}],
       [{percent:70,label:'70% (8-12 повт.)'},{percent:75,label:'75% (8-10 повт.)'},{percent:80,label:'80% (8 повт.)'}]
     );
     document.getElementById('bench-result').style.display='block';
   } else document.getElementById('bench-result').style.display='none';
 
-  if (values.squat) {
-    calculateExercise('squat', values.squat,
+  if (inputs.squat) {
+    calculateExercise('squat', inputs.squat,
       [{percent:40,reps:10},{percent:60,reps:6},{percent:70,reps:3}],
       [{percent:70,label:'70% (8-12 повт.)'},{percent:75,label:'75% (8-10 повт.)'},{percent:80,label:'80% (8 повт.)'}]
     );
     document.getElementById('squat-result').style.display='block';
   } else document.getElementById('squat-result').style.display='none';
 
-  if (values.biceps) {
-    calculateExercise('biceps', values.biceps,
+  if (inputs.biceps) {
+    calculateExercise('biceps', inputs.biceps,
       [{percent:40,reps:10},{percent:60,reps:6},{percent:70,reps:3}],
       [{percent:65,label:'65% (10-12 повт.)'},{percent:70,label:'70% (8-10 повт.)'},{percent:75,label:'75% (6-8 повт.)'}]
     );
     document.getElementById('biceps-result').style.display='block';
   } else document.getElementById('biceps-result').style.display='none';
 
-  // === ARMYPRESS: логика расчёта разминочных и рабочих весов ===
-  if (values.armypress) {
-    calculateExercise('armypress', values.armypress,
-      // Разминка: лёгче, чтобы плечи не обиделись
+  if (inputs.armypress) {
+    calculateExercise('armypress', inputs.armypress,
       [{percent:40,reps:8},{percent:55,reps:5},{percent:65,reps:3}],
-      // Рабочие: классический диапазон для Оверхэда
       [{percent:70,label:'70% (8-10 повт.)'},{percent:75,label:'75% (6-8 повт.)'},{percent:80,label:'80% (5-6 повт.)'},{percent:85,label:'85% (3-5 повт.)'}]
     );
     document.getElementById('armypress-result').style.display='block';
   } else document.getElementById('armypress-result').style.display='none';
 
+  // Показать результаты (кастомные блоки остаются как есть)
   document.getElementById('results').style.display='block';
   document.getElementById('results').scrollIntoView({behavior:'smooth'});
 }
 
 function calculateExercise(exercise, oneRM, warmupData, workingData) {
   const warmupTableBody = document.getElementById(exercise + '-warmup');
-  warmupTableBody.innerHTML = '';
-  warmupData.forEach(data=>{
-    const raw = oneRM * data.percent / 100;
-    const weight = Math.round(raw / 2.5) * 2.5;
-    warmupTableBody.innerHTML += `<tr><td>${weight} кг</td><td>${data.reps}</td></tr>`;
-  });
+  if (warmupTableBody) {
+    warmupTableBody.innerHTML = '';
+    warmupData.forEach(data=>{
+      const raw = oneRM * data.percent / 100;
+      const weight = Math.round(raw / 2.5) * 2.5;
+      warmupTableBody.innerHTML += `<tr><td>${weight} кг</td><td>${data.reps}</td></tr>`;
+    });
+  }
 
   const workingTableBody = document.getElementById(exercise + '-working');
-  workingTableBody.innerHTML = '';
-  workingData.forEach(data=>{
-    const raw = oneRM * data.percent / 100;
-    const weight = Math.round(raw / 2.5) * 2.5;
-    workingTableBody.innerHTML += `<tr><td>${weight} кг</td><td>${data.label}</td></tr>`;
-  });
+  if (workingTableBody) {
+    workingTableBody.innerHTML = '';
+    workingData.forEach(data=>{
+      const raw = oneRM * data.percent / 100;
+      const weight = Math.round(raw / 2.5) * 2.5;
+      workingTableBody.innerHTML += `<tr><td>${weight} кг</td><td>${data.label}</td></tr>`;
+    });
+  }
 }
 
-/* WebAudio: синтетический смех*/
+/* WebAudio: синтетический смех (при ошибке) */
 let audioCtx = null;
 function ensureAudioContext() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -551,20 +722,52 @@ function showError(message) {
   errorDiv.innerText = message;
   errorDiv.classList.add("show");
   try { playDuckLikeLaugh(); } catch (e) {}
-  setTimeout(()=>{ errorDiv.classList.remove("show"); }, 1400);
+  setTimeout(()=>{ errorDiv.classList.remove("show"); }, 1500);
 }
 
-document.querySelectorAll(".dropdown > a").forEach(el=>{
-  el.addEventListener("click",e=>{
-    e.preventDefault();
-    el.parentElement.classList.toggle("open");
-  });
-});
+/* ===================== Восстановление кастомных упражнений при загрузке ===================== */
+function escapeHtml(text) {
+  const map = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"};
+  return String(text).replace(/[&<>"']/g, function(m){return map[m];});
+}
 
+function loadCustomExercisesToUI() {
+  const list = loadCustomList();
+  list.forEach(ex => createCustomResultBlock(ex));
+  if (list.length > 0) document.getElementById('results').style.display = 'block';
+}
+
+/* ===================== Инициализация страницы ===================== */
+window.onload = function() {
+  // тема
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "light") {
+    document.body.classList.add("light-theme");
+    document.querySelector(".theme-toggle").textContent = "☀️";
+  } else {
+    document.querySelector(".theme-toggle").textContent = "🌙";
+  }
+
+  // восстановим стандартные поля и уже посчитаем их (но не будем трогать кастомные)
+  restoreDefaultInputs();
+  // если есть значения — автоматически показать их расчёты
+  const anyDefaultFilled = defaultIds.some(id => {
+    const v = document.getElementById(id).value;
+    return v !== null && v !== "";
+  });
+  if (anyDefaultFilled) calculateWeights();
+
+  // загрузим кастомные упражнения из localStorage и отрисуем их
+  loadCustomExercisesToUI();
+
+  // выпадающие пункты меню
+  document.querySelectorAll(".dropdown > a").forEach(el=>{
+    el.addEventListener("click",e=>{
+      e.preventDefault();
+      el.parentElement.classList.toggle("open");
+    });
+  });
+};
 </script>
 </body>
 </html>
-
-
-
-
