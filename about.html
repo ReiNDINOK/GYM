@@ -17,6 +17,7 @@
   --bg-table-header: #555;
   --bg-dropdown: #262626;
   --bg-dropdown-hover: #333;
+  --bg-dropdown-active: #444;
 
   --text-main: #ddd;
   --text-secondary: #aaa;
@@ -44,7 +45,7 @@ body.light-theme {
   --bg-table-header: #ddd;
   --bg-dropdown: #f0f0f0;
   --bg-dropdown-hover: #ddd;
-
+  --bg-dropdown-active: #ccc
   --text-main: #222;
   --text-secondary: #444;
   --text-title: #111;
@@ -104,24 +105,21 @@ body {
 }
 .sidebar a:hover { background:#333; color:#fff; }
 /* выпадающий список */
-.dropdown > a::after {
-  content:"▼";
-  float:right;
-  font-size:0.8em;
-  transition:transform .3s;
-}
-.dropdown.open > a::after { transform:rotate(-180deg); }
-.dropdown ul { display:none; margin-left:10px; }
-.dropdown.open ul { display:block; }
 .dropdown ul a {
   font-size:0.9em;
   background: var(--bg-dropdown);
   border-radius:6px;
   padding:8px 10px;
-  transition: background .3s;
+  display:block;
+  transition: background .3s, color .3s;
 }
-.dropdown ul a:hover {
+.dropdown ul a:hover,
+.dropdown ul a:focus {
   background: var(--bg-dropdown-hover);
+  color: var(--text-contrast);
+}
+.dropdown ul a:active {
+  background: var(--bg-dropdown-active);
   color: var(--text-contrast);
 }
 /* === Контейнер контента === */
@@ -345,6 +343,7 @@ notifyBtn.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
 
 
 
