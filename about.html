@@ -175,7 +175,13 @@ body {
   border-radius: 6px;
   transition: transform .2s, background .3s;
 }
-.updates li:hover { transform: translateX(4px); background: #3d3d3d; }
+.updates li:hover { 
+  transform: translateX(4px); 
+  background: var(--bg-dropdown-hover); 
+}
+  .updates li:active {
+  background: var(--bg-dropdown-active);
+}
 .updates .version {
   display: inline-block;
   font-weight: bold;
@@ -355,6 +361,7 @@ notifyBtn.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
 
 
 
