@@ -254,25 +254,26 @@ footer {
   justify-content: center;
   box-shadow: 0 0 8px rgba(0,0,0,0.4);
   transition: background .3s, transform .2s;
-  z-index: 1000;}
+  z-index: 1000;
+}
 body.light-theme .theme-toggle {
   background: #ddd;
   color: #222;
 }
 .theme-toggle:hover { transform: translateY(-2px); }
+
+/* === Адаптив для телефонов === */
 @media (max-width: 768px) {
   body {
-    flex-direction: column; /* вместо горизонтального флекса */
+    flex-direction: column;
     padding: 10px;
   }
-
   .sidebar {
     width: 100%;
     margin: 0 0 15px 0;
     position: relative;
     top: auto;
   }
-
   .app {
     max-width: 100%;
   }
@@ -466,4 +467,5 @@ window.onload = function() {
   </script>
 </body>
 </html>
+
 
