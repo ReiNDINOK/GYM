@@ -1,291 +1,174 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Чек-лист упражнений: осанка · сутулость · поперечная</title>
+  <title>Чек-лист упражнений: осанка · сутулость · поперечная (плавная тема)</title>
+
+  <!-- Применяем тему до рендера, чтобы избежать мигания -->
   <script>
     (function() {
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "light") {
-        document.documentElement.classList.add("light-theme");
+      try {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+          // Класс ставим на элемент <html>, потому что он доступен сразу
+          document.documentElement.classList.add('light-theme');
+        }
+      } catch (e) {
+        // Игнорируем (privacy режимы могут блокировать localStorage)
       }
     })();
   </script>
+
   <style>
-:root {
-  /* === Тёмная тема (по умолчанию) === */
-  --bg-main: linear-gradient(135deg,#333 0%,#1c1c1c 100%);
-  --bg-sidebar: #1b1b1b;
-  --bg-container: #212121;
-  --bg-section: #282828;
-  --bg-card: #333;
-  --bg-input: #333;
-  --bg-table: #444;
-  --bg-table-header: #555;
+    :root {
+      /* === Тёмная тема (по умолчанию) === */
+      --bg-main: linear-gradient(135deg,#333 0%,#1c1c1c 100%);
+      --bg-sidebar: #1b1b1b;
+      --bg-container: #212121;
+      --bg-section: #282828;
+      --bg-card: #333;
+      --bg-input: #333;
+      --bg-table: #444;
+      --bg-table-header: #555;
 
-  --text-main: #ddd;
-  --text-secondary: #aaa;
-  --text-title: #f0f0f0;
-  --text-contrast: #fff;
+      --text-main: #ddd;
+      --text-secondary: #aaa;
+      --text-title: #f0f0f0;
+      --text-contrast: #fff;
 
-  --border-color: #666;
-  --header-bg: linear-gradient(135deg,#444 0%,#333 100%);
+      --border-color: #666;
+      --header-bg: linear-gradient(135deg,#444 0%,#333 100%);
 
-  --btn-bg: linear-gradient(135deg,#7f8c8d 0%,#5f6a6a 100%);
-  --btn-text: #fff;
+      --btn-bg: linear-gradient(135deg,#7f8c8d 0%,#5f6a6a 100%);
+      --btn-text: #fff;
 
-  --error-bg: #a60000;
-  --error-text: #fff;
-}
+      --error-bg: #a60000;
+      --error-text: #fff;
+    }
 
-body.light-theme {
-  /* === Светлая тема === */
-  --bg-main: linear-gradient(135deg,#f2f2f2 0%,#e8e8e8 100%);
-  --bg-sidebar: #eaeaea;
-  --bg-container: #fff;
-  --bg-section: #f9f9f9;
-  --bg-card: #f5f5f5;
-  --bg-input: #fff;
-  --bg-table: #f5f5f5;
-  --bg-table-header: #ddd;
+    /* Если класс назначен на <html>, переменные переопределятся до рендера */
+    html.light-theme {
+      --bg-main: linear-gradient(135deg,#f2f2f2 0%,#e8e8e8 100%);
+      --bg-sidebar: #eaeaea;
+      --bg-container: #fff;
+      --bg-section: #f9f9f9;
+      --bg-card: #f5f5f5;
+      --bg-input: #fff;
+      --bg-table: #f5f5f5;
+      --bg-table-header: #ddd;
 
-  --text-main: #222;
-  --text-secondary: #444;
-  --text-title: #111;
-  --text-contrast: #000;
+      --text-main: #222;
+      --text-secondary: #444;
+      --text-title: #111;
+      --text-contrast: #000;
 
-  --border-color: #bbb;
-  --header-bg: linear-gradient(135deg,#ddd 0%,#bbb 100%);
+      --border-color: #bbb;
+      --header-bg: linear-gradient(135deg,#ddd 0%,#bbb 100%);
 
-  --btn-bg: linear-gradient(135deg,#bbb 0%,#999 100%);
-  --btn-text: #222;
+      --btn-bg: linear-gradient(135deg,#bbb 0%,#999 100%);
+      --btn-text: #222;
 
-  --error-bg: #ff5555;
-  --error-text: #fff;
-}
+      --error-bg: #ff5555;
+      --error-text: #fff;
+    }
 
-/* === Общий стиль === */
-* { margin:0; padding:0; box-sizing:border-box; }
+    /* === Плавная загрузка (без мигания) === */
+    html, body {
+      height: 100%;
+    }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: var(--bg-main);
-  min-height:100vh; padding:20px;
-  display:flex;
-  color: var(--text-main);
-}
+    /* Скрываем содержимое до тех пор, пока класс темы не будет применён и DOMContentLoaded не сработает */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-main);
+      min-height:100vh; padding:20px;
+      display:flex; color: var(--text-main);
 
-/* === Боковое меню === */
-.sidebar {
-  width:220px;
-  background: var(--bg-sidebar);
-  border-radius:10px;
-  box-shadow:0 0 15px rgba(0,0,0,0.5);
-  padding:15px;
-  margin-right:20px;
-  height:fit-content;
-  position:sticky;
-  top:20px;
-}
-.sidebar h2 {
-  font-size:1.3em;
-  margin-bottom:10px;
-  color: var(--text-title);
-  text-align:center;
-}
-.sidebar ul { list-style:none; }
-.sidebar li { margin:8px 0; position:relative; }
-.sidebar a {
-  display:block;
-  padding:10px 12px;
-  text-decoration:none;
-  color: var(--text-main);
-  border-radius:8px;
-  transition:background .3s, color .3s;
-}
-.sidebar a:hover {
-  background: var(--bg-card);
-  color: var(--text-contrast);
-}
-/* выпадающий список */
-.dropdown > a::after {
-  content:"▼";
-  float:right;
-  font-size:0.8em;
-  transition:transform .3s;
-}
-.dropdown.open > a::after { transform:rotate(-180deg); }
-.dropdown ul { display:none; margin-left:10px; }
-.dropdown.open ul { display:block; }
-.dropdown ul a {
-  font-size:0.9em;
-  background: var(--bg-section);
-}
+      /* общие переходы для смены темы */
+      transition: background .35s ease, color .35s ease;
 
-/* === Основное приложение === */
-.app {
-  flex:1;
-  max-width:1200px;
-  background: var(--bg-container);
-  border-radius:15px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.7);
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-}
+      /* изначально невидим, чтобы избежать мерцания */
+      opacity: 0;
+      transition-property: opacity, background, color;
+      transition-duration: .35s, .35s, .35s;
+      transition-timing-function: ease, ease, ease;
+    }
 
-header {
-  background: var(--header-bg);
-  color: var(--text-title);
-  padding:30px;
-  text-align:center;
-  border-bottom:2px solid var(--border-color);
-  position:relative;
-}
-header h1 {
-  font-size:2.2em;
-  margin:0;
-}
+    /* Когда JS завершит подготовку — покажем страницу плавно */
+    html.ready body {
+      opacity: 1;
+    }
 
-.content {
-  padding:30px;
-  background: var(--bg-section);
-  flex:1;
-}
-.controls {
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  justify-content:center;
-  margin-bottom:20px;
-}
-button {
-  border:none;
-  padding:14px 24px;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:600;
-  font-size:16px;
-  transition:transform .2s, background .3s;
-}
-#generate {
-  background: var(--btn-bg);
-  color: var(--btn-text);
-}
-#save {
-  background: var(--bg-card);
-  color: var(--text-main);
-  border:2px solid var(--border-color);
-}
-#clear {
-  background: linear-gradient(135deg,#a60000,#6b0000);
-  color:white;
-}
-button:hover { transform:translateY(-2px); }
-.hint {
-  color: var(--text-secondary);
-  font-size:14px;
-  text-align:center;
-  margin-bottom:20px;
-}
+    /* Если JS выключен — сразу показываем страницу */
+    noscript body { opacity: 1; }
 
-/* === Список упражнений === */
-.exercise-list {
-  list-style:none;
-  padding:0;
-  margin:0;
-  display:grid;
-  gap:20px;
-}
-.exercise-list li {
-  background: var(--bg-card);
-  border-radius:10px;
-  padding:18px;
-  box-shadow:0 2px 10px rgba(0,0,0,0.5);
-  display:grid;
-  gap:10px;
-}
-.title {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight:bold;
-  font-size:1.1em;
-  color: var(--text-title);
-}
-.badge {
-  font-size:12px;
-  padding:4px 10px;
-  border-radius:999px;
-  background: var(--bg-table-header);
-  color: var(--text-main);
-}
-label.exercise {
-  display:grid;
-  grid-template-columns:24px 1fr;
-  gap:12px;
-  cursor:pointer;
-}
-input[type="checkbox"] {
-  width:20px; height:20px; margin-top:2px;
-  accent-color:#34d399;
-}
-.desc { color: var(--text-main); font-size:14px; }
-.meta { color: var(--text-secondary); font-size:12px; }
+    /* === Общий стиль === */
+    * { margin:0; padding:0; box-sizing:border-box; }
 
-footer {
-  padding:20px;
-  background: var(--bg-section);
-  border-top:2px solid var(--border-color);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:13px;
-  color: var(--text-secondary);
-}
+    /* === Боковое меню === */
+    .sidebar {
+      width:220px;
+      background: var(--bg-sidebar);
+      border-radius:10px;
+      box-shadow:0 0 15px rgba(0,0,0,0.5);
+      padding:15px;
+      margin-right:20px;
+      height:fit-content;
+      position:sticky;
+      top:20px;
+    }
+    .sidebar h2 { font-size:1.3em; margin-bottom:10px; color: var(--text-title); text-align:center; }
+    .sidebar ul { list-style:none; }
+    .sidebar li { margin:8px 0; position:relative; }
+    .sidebar a { display:block; padding:10px 12px; text-decoration:none; color: var(--text-main); border-radius:8px; transition:background .3s, color .3s; }
+    .sidebar a:hover { background: var(--bg-card); color: var(--text-contrast); }
 
-/* === Кнопка переключения темы === */
-.theme-toggle {
-  position: fixed;
-  left: 20px; bottom: 20px;
-  background: #444;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 50px; height: 50px;
-  cursor: pointer;
-  font-size: 1.4em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 8px rgba(0,0,0,0.4);
-  transition: background .3s, transform .2s;
-  z-index: 1000;
-}
-body.light-theme .theme-toggle {
-  background: #ddd;
-  color: #222;
-}
-.theme-toggle:hover { transform: translateY(-2px); }
+    .dropdown > a::after { content:"▼"; float:right; font-size:0.8em; transition:transform .3s; }
+    .dropdown.open > a::after { transform:rotate(-180deg); }
+    .dropdown ul { display:none; margin-left:10px; }
+    .dropdown.open ul { display:block; }
+    .dropdown ul a { font-size:0.9em; background: var(--bg-section); }
 
-/* === Адаптив для телефонов === */
-@media (max-width: 768px) {
-  body {
-    flex-direction: column;
-    padding: 10px;
-  }
-  .sidebar {
-    width: 100%;
-    margin: 0 0 15px 0;
-    position: relative;
-    top: auto;
-  }
-  .app {
-    max-width: 100%;
-  }
-}
+    /* === Основное приложение === */
+    .app { flex:1; max-width:1200px; background: var(--bg-container); border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.7); overflow:hidden; display:flex; flex-direction:column; }
+
+    header { background: var(--header-bg); color: var(--text-title); padding:30px; text-align:center; border-bottom:2px solid var(--border-color); position:relative; }
+    header h1 { font-size:2.2em; margin:0; }
+
+    .content { padding:30px; background: var(--bg-section); flex:1; }
+    .controls { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:20px; }
+    button { border:none; padding:14px 24px; border-radius:8px; cursor:pointer; font-weight:600; font-size:16px; transition:transform .2s, background .3s; }
+    #generate { background: var(--btn-bg); color: var(--btn-text); }
+    #save { background: var(--bg-card); color: var(--text-main); border:2px solid var(--border-color); }
+    #clear { background: linear-gradient(135deg,#a60000,#6b0000); color:white; }
+    button:hover { transform:translateY(-2px); }
+    .hint { color: var(--text-secondary); font-size:14px; text-align:center; margin-bottom:20px; }
+
+    /* === Список упражнений === */
+    .exercise-list { list-style:none; padding:0; margin:0; display:grid; gap:20px; }
+    .exercise-list li { background: var(--bg-card); border-radius:10px; padding:18px; box-shadow:0 2px 10px rgba(0,0,0,0.5); display:grid; gap:10px; }
+    .title { display:flex; align-items:center; gap:10px; font-weight:bold; font-size:1.1em; color: var(--text-title); }
+    .badge { font-size:12px; padding:4px 10px; border-radius:999px; background: var(--bg-table-header); color: var(--text-main); }
+    label.exercise { display:grid; grid-template-columns:24px 1fr; gap:12px; cursor:pointer; }
+    input[type="checkbox"] { width:20px; height:20px; margin-top:2px; accent-color:#34d399; }
+    .desc { color: var(--text-main); font-size:14px; }
+    .meta { color: var(--text-secondary); font-size:12px; }
+
+    footer { padding:20px; background: var(--bg-section); border-top:2px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; font-size:13px; color: var(--text-secondary); }
+
+    /* === Кнопка переключения темы === */
+    .theme-toggle { position: fixed; left: 20px; bottom: 20px; background: #444; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 1.4em; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 8px rgba(0,0,0,0.4); transition: background .3s, transform .2s; z-index: 1000; }
+    html.light-theme .theme-toggle, body.light-theme .theme-toggle { background: #ddd; color: #222; }
+    .theme-toggle:hover { transform: translateY(-2px); }
+
+    /* === Адаптив для телефонов === */
+    @media (max-width: 768px) {
+      body { flex-direction: column; padding: 10px; }
+      .sidebar { width: 100%; margin: 0 0 15px 0; position: relative; top: auto; }
+      .app { max-width: 100%; }
+      .controls { justify-content: stretch; }
+    }
   </style>
 </head>
 <body>
@@ -326,25 +209,50 @@ body.light-theme .theme-toggle {
       <span id="progress">0 / 3 выполнено</span>
     </footer>
   </div>
-<!-- Кнопка переключения темы -->
-<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+  <!-- Кнопка переключения темы -->
+  <button class="theme-toggle" id="themeToggle">🌙</button>
 
   <script>
-function toggleTheme() {
-  document.body.classList.toggle("light-theme");
-  const isLight = document.body.classList.contains("light-theme");
-  localStorage.setItem("theme", isLight ? "light" : "dark");
+    // После того как DOM готов — помечаем страницу как "ready" чтобы показать её плавно.
+    window.addEventListener('DOMContentLoaded', () => {
+      // Пометим, что готово показывать содержимое
+      document.documentElement.classList.add('ready');
 
-  document.querySelector(".theme-toggle").textContent = isLight ? "☀️" : "🌙";
-}
+      // Установим корректный значок на кнопке темы сразу после рендера
+      const btn = document.getElementById('themeToggle');
+      if (document.documentElement.classList.contains('light-theme')) {
+        btn.textContent = '☀️';
+      } else {
+        btn.textContent = '🌙';
+      }
+    });
 
-window.onload = function() {
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "light") {
-    document.body.classList.add("light-theme");
-    document.querySelector(".theme-toggle").textContent = "☀️"; 
-  }
-};
+    // Переключение темы (работаем с <html> чтобы сначала класс мог быть выставлен в head)
+    function toggleTheme() {
+      const html = document.documentElement;
+      html.classList.toggle('light-theme');
+      const isLight = html.classList.contains('light-theme');
+      try { localStorage.setItem('theme', isLight ? 'light' : 'dark'); } catch (e) {}
+      document.getElementById('themeToggle').textContent = isLight ? '☀️' : '🌙';
+    }
+
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+    // Поддержка синхронизации между вкладками
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'theme') {
+        if (e.newValue === 'light') {
+          document.documentElement.classList.add('light-theme');
+          document.getElementById('themeToggle').textContent = '☀️';
+        } else {
+          document.documentElement.classList.remove('light-theme');
+          document.getElementById('themeToggle').textContent = '🌙';
+        }
+      }
+    });
+
+    // === Логика приложения (генерация чек-листа, сохранение прогресса) ===
     const STORAGE_KEY = 'coreChecklistV1';
     const POOLS = {
       posture: [
@@ -439,7 +347,7 @@ window.onload = function() {
     }
 
     function persist(state) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
     }
 
     function saveProgress() {
@@ -453,7 +361,7 @@ window.onload = function() {
     document.getElementById('generate').addEventListener('click', generateNew);
     document.getElementById('save').addEventListener('click', saveProgress);
     document.getElementById('clear').addEventListener('click', () => {
-      localStorage.removeItem(STORAGE_KEY);
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
       listEl.innerHTML = '';
       progressEl.textContent = '0 / 3 выполнено';
     });
@@ -466,15 +374,19 @@ window.onload = function() {
     }
 
     // выпадающее меню
-    document.querySelectorAll(".dropdown > a").forEach(el=>{
-      el.addEventListener("click",e=>{
+    document.querySelectorAll('.dropdown > a').forEach(el=>{
+      el.addEventListener('click',e=>{
         e.preventDefault();
-        el.parentElement.classList.toggle("open");
+        el.parentElement.classList.toggle('open');
       });
     });
   </script>
+
+  <noscript>
+    <style>
+      /* Если JS отключен — показываем контент и (не) переключаем тему */
+      body { opacity: 1 !important; }
+    </style>
+  </noscript>
 </body>
 </html>
-
-
-
