@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Калькулятор рабочих весов</title>
 <style>
-:root {
+  :root {
   /* === Тёмная тема (по умолчанию) === */
   --bg-main: linear-gradient(135deg,#333 0%,#1c1c1c 100%);
   --bg-sidebar: #1b1b1b;
@@ -89,13 +89,8 @@ body {
   color:#f0f0f0;
   text-align:center;
 }
-.sidebar ul {
-  list-style:none;
-}
-.sidebar li {
-  margin:8px 0;
-  position:relative;
-}
+.sidebar ul { list-style:none; }
+.sidebar li { margin:8px 0; position:relative; }
 .sidebar a {
   display:block;
   padding:10px 12px;
@@ -104,10 +99,7 @@ body {
   border-radius:8px;
   transition:background .3s, color .3s;
 }
-.sidebar a:hover {
-  background:#333;
-  color:#fff;
-}
+.sidebar a:hover { background:#333; color:#fff; }
 /* выпадающий список */
 .dropdown > a::after {
   content:"▼";
@@ -115,20 +107,10 @@ body {
   font-size:0.8em;
   transition:transform .3s;
 }
-.dropdown.open > a::after {
-  transform:rotate(-180deg);
-}
-.dropdown ul {
-  display:none;
-  margin-left:10px;
-}
-.dropdown.open ul {
-  display:block;
-}
-.dropdown ul a {
-  font-size:0.9em;
-  background:#262626;
-}
+.dropdown.open > a::after { transform:rotate(-180deg); }
+.dropdown ul { display:none; margin-left:10px; }
+.dropdown.open ul { display:block; }
+.dropdown ul a { font-size:0.9em; background:#262626; }
 
 /* === Контейнер контента === */
 .container {
@@ -180,19 +162,51 @@ body {
 .weight-table th, .weight-table td { padding:10px; text-align:center; border-bottom:1px solid #666; }
 .weight-table th { background:#555; color:white; font-weight:bold; }
 .emoji { font-size:1.2em; margin-right:10px; }
+
+/* === Обновления === */
+.updates {
+  background: #2a2a2a;
+  margin-top: 25px;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  text-align: left;
+}
+.updates h2 {
+  margin-bottom: 15px;
+  font-size: 1.4em;
+  color: #f0f0f0;
+  border-bottom: 1px solid #444;
+  padding-bottom: 8px;
+}
+.updates ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.updates li {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-left: 4px solid #7f8c8d;
+  background: #333;
+  border-radius: 6px;
+  transition: transform .2s, background .3s;
+}
+.updates li:hover { transform: translateX(4px); background: #3d3d3d; }
+.updates .version {
+  display: inline-block;
+  font-weight: bold;
+  color: #7f8c8d;
+  margin-right: 10px;
+}
+.updates .desc { color: #ddd; }
+
 @media (max-width:768px) {
   body { flex-direction:column; }
   .sidebar { width:100%; margin-bottom:20px; position:static; }
   .weight-tables { grid-template-columns:1fr; }
   .header h1 { font-size:2em; }
 }
-#error-message {
-  opacity:0; background-color:#a60000; color:white; padding:12px; margin-bottom:20px;
-  border-radius:5px; text-align:center; max-width:600px; margin-left:auto; margin-right:auto;
-  transition: opacity .4s ease-in-out; pointer-events:none; user-select:none; box-shadow:0 0 15px rgba(180,0,0,0.9);
-  position:relative;
-}
-#error-message.show { opacity:1; pointer-events:auto; user-select:auto; }
 #notify-btn {
   position: fixed;
   right: 20px;
@@ -211,10 +225,7 @@ body {
   transition: background 0.3s;
   z-index: 1000;
 }
-#notify-btn:hover {
-  background: #666;
-}
-
+#notify-btn:hover { background: #666; }
 #notify-box {
   position: fixed;
   right: 20px;
@@ -232,69 +243,62 @@ body {
   display: block;
   animation: fadeIn 0.3s ease;
 }
-
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-/* === Кнопка переключения темы === */
-.theme-toggle {
-  position: fixed;
-  left: 20px; bottom: 20px;
-  background: #444;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 50px; height: 50px;
-  cursor: pointer;
-  font-size: 1.4em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 8px rgba(0,0,0,0.4);
-  transition: background .3s, transform .2s;
-  z-index: 1000;}
-body.light-theme .theme-toggle {
-  background: #ddd;
-  color: #222;
-}
-.theme-toggle:hover { transform: translateY(-2px); }
-
 </style>
 </head>
 <body>
-<!-- Боковое меню -->
+  <!-- Боковое меню -->
   <div class="sidebar">
     <h2>Меню</h2>
     <ul>
-      <li><a href="index.html">🏠 Главная</a></li>
+      <li><a href='/'>🏠 Главная</a></li>
       <li class="dropdown">
         <a href="#">📂 Разделы</a>
         <ul>
-          <li><a href="gum.html">Моё тело - железо</a></li>
-          <li><a href="osanka.html">Позвоночник - титан</a></li>
+          <li><a href='/gum'>Моё тело - железо</a></li>
+          <li><a href='/osanka'>Позвоночник - титан</a></li>
         </ul>
       </li>
-      
+      <li><a href='/about'>ℹ️ О проекте</a></li>
     </ul>
   </div>
   <div class="container">
     <div class="header">
-  <h1>Данный сайт создан для помощи себе и паре близких друзей</h1>
-  <p>P.S. Make love, not war</p>
-  <img src="https://avatars.mds.yandex.net/get-entity_search/2363292/1057020936/S600xU_2x" 
-       alt="IMAGE" class="header-img">
-<p>Последние обновления:</p>
-<p>Версия 4.1.1: Добавлен армейский жим на главной странице, улучшено визуальное оформление некоторых разделов</p>
-</div>
-<!-- Кнопка-иконка -->
-<div id="notify-btn">💡</div>
+      <h1>Данный сайт создан для помощи себе и паре близких друзей</h1>
+      <img src="https://avatars.mds.yandex.net/get-entity_search/2363292/1057020936/S600xU_2x" 
+           alt="IMAGE" class="header-img">  
+    </div>
 
-<!-- Уведомление -->
-<div id="notify-box">Если у тебя есть доступ к данному сайту - его автора ты знаешь. Найдёшь ошибки - сообщи, не будь бякой! 
-😉</div>
-<!-- Кнопка переключения темы -->
+    <!-- Блок обновлений -->
+    <div class="updates">
+      <h2>📌 Последние обновления</h2>
+      <ul>
+        <li>
+          <span class="version">v 4.1.3</span>
+          <span class="desc">Добавлены "светлая" и "тёмные" темы</span>
+        </li>
+        <li>
+          <span class="version">v 4.1.2</span>
+          <span class="desc">Добавлено боковое меню в каждый раздел сайта</span>
+        </li>
+        <li>
+          <span class="version">v 4.1.1</span>
+          <span class="desc">Добавлен армейский жим на главной странице, улучшено визуальное оформление некоторых разделов</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Кнопка-иконка -->
+  <div id="notify-btn">💡</div>
+  <!-- Уведомление -->
+  <div id="notify-box">Если у тебя есть доступ к данному сайту - его автора ты знаешь. Найдёшь ошибки - сообщи, не будь бякой! 😉</div>
+  <!-- Кнопка переключения темы -->
 <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
 <script>
 function toggleTheme() {
   document.body.classList.toggle("light-theme");
@@ -319,141 +323,7 @@ window.onload = function() {
   });
 };
 
-function calculateWeights() {
-  const exercises = ["deadlift","bench","squat","biceps"];
-  let allEmpty = true;
-  let hasZero = false;
-  let below20 = false;
-  const values = {};
-
-  exercises.forEach(id => {
-    const val = parseFloat(document.getElementById(id).value);
-    if (!isNaN(val) && val > 0) {
-      allEmpty = false;
-      values[id] = val;
-      if (val < 20) below20 = true;
-    } else if (val === 0) {
-      hasZero = true;
-    }
-  });
-
-  if (allEmpty) {
-    showError("Дорогой, нехой пустоту тягать!");
-    return;
-  }
-  if (hasZero) return;
-
-  if (below20) {
-    showError("Хотя бы гриф подними!");
-    return;
-  }
-
-  exercises.forEach(id => {
-    localStorage.setItem(id, document.getElementById(id).value);
-  });
-
-  if (values.deadlift) {
-    calculateExercise('deadlift', values.deadlift,
-      [{percent:43,reps:8},{percent:57,reps:5},{percent:64,reps:3}],
-      [{percent:70,label:'70% (6-10 повт.)'},{percent:75,label:'75% (6-8 повт.)'},{percent:80,label:'80% (6 повт.)'},{percent:82,label:'82% (максимум)'}]
-    );
-    document.getElementById('deadlift-result').style.display='block';
-  } else document.getElementById('deadlift-result').style.display='none';
-
-  if (values.bench) {
-    calculateExercise('bench', values.bench,
-      [{percent:40,reps:10},{percent:60,reps:6},{percent:70,reps:3}],
-      [{percent:70,label:'70% (8-12 повт.)'},{percent:75,label:'75% (8-10 повт.)'},{percent:80,label:'80% (8 повт.)'}]
-    );
-    document.getElementById('bench-result').style.display='block';
-  } else document.getElementById('bench-result').style.display='none';
-
-  if (values.squat) {
-    calculateExercise('squat', values.squat,
-      [{percent:40,reps:10},{percent:60,reps:6},{percent:70,reps:3}],
-      [{percent:70,label:'70% (8-12 повт.)'},{percent:75,label:'75% (8-10 повт.)'},{percent:80,label:'80% (8 повт.)'}]
-    );
-    document.getElementById('squat-result').style.display='block';
-  } else document.getElementById('squat-result').style.display='none';
-
-  if (values.biceps) {
-    calculateExercise('biceps', values.biceps,
-      [{percent:40,reps:10},{percent:60,reps:6},{percent:70,reps:3}],
-      [{percent:65,label:'65% (10-12 повт.)'},{percent:70,label:'70% (8-10 повт.)'},{percent:75,label:'75% (6-8 повт.)'}]
-    );
-    document.getElementById('biceps-result').style.display='block';
-  } else document.getElementById('biceps-result').style.display='none';
-
-  document.getElementById('results').style.display='block';
-  document.getElementById('results').scrollIntoView({behavior:'smooth'});
-}
-
-function calculateExercise(exercise, oneRM, warmupData, workingData) {
-  const warmupTableBody = document.getElementById(exercise + '-warmup');
-  warmupTableBody.innerHTML = '';
-  warmupData.forEach(data=>{
-    const weight = Math.round((oneRM * data.percent / 100) / 2.5) * 2.5;
-    warmupTableBody.innerHTML += `<tr><td>${weight} кг</td><td>${data.reps}</td></tr>`;
-  });
-
-  const workingTableBody = document.getElementById(exercise + '-working');
-  workingTableBody.innerHTML = '';
-  workingData.forEach(data=>{
-    const weight = Math.round((oneRM * data.percent / 100) / 2.5) * 2.5;
-    workingTableBody.innerHTML += `<tr><td>${weight} кг</td><td>${data.label}</td></tr>`;
-  });
-}
-
-/* WebAudio: синтетический смех */
-let audioCtx = null;
-function ensureAudioContext() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
-  return audioCtx;
-}
-
-function playDuckLikeLaugh() {
-  const ctx = ensureAudioContext();
-  const now = ctx.currentTime + 0.01;
-  const master = ctx.createGain(); master.gain.value = 0.8; master.connect(ctx.destination);
-
-  const noiseBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.08), ctx.sampleRate);
-  const data = noiseBuf.getChannelData(0);
-  for (let i=0;i<data.length;i++) data[i] = (Math.random()*2-1)*(1 - i/data.length);
-  const noise = ctx.createBufferSource(); noise.buffer = noiseBuf;
-  const nf = ctx.createBiquadFilter(); nf.type='bandpass'; nf.frequency.value = 1200;
-  noise.connect(nf); nf.connect(master);
-  noise.start(now); noise.stop(now + 0.08);
-
-  const syllables = [{t:0,f:200,d:0.16},{t:0.17,f:260,d:0.13},{t:0.33,f:320,d:0.11}];
-  syllables.forEach(s=>{
-    const o1 = ctx.createOscillator(); o1.type='square'; o1.frequency.setValueAtTime(s.f, now + s.t);
-    const o2 = ctx.createOscillator(); o2.type='sawtooth'; o2.frequency.setValueAtTime(s.f*1.02, now + s.t);
-    const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, now + s.t);
-    g.gain.exponentialRampToValueAtTime(0.45, now + s.t + 0.02);
-    g.gain.exponentialRampToValueAtTime(0.0001, now + s.t + s.d);
-    const fil = ctx.createBiquadFilter(); fil.type='lowpass'; fil.frequency.setValueAtTime(2200, now + s.t);
-    o1.connect(g); o2.connect(g); g.connect(fil); fil.connect(master);
-    o1.start(now + s.t); o1.stop(now + s.t + s.d + 0.02);
-    o2.start(now + s.t); o2.stop(now + s.t + s.d + 0.02);
-  });
-
-  const bass = ctx.createOscillator(); bass.type='sine'; bass.frequency.setValueAtTime(90, now + 0.46);
-  const gb = ctx.createGain(); gb.gain.setValueAtTime(0.0001, now + 0.46);
-  gb.gain.linearRampToValueAtTime(0.35, now + 0.46 + 0.01);
-  gb.gain.exponentialRampToValueAtTime(0.0001, now + 0.46 + 0.26);
-  bass.connect(gb); gb.connect(master);
-  bass.start(now + 0.46); bass.stop(now + 0.46 + 0.28);
-}
-
-function showError(message) {
-  const errorDiv = document.getElementById("error-message");
-  errorDiv.innerText = message;
-  errorDiv.classList.add("show");
-  try { playDuckLikeLaugh(); } catch (e) {}
-  setTimeout(()=>{ errorDiv.classList.remove("show"); }, 1400);
-}
-// выпадающее меню
+  // выпадающее меню
 document.querySelectorAll(".dropdown > a").forEach(el=>{
   el.addEventListener("click",e=>{
     e.preventDefault();
@@ -462,10 +332,10 @@ document.querySelectorAll(".dropdown > a").forEach(el=>{
 });
 const notifyBtn = document.getElementById("notify-btn");
 const notifyBox = document.getElementById("notify-box");
-
 notifyBtn.addEventListener("click", () => {
   notifyBox.classList.toggle("show");
 });
 </script>
 </body>
 </html>
+
