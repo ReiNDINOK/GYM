@@ -328,32 +328,40 @@ function toggleTheme() {
   document.body.classList.toggle("light-theme");
   const isLight = document.body.classList.contains("light-theme");
   localStorage.setItem("theme", isLight ? "light" : "dark");
-
   document.querySelector(".theme-toggle").textContent = isLight ? "☀️" : "🌙";
 }
 
-window.onload = function() {
+// при загрузке страницы
+window.addEventListener("load", () => {
   const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "light") {
-    document.body.classList.add("light-theme");
-    document.querySelector(".theme-toggle").textContent = "☀️"; 
-  }
-};
+  const isLight = savedTheme === "light";
 
-window.onload = function() {
+  if (isLight) {
+    document.body.classList.add("light-theme");
+  }
+
+  // выставляем иконку сразу под сохранённую тему
+  document.querySelector(".theme-toggle").textContent = isLight ? "☀️" : "🌙";
+
+  // восстановление значений полей (если они есть на странице)
   ["deadlift","bench","squat","biceps"].forEach(id=>{
     const saved = localStorage.getItem(id);
-    if (saved !== null) document.getElementById(id).value = saved;
+    if (saved !== null) {
+      const el = document.getElementById(id);
+      if (el) el.value = saved;
+    }
   });
-};
+});
 
-  // выпадающее меню
+// выпадающее меню
 document.querySelectorAll(".dropdown > a").forEach(el=>{
   el.addEventListener("click",e=>{
     e.preventDefault();
     el.parentElement.classList.toggle("open");
   });
 });
+
+// уведомления
 const notifyBtn = document.getElementById("notify-btn");
 const notifyBox = document.getElementById("notify-box");
 notifyBtn.addEventListener("click", () => {
@@ -362,5 +370,6 @@ notifyBtn.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
 
 
