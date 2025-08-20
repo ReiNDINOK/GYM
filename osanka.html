@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -5,218 +6,261 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Чек-лист упражнений: осанка · сутулость · поперечная</title>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg,#333 0%,#1c1c1c 100%);
-      min-height:100vh; padding:20px; color:#ddd;
-      display:flex;
-    }
+:root {
+  /* === Тёмная тема (по умолчанию) === */
+  --bg-main: linear-gradient(135deg,#333 0%,#1c1c1c 100%);
+  --bg-sidebar: #1b1b1b;
+  --bg-container: #212121;
+  --bg-section: #282828;
+  --bg-card: #333;
+  --bg-input: #333;
+  --bg-table: #444;
+  --bg-table-header: #555;
 
-    /* === Боковое меню === */
-    .sidebar {
-      width:220px;
-      background:#1b1b1b;
-      border-radius:10px;
-      box-shadow:0 0 15px rgba(0,0,0,0.5);
-      padding:15px;
-      margin-right:20px;
-      height:fit-content;
-      position:sticky;
-      top:20px;
-    }
-    .sidebar h2 {
-      font-size:1.3em;
-      margin-bottom:10px;
-      color:#f0f0f0;
-      text-align:center;
-    }
-    .sidebar ul {
-      list-style:none;
-      padding:0;
-      margin:0;
-    }
-    .sidebar li {
-      margin:8px 0;
-      position:relative;
-    }
-    .sidebar a {
-      display:block;
-      padding:10px 12px;
-      text-decoration:none;
-      color:#ddd;
-      border-radius:8px;
-      transition:background .3s, color .3s;
-    }
-    .sidebar a:hover {
-      background:#333;
-      color:#fff;
-    }
-    /* выпадающий список */
-    .dropdown > a::after {
-      content:"▼";
-      float:right;
-      font-size:0.8em;
-      transition:transform .3s;
-    }
-    .dropdown.open > a::after {
-      transform:rotate(-180deg);
-    }
-    .dropdown ul {
-      display:none;
-      margin-left:10px;
-      list-style:none;
-      padding:0;
-    }
-    .dropdown.open ul {
-      display:block;
-    }
-    .dropdown ul a {
-      font-size:0.9em;
-      background:#262626;
-    }
+  --text-main: #ddd;
+  --text-secondary: #aaa;
+  --text-title: #f0f0f0;
+  --text-contrast: #fff;
 
-    /* === Основное приложение === */
-    .app {
-      flex:1;
-      max-width:1200px;
-      background:#212121;
-      border-radius:15px;
-      box-shadow:0 10px 30px rgba(0,0,0,0.7);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-    }
-    header {
-      background: linear-gradient(135deg,#444 0%,#333 100%);
-      color:#ecf0f1;
-      padding:30px;
-      text-align:center;
-      border-bottom:2px solid #555;
-      position:relative;
-    }
-    header h1 {
-      font-size:2.2em;
-      margin:0;
-    }
+  --border-color: #666;
+  --header-bg: linear-gradient(135deg,#444 0%,#333 100%);
 
-    .content {
-      padding:30px;
-      background:#282828;
-      flex:1;
-    }
-    .controls {
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      justify-content:center;
-      margin-bottom:20px;
-    }
-    button {
-      border:none;
-      padding:14px 24px;
-      border-radius:8px;
-      cursor:pointer;
-      font-weight:600;
-      font-size:16px;
-      transition:transform .2s, background .3s;
-    }
-    #generate {
-      background: linear-gradient(135deg,#7f8c8d,#5f6a6a);
-      color:white;
-    }
-    #save {
-      background:#333;
-      color:#ecf0f1;
-      border:2px solid #555;
-    }
-    #clear {
-      background: linear-gradient(135deg,#a60000,#6b0000);
-      color:white;
-    }
-    button:hover { transform:translateY(-2px); }
-    .hint {
-      color:#aaa;
-      font-size:14px;
-      text-align:center;
-      margin-bottom:20px;
-    }
+  --btn-bg: linear-gradient(135deg,#7f8c8d 0%,#5f6a6a 100%);
+  --btn-text: #fff;
 
-    /* === Список упражнений === */
-    .exercise-list {
-      list-style:none;
-      padding:0;
-      margin:0;
-      display:grid;
-      gap:20px;
-    }
-    .exercise-list li {
-      background:#333;
-      border-radius:10px;
-      padding:18px;
-      box-shadow:0 2px 10px rgba(0,0,0,0.5);
-      display:grid;
-      gap:10px;
-    }
-    .title {
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-weight:bold;
-      font-size:1.1em;
-      color:#f0f0f0;
-    }
-    .badge {
-      font-size:12px;
-      padding:4px 10px;
-      border-radius:999px;
-      background:#555;
-      color:#ddd;
-    }
-    label.exercise {
-      display:grid;
-      grid-template-columns:24px 1fr;
-      gap:12px;
-      cursor:pointer;
-    }
-    input[type="checkbox"] {
-      width:20px; height:20px; margin-top:2px;
-      accent-color:#34d399;
-    }
-    .desc { color:#ccc; font-size:14px; }
-    .meta { color:#888; font-size:12px; }
+  --error-bg: #a60000;
+  --error-text: #fff;
+}
 
-    footer {
-      padding:20px;
-      background:#282828;
-      border-top:2px solid #555;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      font-size:13px;
-      color:#aaa;
-    }
+body.light-theme {
+  /* === Светлая тема === */
+  --bg-main: linear-gradient(135deg,#f2f2f2 0%,#e8e8e8 100%);
+  --bg-sidebar: #eaeaea;
+  --bg-container: #fff;
+  --bg-section: #f9f9f9;
+  --bg-card: #f5f5f5;
+  --bg-input: #fff;
+  --bg-table: #f5f5f5;
+  --bg-table-header: #ddd;
 
-    /* Мобильная версия */
-    @media (max-width: 768px) {
-      body {
-        flex-direction: column;
-        padding:10px;
-      }
-      .sidebar {
-        width:100%;
-        margin:0 0 20px;
-        position:static;
-      }
-      header h1 {
-        font-size:1.6em;
-      }
-      footer {
-        flex-direction:column;
-        gap:8px;
-        text-align:center;
-      }
-    }
+  --text-main: #222;
+  --text-secondary: #444;
+  --text-title: #111;
+  --text-contrast: #000;
+
+  --border-color: #bbb;
+  --header-bg: linear-gradient(135deg,#ddd 0%,#bbb 100%);
+
+  --btn-bg: linear-gradient(135deg,#bbb 0%,#999 100%);
+  --btn-text: #222;
+
+  --error-bg: #ff5555;
+  --error-text: #fff;
+}
+
+/* === Общий стиль === */
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-main);
+  min-height:100vh; padding:20px;
+  display:flex;
+  color: var(--text-main);
+}
+
+/* === Боковое меню === */
+.sidebar {
+  width:220px;
+  background: var(--bg-sidebar);
+  border-radius:10px;
+  box-shadow:0 0 15px rgba(0,0,0,0.5);
+  padding:15px;
+  margin-right:20px;
+  height:fit-content;
+  position:sticky;
+  top:20px;
+}
+.sidebar h2 {
+  font-size:1.3em;
+  margin-bottom:10px;
+  color: var(--text-title);
+  text-align:center;
+}
+.sidebar ul { list-style:none; }
+.sidebar li { margin:8px 0; position:relative; }
+.sidebar a {
+  display:block;
+  padding:10px 12px;
+  text-decoration:none;
+  color: var(--text-main);
+  border-radius:8px;
+  transition:background .3s, color .3s;
+}
+.sidebar a:hover {
+  background: var(--bg-card);
+  color: var(--text-contrast);
+}
+/* выпадающий список */
+.dropdown > a::after {
+  content:"▼";
+  float:right;
+  font-size:0.8em;
+  transition:transform .3s;
+}
+.dropdown.open > a::after { transform:rotate(-180deg); }
+.dropdown ul { display:none; margin-left:10px; }
+.dropdown.open ul { display:block; }
+.dropdown ul a {
+  font-size:0.9em;
+  background: var(--bg-section);
+}
+
+/* === Основное приложение === */
+.app {
+  flex:1;
+  max-width:1200px;
+  background: var(--bg-container);
+  border-radius:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.7);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+header {
+  background: var(--header-bg);
+  color: var(--text-title);
+  padding:30px;
+  text-align:center;
+  border-bottom:2px solid var(--border-color);
+  position:relative;
+}
+header h1 {
+  font-size:2.2em;
+  margin:0;
+}
+
+.content {
+  padding:30px;
+  background: var(--bg-section);
+  flex:1;
+}
+.controls {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:center;
+  margin-bottom:20px;
+}
+button {
+  border:none;
+  padding:14px 24px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+  font-size:16px;
+  transition:transform .2s, background .3s;
+}
+#generate {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+}
+#save {
+  background: var(--bg-card);
+  color: var(--text-main);
+  border:2px solid var(--border-color);
+}
+#clear {
+  background: linear-gradient(135deg,#a60000,#6b0000);
+  color:white;
+}
+button:hover { transform:translateY(-2px); }
+.hint {
+  color: var(--text-secondary);
+  font-size:14px;
+  text-align:center;
+  margin-bottom:20px;
+}
+
+/* === Список упражнений === */
+.exercise-list {
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:grid;
+  gap:20px;
+}
+.exercise-list li {
+  background: var(--bg-card);
+  border-radius:10px;
+  padding:18px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.5);
+  display:grid;
+  gap:10px;
+}
+.title {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:bold;
+  font-size:1.1em;
+  color: var(--text-title);
+}
+.badge {
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:999px;
+  background: var(--bg-table-header);
+  color: var(--text-main);
+}
+label.exercise {
+  display:grid;
+  grid-template-columns:24px 1fr;
+  gap:12px;
+  cursor:pointer;
+}
+input[type="checkbox"] {
+  width:20px; height:20px; margin-top:2px;
+  accent-color:#34d399;
+}
+.desc { color: var(--text-main); font-size:14px; }
+.meta { color: var(--text-secondary); font-size:12px; }
+
+footer {
+  padding:20px;
+  background: var(--bg-section);
+  border-top:2px solid var(--border-color);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:13px;
+  color: var(--text-secondary);
+}
+
+/* === Кнопка переключения темы === */
+.theme-toggle {
+  position: fixed;
+  left: 20px; bottom: 20px;
+  background: #444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px; height: 50px;
+  cursor: pointer;
+  font-size: 1.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 8px rgba(0,0,0,0.4);
+  transition: background .3s, transform .2s;
+  z-index: 1000;}
+body.light-theme .theme-toggle {
+  background: #ddd;
+  color: #222;
+}
+.theme-toggle:hover { transform: translateY(-2px); }
+
   </style>
 </head>
 <body>
@@ -257,8 +301,25 @@
       <span id="progress">0 / 3 выполнено</span>
     </footer>
   </div>
+<!-- Кнопка переключения темы -->
+<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
   <script>
+function toggleTheme() {
+  document.body.classList.toggle("light-theme");
+  const isLight = document.body.classList.contains("light-theme");
+  localStorage.setItem("theme", isLight ? "light" : "dark");
+
+  document.querySelector(".theme-toggle").textContent = isLight ? "☀️" : "🌙";
+}
+
+window.onload = function() {
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "light") {
+    document.body.classList.add("light-theme");
+    document.querySelector(".theme-toggle").textContent = "☀️"; 
+  }
+};
     const STORAGE_KEY = 'coreChecklistV1';
     const POOLS = {
       posture: [
