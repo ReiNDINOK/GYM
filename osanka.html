@@ -379,226 +379,216 @@ body.light-theme .theme-toggle {
   <button class="theme-toggle" onclick="toggleTheme()" aria-label="Переключить тему">🌙</button>
 
   <script>
-    const STORAGE_KEY = 'coreChecklistV1';
-    const POOLS = {
-      posture: [
-        { name: 'Стена-ангелы', desc: 'Спиной к стене, руки от «W» к «Y», поясница прижата.', meta: '2×8–12 медленно' },
-        { name: 'Подбородок к горлу', desc: 'Втягивай подбородок назад, держи 2–3 сек.', meta: '2×10–12' },
-        { name: 'Удлинение позвоночника сидя', desc: 'Сидя, вытягивайся макушкой вверх.', meta: '2×60 сек' },
-        { name: 'Упражнение «Стена»', desc: 'Прижми спину к стене, затем медленно поднимай-опускай руки вдоль неё.', meta: '1×1 мин' },
-        { name: 'Кошка–собака', desc: 'На четвереньках прогибай и округляй спину, дыши глубоко.', meta: '2×10 движений' },
-        { name: 'Поза ребёнка', desc: 'Сядь на колени, ляг животом, вытягивай руки, расслабь спину.', meta: '1–2 мин' },
-      ],
-      antiSlouch: [
-        { name: 'Распаковка лопаток', desc: 'Своди лопатки вниз и внутрь.', meta: '3×12–15' },
-        { name: 'YTW лёжа', desc: 'Подними руки в формы Y, T, W.', meta: '2×6 каждого' },
-        { name: 'Растяжка задней поверхности бедра лёжа', desc: 'Ляг, подтяни одну ногу к себе, выпрями её.', meta: '2–3×20–30 сек/нога' },
-        { name: 'Прогиб в спине стоя', desc: 'Встань прямо, руки на талии, прогнись назад.', meta: '5×5 сек' },
-      ],
-      transverse: [
-        { name: 'Вакуум живота', desc: 'Выдох → подтяни живот внутрь и вверх.', meta: '3×10–20 сек' },
-        { name: 'Dead Bug', desc: 'Поясница прижата, медленно опускай руку и ногу.', meta: '2×10/сторона' },
-        { name: 'Ягодичный мостик', desc: 'Ляг на спину, подними таз, напряги поперечную мышцу.', meta: '3×8–10' },
-        { name: 'Боковая планка', desc: 'Удерживай тело в прямой линии, опираясь на боковой локоть.', meta: '2×20–60 сек/сторона' },
-      ]
-    };
+  const STORAGE_KEY = 'coreChecklistV1';
+  const POOLS = {
+    posture: [
+      { name: 'Стена-ангелы', desc: 'Спиной к стене, руки от «W» к «Y», поясница прижата.', meta: '2×8–12 медленно' },
+      { name: 'Подбородок к горлу', desc: 'Втягивай подбородок назад, держи 2–3 сек.', meta: '2×10–12' },
+      { name: 'Удлинение позвоночника сидя', desc: 'Сидя, вытягивайся макушкой вверх.', meta: '2×60 сек' },
+      { name: 'Упражнение «Стена»', desc: 'Прижми спину к стене, затем медленно поднимай-опускай руки вдоль неё.', meta: '1×1 мин' },
+      { name: 'Кошка–собака', desc: 'На четвереньках прогибай и округляй спину, дыши глубоко.', meta: '2×10 движений' },
+      { name: 'Поза ребёнка', desc: 'Сядь на колени, ляг животом, вытягивай руки, расслабь спину.', meta: '1–2 мин' },
+    ],
+    antiSlouch: [
+      { name: 'Распаковка лопаток', desc: 'Своди лопатки вниз и внутрь.', meta: '3×12–15' },
+      { name: 'YTW лёжа', desc: 'Подними руки в формы Y, T, W.', meta: '2×6 каждого' },
+      { name: 'Растяжка задней поверхности бедра лёжа', desc: 'Ляг, подтяни одну ногу к себе, выпрями её.', meta: '2–3×20–30 сек/нога' },
+      { name: 'Прогиб в спине стоя', desc: 'Встань прямо, руки на талии, прогнись назад.', meta: '5×5 сек' },
+    ],
+    transverse: [
+      { name: 'Вакуум живота', desc: 'Выдох → подтяни живот внутрь и вверх.', meta: '3×10–20 сек' },
+      { name: 'Dead Bug', desc: 'Поясница прижата, медленно опускай руку и ногу.', meta: '2×10/сторона' },
+      { name: 'Ягодичный мостик', desc: 'Ляг на спину, подними таз, напряги поперечную мышцу.', meta: '3×8–10' },
+      { name: 'Боковая планка', desc: 'Удерживай тело в прямой линии, опираясь на боковой локоть.', meta: '2×20–60 сек/сторона' },
+    ]
+  };
 
-    const listEl = document.getElementById('list');
-    const progressEl = document.getElementById('progress');
-    const progressBarEl = document.getElementById('progress-bar');
-    const progressContainerEl = document.getElementById('progress-container');
+  const listEl = document.getElementById('list');
+  const progressEl = document.getElementById('progress');
+  const progressBarEl = document.getElementById('progress-bar');
+  const progressContainerEl = document.getElementById('progress-container');
 
-    const randPick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  const randPick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-    function buildItem(ex, category, idx) {
-      const li = document.createElement('li');
+  function buildItem(ex, category, idx) {
+    const li = document.createElement('li');
 
-      const title = document.createElement('div');
-      title.className = 'title';
-      const badge = document.createElement('span');
-      badge.className = 'badge';
-      badge.textContent = category === 'posture' ? 'Осанка' : category === 'antiSlouch' ? 'Против сутулости' : 'Поперечная';
-      const span = document.createElement('span');
-      span.textContent = ex.name;
-      title.appendChild(badge);
-      title.appendChild(span);
+    const title = document.createElement('div');
+    title.className = 'title';
+    const badge = document.createElement('span');
+    badge.className = 'badge';
+    badge.textContent = category === 'posture' ? 'Осанка' : category === 'antiSlouch' ? 'Против сутулости' : 'Поперечная';
+    const span = document.createElement('span');
+    span.textContent = ex.name;
+    title.appendChild(badge);
+    title.appendChild(span);
 
-      const label = document.createElement('label');
-      label.className = 'exercise';
-      label.setAttribute('for', 'cb-' + idx);
+    const label = document.createElement('label');
+    label.className = 'exercise';
+    label.setAttribute('for', 'cb-' + idx);
 
-      const cb = document.createElement('input');
-      cb.type = 'checkbox';
-      cb.id = 'cb-' + idx;
-      cb.setAttribute('aria-label', ex.name + ' — отметить как выполненное');
-      cb.addEventListener('change', () => {
-        saveProgress();
-      });
-
-      const descWrap = document.createElement('div');
-      const desc = document.createElement('div');
-      desc.className = 'desc';
-      desc.textContent = ex.desc;
-      const meta = document.createElement('div');
-      meta.className = 'meta';
-      meta.textContent = ex.meta;
-
-      descWrap.appendChild(desc);
-      descWrap.appendChild(meta);
-      label.appendChild(cb);
-      label.appendChild(descWrap);
-
-      li.appendChild(title);
-      li.appendChild(label);
-      return li;
-    }
-
-    function generateNew() {
-      const selected = [
-        randPick(POOLS.posture),
-        randPick(POOLS.antiSlouch),
-        randPick(POOLS.transverse)
-      ];
-      renderList(selected, [false, false, false]);
-      persist({ items: selected, checks: [false, false, false] });
-    }
-
-    function renderList(items, checks = []) {
-      listEl.innerHTML = '';
-      items.forEach((ex, idx) => {
-        const category = idx === 0 ? 'posture' : idx === 1 ? 'antiSlouch' : 'transverse';
-        const el = buildItem(ex, category, idx);
-        const cb = el.querySelector('input[type="checkbox"]');
-        cb.checked = !!checks[idx];
-        // Вешаем делегирование на изменение — уже добавлено в buildItem
-        listEl.appendChild(el);
-      });
-      updateProgress();
-    }
-
-    function updateProgress() {
-      const boxes = listEl.querySelectorAll('input[type="checkbox"]');
-      const done = Array.from(boxes).filter(b => b.checked).length;
-      progressEl.textContent = `${done} / ${boxes.length} выполнено`;
-
-      const percent = boxes.length ? Math.round((done / boxes.length) * 100) : 0;
-      progressBarEl.style.width = percent + "%";
-      progressContainerEl.setAttribute('aria-valuenow', percent);
-
-      // Цвет по состоянию: 0-1 красный, 2 — жёлтый, 3 — зелёный
-      if (done === 0 || done === 1) {
-        progressBarEl.style.background = "linear-gradient(135deg,#ef4444,#b91c1c)"; // красный
-      } else if (done === 2) {
-        progressBarEl.style.background = "linear-gradient(135deg,#f59e0b,#d97706)"; // жёлтый
-      } else if (done === 3) {
-        progressBarEl.style.background = "linear-gradient(135deg,#34d399,#059669)"; // зелёный
-      } else {
-        progressBarEl.style.background = "linear-gradient(135deg,#6b7280,#374151)"; // запасной
-      }
-    }
-
-    function getState() {
-      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || null; } catch { return null; }
-    }
-
-    function persist(state) {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      } catch (e) {
-        console.warn("Не удалось сохранить в localStorage:", e);
-      }
-    }
-
-    function saveProgress() {
-      const state = getState();
-      // Если состояния нет (напр. список не сохранён) — создадим его динамически
-      let items = state?.items || Array.from(listEl.querySelectorAll('.title span')).map(s => ({ name: s.textContent }));
-      const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb => cb.checked);
-      persist({ items, checks });
-      updateProgress();
-    }
-
-    // Кнопки
-    document.getElementById('generate').addEventListener('click', () => {
-      generateNew();
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.id = 'cb-' + idx;
+    cb.setAttribute('aria-label', ex.name + ' — отметить как выполненное');
+    cb.addEventListener('change', () => {
+      saveProgress();
     });
-    document.getElementById('save').addEventListener('click', () => {
-  const items = Array.from(listEl.querySelectorAll('li')).map((li) => {
-    return {
-      name: li.querySelector('.title span').textContent,
-      desc: li.querySelector('.desc')?.textContent || '',
-      meta: li.querySelector('.meta')?.textContent || ''
-    };
-  });
-  const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb => cb.checked);
-  persist({ items, checks });
-  document.getElementById('save').textContent = 'Сохранено ✓';
-  setTimeout(() => document.getElementById('save').textContent = 'Сохранить список', 1200);
-});
-      // Короткая визуальная подсказка (можно заменить на тост)
-      document.getElementById('save').textContent = 'Сохранено ✓';
-      setTimeout(()=> document.getElementById('save').textContent = 'Сохранить список', 1200);
+
+    const descWrap = document.createElement('div');
+    const desc = document.createElement('div');
+    desc.className = 'desc';
+    desc.textContent = ex.desc;
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.textContent = ex.meta;
+
+    descWrap.appendChild(desc);
+    descWrap.appendChild(meta);
+    label.appendChild(cb);
+    label.appendChild(descWrap);
+
+    li.appendChild(title);
+    li.appendChild(label);
+    return li;
+  }
+
+  function generateNew() {
+    const selected = [
+      randPick(POOLS.posture),
+      randPick(POOLS.antiSlouch),
+      randPick(POOLS.transverse)
+    ];
+    renderList(selected, [false, false, false]);
+    persist({ items: selected, checks: [false, false, false] });
+  }
+
+  function renderList(items, checks = []) {
+    listEl.innerHTML = '';
+    items.forEach((ex, idx) => {
+      const category = idx === 0 ? 'posture' : idx === 1 ? 'antiSlouch' : 'transverse';
+      const el = buildItem(ex, category, idx);
+      const cb = el.querySelector('input[type="checkbox"]');
+      cb.checked = !!checks[idx];
+      listEl.appendChild(el);
     });
-    document.getElementById('clear').addEventListener('click', () => {
-      localStorage.removeItem(STORAGE_KEY);
-      listEl.innerHTML = '';
-      progressEl.textContent = '0 / 3 выполнено';
-      progressBarEl.style.width = '0%';
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const boxes = listEl.querySelectorAll('input[type="checkbox"]');
+    const done = Array.from(boxes).filter(b => b.checked).length;
+    progressEl.textContent = `${done} / ${boxes.length} выполнено`;
+
+    const percent = boxes.length ? Math.round((done / boxes.length) * 100) : 0;
+    progressBarEl.style.width = percent + "%";
+    progressContainerEl.setAttribute('aria-valuenow', percent);
+
+    if (done === 0 || done === 1) {
       progressBarEl.style.background = "linear-gradient(135deg,#ef4444,#b91c1c)";
-      progressContainerEl.setAttribute('aria-valuenow', 0);
+    } else if (done === 2) {
+      progressBarEl.style.background = "linear-gradient(135deg,#f59e0b,#d97706)";
+    } else if (done === 3) {
+      progressBarEl.style.background = "linear-gradient(135deg,#34d399,#059669)";
+    } else {
+      progressBarEl.style.background = "linear-gradient(135deg,#6b7280,#374151)";
+    }
+  }
+
+  function getState() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || null; } catch { return null; }
+  }
+
+  function persist(state) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      console.warn("Не удалось сохранить в localStorage:", e);
+    }
+  }
+
+  function saveProgress() {
+    const state = getState();
+    let items = state?.items || Array.from(listEl.querySelectorAll('.title span')).map(s => ({ name: s.textContent }));
+    const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb => cb.checked);
+    persist({ items, checks });
+    updateProgress();
+  }
+
+  // Кнопки
+  document.getElementById('generate').addEventListener('click', () => {
+    generateNew();
+  });
+
+  document.getElementById('save').addEventListener('click', () => {
+    const items = Array.from(listEl.querySelectorAll('li')).map((li) => {
+      return {
+        name: li.querySelector('.title span').textContent,
+        desc: li.querySelector('.desc')?.textContent || '',
+        meta: li.querySelector('.meta')?.textContent || ''
+      };
     });
+    const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb => cb.checked);
+    persist({ items, checks });
+    document.getElementById('save').textContent = 'Сохранено ✓';
+    setTimeout(() => document.getElementById('save').textContent = 'Сохранить список', 1200);
+  });
 
-    // Инициализация
-    (function init() {
-      // Восстанавливаем состояние, если есть
-      const saved = getState();
-      if (saved?.items?.length === 3) {
-        // Попробуем восстановить полные объекты упражнений: если в saved.items есть full info - используем, иначе возьмём из POOLS по имени
-        const itemsRestored = saved.items.map(it => {
-          // если объект похож на полный (name + desc), используем как есть
-          if (it.desc || it.meta) return it;
-          // иначе ищем в пулах по имени
-          for (const key of Object.keys(POOLS)) {
-            const found = POOLS[key].find(p => p.name === it.name);
-            if (found) return found;
-          }
-          // запасной — просто имя
-          return { name: it.name || 'Упражнение', desc: '', meta: '' };
-        });
-        renderList(itemsRestored, saved.checks || [false, false, false]);
-      } else {
-        generateNew();
-      }
+  document.getElementById('clear').addEventListener('click', () => {
+    localStorage.removeItem(STORAGE_KEY);
+    listEl.innerHTML = '';
+    progressEl.textContent = '0 / 3 выполнено';
+    progressBarEl.style.width = '0%';
+    progressBarEl.style.background = "linear-gradient(135deg,#ef4444,#b91c1c)";
+    progressContainerEl.setAttribute('aria-valuenow', 0);
+  });
 
-      // Выпадающее меню
-      document.querySelectorAll(".dropdown > a").forEach(el=>{
-        el.addEventListener("click",e=>{
-          e.preventDefault();
-          el.parentElement.classList.toggle("open");
-        });
+  // Инициализация
+  (function init() {
+    const saved = getState();
+    if (saved?.items?.length === 3) {
+      const itemsRestored = saved.items.map(it => {
+        if (it.desc || it.meta) return it;
+        for (const key of Object.keys(POOLS)) {
+          const found = POOLS[key].find(p => p.name === it.name);
+          if (found) return found;
+        }
+        return { name: it.name || 'Упражнение', desc: '', meta: '' };
       });
-    })();
-
-    // Тема
-    function toggleTheme() {
-      document.body.classList.toggle("light-theme");
-      const isLight = document.body.classList.contains("light-theme");
-      localStorage.setItem("theme", isLight ? "light" : "dark");
-      document.querySelector(".theme-toggle").textContent = isLight ? "☀️" : "🌙";
+      renderList(itemsRestored, saved.checks || [false, false, false]);
+    } else {
+      generateNew();
     }
 
-    window.onload = function() {
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "light") {
-        document.body.classList.add("light-theme");
-        document.querySelector(".theme-toggle").textContent = "☀️";
-      } else {
-        document.querySelector(".theme-toggle").textContent = "🌙";
-      }
-    };
-  </script>
+    document.querySelectorAll(".dropdown > a").forEach(el=>{
+      el.addEventListener("click",e=>{
+        e.preventDefault();
+        el.parentElement.classList.toggle("open");
+      });
+    });
+  })();
+
+  // Тема
+  function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+    const isLight = document.body.classList.contains("light-theme");
+    localStorage.setItem("theme", isLight ? "light" : "dark");
+    document.querySelector(".theme-toggle").textContent = isLight ? "☀️" : "🌙";
+  }
+
+  window.onload = function() {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light") {
+      document.body.classList.add("light-theme");
+      document.querySelector(".theme-toggle").textContent = "☀️";
+    } else {
+      document.querySelector(".theme-toggle").textContent = "🌙";
+    }
+  };
+</script>
 </body>
 </html>
+
 
 
 
