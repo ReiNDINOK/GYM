@@ -11,11 +11,9 @@
       try {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'light') {
-          // Класс ставим на элемент <html>, потому что он доступен сразу
           document.documentElement.classList.add('light-theme');
         }
-      } catch (e) {
-        // Игнорируем (privacy режимы могут блокировать localStorage)
+      } catch (e) 
       }
     })();
   </script>
@@ -47,7 +45,6 @@
       --error-text: #fff;
     }
 
-    /* Если класс назначен на <html>, переменные переопределятся до рендера */
     html.light-theme {
       --bg-main: linear-gradient(135deg,#f2f2f2 0%,#e8e8e8 100%);
       --bg-sidebar: #eaeaea;
@@ -73,12 +70,10 @@
       --error-text: #fff;
     }
 
-    /* === Плавная загрузка (без мигания) === */
     html, body {
       height: 100%;
     }
 
-    /* Скрываем содержимое до тех пор, пока класс темы не будет применён и DOMContentLoaded не сработает */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: var(--bg-main);
@@ -95,7 +90,6 @@
       transition-timing-function: ease, ease, ease;
     }
 
-    /* Когда JS завершит подготовку — покажем страницу плавно */
     html.ready body {
       opacity: 1;
     }
@@ -131,7 +125,11 @@
     .dropdown ul a { font-size:0.9em; background: var(--bg-section); }
 
     /* === Основное приложение === */
-    .app { flex:1; max-width:1200px; background: var(--bg-container); border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.7); overflow:hidden; display:flex; flex-direction:column; }
+    .app { 
+  display: flex; 
+  flex-direction: column; 
+  overflow: visible; /* вместо hidden */
+}
 
     header { background: var(--header-bg); color: var(--text-title); padding:30px; text-align:center; border-bottom:2px solid var(--border-color); position:relative; }
     header h1 { font-size:2.2em; margin:0; }
@@ -390,3 +388,4 @@
   </noscript>
 </body>
 </html>
+
