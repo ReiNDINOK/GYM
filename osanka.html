@@ -14,25 +14,17 @@
   --bg-input: #333;
   --bg-table: #444;
   --bg-table-header: #555;
-  --bg-dropdown: #262626;
-  --bg-dropdown-hover: #333;
-  --bg-dropdown-active: #444;
-
   --text-main: #ddd;
   --text-secondary: #aaa;
   --text-title: #f0f0f0;
   --text-contrast: #fff;
-
   --border-color: #666;
   --header-bg: linear-gradient(135deg,#444 0%,#333 100%);
-
   --btn-bg: linear-gradient(135deg,#7f8c8d 0%,#5f6a6a 100%);
   --btn-text: #fff;
-
   --error-bg: #a60000;
   --error-text: #fff;
 }
-
 body.light-theme {
   --bg-main: linear-gradient(135deg,#f2f2f2 0%,#e8e8e8 100%);
   --bg-sidebar: #eaeaea;
@@ -42,34 +34,18 @@ body.light-theme {
   --bg-input: #fff;
   --bg-table: #f5f5f5;
   --bg-table-header: #ddd;
-  --bg-dropdown: #f0f0f0;
-  --bg-dropdown-hover: #ddd;
-  --bg-dropdown-active: #ccc;
-
   --text-main: #222;
   --text-secondary: #444;
   --text-title: #111;
   --text-contrast: #000;
-
   --border-color: #bbb;
   --header-bg: linear-gradient(135deg,#ddd 0%,#bbb 100%);
-
   --btn-bg: linear-gradient(135deg,#bbb 0%,#999 100%);
   --btn-text: #222;
-
   --error-bg: #ff5555;
   --error-text: #fff;
 }
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: var(--bg-main);
-  min-height:100vh;
-  display:flex;
-  color: var(--text-main);
-  padding:20px;
-}
-
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-main); min-height:100vh; padding:20px; display:flex; color: var(--text-main);}
 /* === Боковое меню === */
 .sidebar {
   width: 220px;
@@ -88,15 +64,21 @@ body {
   color: var(--text-title);
   text-align: center;
 }
-.sidebar ul { list-style:none; padding-left:0; }
-.sidebar li { margin: 8px 0; position: relative; }
+.sidebar ul {
+  list-style: none;
+  padding-left: 0;
+}
+.sidebar li {
+  margin: 8px 0;
+  position: relative;
+}
 .sidebar a {
-  display:block;
-  padding:10px 12px;
-  text-decoration:none;
+  display: block;
+  padding: 10px 12px;
+  text-decoration: none;
   color: var(--text-main);
-  border-radius:8px;
-  transition: background .3s, color .3s;
+  border-radius: 8px;
+  transition: background 0.3s, color 0.3s;
 }
 .sidebar a:hover {
   background: var(--bg-card);
@@ -104,144 +86,135 @@ body {
 }
 /* выпадающий список */
 .dropdown > a::after {
-  content:"▼";
-  float:right;
-  font-size:0.8em;
-  transition: transform .3s;
+  content: "▼";
+  float: right;
+  font-size: 0.8em;
+  transition: transform 0.3s;
 }
-.dropdown.open > a::after { transform:rotate(-180deg); }
-.dropdown ul { display:none; margin-left:10px; }
-.dropdown.open ul { display:block; }
+.dropdown.open > a::after {
+  transform: rotate(-180deg);
+}
+.dropdown ul {
+  display: none;
+  margin-left: 10px;
+}
+.dropdown.open ul {
+  display: block;
+}
 .dropdown ul a {
-  font-size:0.9em;
+  font-size: 0.9em;
   background: var(--bg-section);
-  border-radius:6px;
-  padding:8px 10px;
-  display:block;
-  transition: background .3s, color .3s;
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: block;
+  transition: background 0.3s, color 0.3s;
 }
 .dropdown ul a:hover {
   background: var(--bg-card);
   color: var(--text-contrast);
 }
-
-/* === Контейнер приложения (как в коде 2) === */
-.app {
+.app {                       
   flex: 1;
   max-width: 1200px;
   background: var(--bg-container);
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  padding:0; /* важно для точного соответствия */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0;                
 }
-
-/* === Header === */
-header {
-  background: var(--header-bg);
-  color: var(--text-title);
-  padding:30px;
-  text-align:center;
-  border-bottom:2px solid var(--border-color);
-  position:relative;
-}
-header h1 { font-size:2.5em; margin-bottom:10px; }
-
-/* === Контент чек-листа === */
-.content { padding:30px; background: var(--bg-section); flex:1; }
-.controls { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:20px; }
-button { border:none; padding:14px 24px; border-radius:8px; cursor:pointer; font-weight:600; font-size:16px; transition:transform .2s, background .3s; }
-#generate { background: var(--btn-bg); color: var(--btn-text); }
-#save { background: var(--bg-card); color: var(--text-main); border:2px solid var(--border-color); }
-#clear { background: linear-gradient(135deg,#a60000,#6b0000); color:white; }
-button:hover { transform:translateY(-2px); }
-
-.hint { color: var(--text-secondary); font-size:14px; text-align:center; margin-bottom:20px; }
-.exercise-list { list-style:none; padding:0; margin:0; display:grid; gap:20px; }
-.exercise-list li { background: var(--bg-card); border-radius:10px; padding:18px; box-shadow:0 2px 10px rgba(0,0,0,0.5); display:grid; gap:10px; }
-.title { display:flex; align-items:center; gap:10px; font-weight:bold; font-size:1.1em; color: var(--text-title); }
-.badge { font-size:12px; padding:4px 10px; border-radius:999px; background: var(--bg-table-header); color: var(--text-main); }
-label.exercise { display:grid; grid-template-columns:24px 1fr; gap:12px; cursor:pointer; }
-input[type="checkbox"] { width:20px; height:20px; margin-top:2px; accent-color:#34d399; }
+header { background: var(--header-bg); color: var(--text-title); padding:30px; text-align:center; border-bottom:2px solid var(--border-color); position:relative;}
+header h1 { font-size:2.2em; margin:0;}
+.content { padding:30px; background: var(--bg-section); flex:1;}
+.controls { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:20px;}
+button { border:none; padding:14px 24px; border-radius:8px; cursor:pointer; font-weight:600; font-size:16px; transition:transform .2s, background .3s;}
+#generate { background: var(--btn-bg); color: var(--btn-text);}
+#save { background: var(--bg-card); color: var(--text-main); border:2px solid var(--border-color);}
+#clear { background: linear-gradient(135deg,#a60000,#6b0000); color:white;}
+button:hover { transform:translateY(-2px);}
+.hint { color: var(--text-secondary); font-size:14px; text-align:center; margin-bottom:20px;}
+.exercise-list { list-style:none; padding:0; margin:0; display:grid; gap:20px;}
+.exercise-list li { background: var(--bg-card); border-radius:10px; padding:18px; box-shadow:0 2px 10px rgba(0,0,0,0.5); display:grid; gap:10px;}
+.title { display:flex; align-items:center; gap:10px; font-weight:bold; font-size:1.1em; color: var(--text-title);}
+.badge { font-size:12px; padding:4px 10px; border-radius:999px; background: var(--bg-table-header); color: var(--text-main);}
+label.exercise { display:grid; grid-template-columns:24px 1fr; gap:12px; cursor:pointer;}
+input[type="checkbox"] { width:20px; height:20px; margin-top:2px; accent-color:#34d399;}
 .desc { color: var(--text-main); font-size:14px; }
 .meta { color: var(--text-secondary); font-size:12px; }
-
-footer { padding:20px; background: var(--bg-section); border-top:2px solid var(--border-color); display:flex; align-items:center; font-size:13px; color: var(--text-secondary); gap:12px; }
-.progress-container { flex:1; height: 12px; background: var(--bg-card); border-radius: 6px; margin: 0 15px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4); min-width: 120px; }
-#progress-bar { height: 100%; width: 0%; border-radius: 6px 0 0 6px; transition: width 0.4s ease, background 0.4s ease; }
-
-/* кнопка темы */
-.theme-toggle {
-  position: fixed; left: 20px; bottom: 20px;
-  background: #444; color: white;
-  border: none; border-radius: 50%;
-  width: 50px; height: 50px;
-  cursor: pointer; font-size: 1.4em;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 8px rgba(0,0,0,0.4);
-  transition: background .3s, transform .2s;
-  z-index: 1000;
-}
-body.light-theme .theme-toggle { background: #ddd; color: #222; }
+footer { padding:20px; background: var(--bg-section); border-top:2px solid var(--border-color); display:flex; align-items:center; font-size:13px; color: var(--text-secondary); gap:12px;}
+.progress-container { flex:1; height: 12px; background: var(--bg-card); border-radius: 6px; margin: 0 15px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4); min-width: 120px;}
+#progress-bar { height: 100%; width: 0%; border-radius: 6px 0 0 6px; transition: width 0.4s ease, background 0.4s ease;}
+.theme-toggle { position: fixed; left: 20px; bottom: 20px; background: #444; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 1.4em; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 8px rgba(0,0,0,0.4); transition: background .3s, transform .2s; z-index: 1000;}
+body.light-theme .theme-toggle { background: #ddd; color: #222;}
 .theme-toggle:hover { transform: translateY(-2px); }
-
-/* === Адаптивность === */
 @media (max-width: 768px) {
-  body { flex-direction: column; padding: 10px; }
-  .sidebar { width: 100%; margin-bottom:20px; position: static; }
-  .app { max-width: 100%; }
-  footer { flex-direction: column; gap: 8px; align-items: stretch; }
-  .progress-container { margin: 8px 0; width: 100%; min-width: auto; }
+  body {
+    flex-direction: column;
+    padding: 10px;
+  }
+  .sidebar {
+    width: 100%;
+    margin: 0 0 15px 0;
+    position: static;
+  }
+  .app {
+    max-width: 100%;
+  }
+  footer {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .progress-container {
+    margin: 8px 0;
+    width: 100%;
+    min-width: auto;
+  }
 }
 </style>
 </head>
 <body>
-
 <div class="sidebar">
-  <h2>Меню</h2>
-  <ul>
-    <li><a href='/'>🏠 Главная</a></li>
-    <li class="dropdown"><a href="#">📂 Разделы</a>
-      <ul>
-        <li><a href='/gum'>Моё тело - железо</a></li>
-        <li><a href='/osanka'>Позвоночник - титан</a></li>
-        <li><a href='/motor'>Сердце - мотор</a></li>
-      </ul>
-    </li>
-    <li><a href='/about'>ℹ️ О проекте</a></li>
-  </ul>
+<h2>Меню</h2>
+<ul>
+<li><a href='/'>🏠 Главная</a></li>
+<li class="dropdown"><a href="#">📂 Разделы</a>
+<ul>
+<li><a href='/gum'>Моё тело - железо</a></li>
+<li><a href='/osanka'>Позвоночник - титан</a></li>
+<li><a href='/motor'>Сердце - мотор</a></li>
+</ul></li>
+<li><a href='/about'>ℹ️ О проекте</a></li>
+</ul>
 </div>
 
 <div class="app">
-  <header>
-    <h1>📋 Чек-лист на сегодня</h1>
-  </header>
-  <div class="content">
-    <div class="controls">
-      <button id="generate">Сгенерировать новые</button>
-      <button id="save">Сохранить список</button>
-      <button id="clear" title="Очистить состояние и начать заново">Сбросить</button>
-    </div>
-    <p class="hint">Каждый раз генерируется <strong>1 упражнение на осанку</strong>, <strong>1 — против сутулости</strong> и <strong>1 — для поперечной мышцы живота</strong>.</p>
-    <ul id="list" class="exercise-list" aria-live="polite" aria-atomic="true"></ul>
-  </div>
-  <footer>
-    <span>Прогресс выполнения упражнений:</span>
-    <div class="progress-container" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-container">
-      <div id="progress-bar" aria-hidden="true"></div>
-    </div>
-    <span id="progress">0 / 3 выполнено</span>
-  </footer>
+<header><h1>📋 Чек-лист на сегодня</h1></header>
+<div class="content">
+<div class="controls">
+<button id="generate">Сгенерировать новые</button>
+<button id="save">Сохранить список</button>
+<button id="clear" title="Очистить состояние и начать заново">Сбросить</button>
+</div>
+<p class="hint">Каждый раз генерируется <strong>1 упражнение на осанку</strong>, <strong>1 — против сутулости</strong> и <strong>1 — для поперечной мышцы живота</strong>.</p>
+<ul id="list" class="exercise-list" aria-live="polite" aria-atomic="true"></ul>
+</div>
+<footer>
+<span>Прогресс выполнения упражнений:</span>
+<div class="progress-container" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-container">
+<div id="progress-bar" aria-hidden="true"></div>
+</div>
+<span id="progress">0 / 3 выполнено</span>
+</footer>
 </div>
 
 <button class="theme-toggle" onclick="toggleTheme()" aria-label="Переключить тему">🌙</button>
 
 <script>
-// === Выпадающее меню ===
+// === Боковое меню ===
 document.querySelectorAll(".dropdown > a").forEach(el=>{
-  el.addEventListener("click", e=>{
+  el.addEventListener("click",e=>{
     e.preventDefault();
     el.parentElement.classList.toggle("open");
   });
@@ -330,24 +303,38 @@ function saveCurrent(){
   setTimeout(()=>btn.textContent='Сохранить список',1200);
 }
 document.getElementById('clear').addEventListener('click', ()=>{
-  currentList = [];
-  renderList([]);
+  currentList = [];          // очищаем текущий список
+  renderList([]);            // очищаем блоки на странице
   progressEl.textContent = `0 / 0 выполнено`;
   progressBarEl.style.width = '0%';
   progressBarEl.style.background = "linear-gradient(135deg,#ef4444,#b91c1c)";
 });
 document.getElementById('generate').addEventListener('click', generateNew);
 document.getElementById('save').addEventListener('click', saveCurrent);
-
 (function init(){
   const saved = getState();
-  if(saved && saved.items){ currentList=saved.items; renderList(saved.items,saved.checks); }
-  else generateNew();
+  if(saved?.items?.length===3){
+    currentList = saved.items;
+    renderList(currentList, saved.checks || [false,false,false]);
+  } else {
+    generateNew();
+    const checks = [false,false,false];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({items: currentList, checks}));
+  }
 })();
-
-// === Тема ===
-function toggleTheme(){ document.body.classList.toggle('light-theme'); }
+function toggleTheme(){
+  document.body.classList.toggle('light-theme');
+  const btn = document.querySelector('.theme-toggle');
+  btn.textContent = document.body.classList.contains('light-theme')?"☀️":"🌙";
+  localStorage.setItem('theme', document.body.classList.contains('light-theme')?"light":"dark");
+}
+window.onload = function(){
+  const theme = localStorage.getItem('theme');
+  if(theme==='light') document.body.classList.add('light-theme');
+  document.querySelector('.theme-toggle').textContent = theme==='light'?"☀️":"🌙";
+};
 </script>
-
 </body>
 </html>
+
+
