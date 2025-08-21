@@ -523,12 +523,18 @@ body.light-theme .theme-toggle {
       generateNew();
     });
     document.getElementById('save').addEventListener('click', () => {
-      // Просто перезаписываем текущие items+checks (на случай, если пользователь что-то поменял)
-      const items = Array.from(listEl.querySelectorAll('.title span')).map((sp) => {
-        return { name: sp.textContent };
-      });
-      const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb => cb.checked);
-      persist({ items, checks });
+  const items = Array.from(listEl.querySelectorAll('li')).map((li) => {
+    return {
+      name: li.querySelector('.title span').textContent,
+      desc: li.querySelector('.desc')?.textContent || '',
+      meta: li.querySelector('.meta')?.textContent || ''
+    };
+  });
+  const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb => cb.checked);
+  persist({ items, checks });
+  document.getElementById('save').textContent = 'Сохранено ✓';
+  setTimeout(() => document.getElementById('save').textContent = 'Сохранить список', 1200);
+});
       // Короткая визуальная подсказка (можно заменить на тост)
       document.getElementById('save').textContent = 'Сохранено ✓';
       setTimeout(()=> document.getElementById('save').textContent = 'Сохранить список', 1200);
