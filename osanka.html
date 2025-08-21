@@ -147,23 +147,25 @@ const listEl = document.getElementById('list');
 const progressEl = document.getElementById('progress');
 const progressBarEl = document.getElementById('progress-bar');
 
+let currentList = []; // текущий сгенерированный список
+
 function randPick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
 function buildItem(ex, category, idx){
-  const li=document.createElement('li');
-  const title=document.createElement('div'); title.className='title';
-  const badge=document.createElement('span'); badge.className='badge';
+  const li = document.createElement('li');
+  const title = document.createElement('div'); title.className='title';
+  const badge = document.createElement('span'); badge.className='badge';
   badge.textContent = category==='posture'?'Осанка':category==='antiSlouch'?'Против сутулости':'Поперечная';
-  const span=document.createElement('span'); span.textContent = ex.name;
+  const span = document.createElement('span'); span.textContent = ex.name;
   title.appendChild(badge); title.appendChild(span);
 
-  const label=document.createElement('label'); label.className='exercise';
-  const cb=document.createElement('input'); cb.type='checkbox'; cb.id='cb-'+idx; cb.addEventListener('change', updateProgress);
+  const label = document.createElement('label'); label.className='exercise';
+  const cb = document.createElement('input'); cb.type='checkbox'; cb.id='cb-'+idx; cb.addEventListener('change', updateProgress);
   label.appendChild(cb);
 
-  const descWrap=document.createElement('div');
-  const desc=document.createElement('div'); desc.className='desc'; desc.textContent=ex.desc;
-  const meta=document.createElement('div'); meta.className='meta'; meta.textContent=ex.meta;
+  const descWrap = document.createElement('div');
+  const desc = document.createElement('div'); desc.className='desc'; desc.textContent = ex.desc;
+  const meta = document.createElement('div'); meta.className='meta'; meta.textContent = ex.meta;
   descWrap.appendChild(desc); descWrap.appendChild(meta);
   label.appendChild(descWrap);
 
@@ -173,7 +175,7 @@ function buildItem(ex, category, idx){
 
 function renderList(items, checks=[false,false,false]){
   listEl.innerHTML='';
-  items.forEach((ex,idx)=>{
+  items.forEach((ex, idx) => {
     const category = idx===0?'posture':idx===1?'antiSlouch':'transverse';
     const li = buildItem(ex, category, idx);
     li.querySelector('input').checked = !!checks[idx];
@@ -183,45 +185,40 @@ function renderList(items, checks=[false,false,false]){
 }
 
 function updateProgress(){
-  const boxes=listEl.querySelectorAll('input[type="checkbox"]');
-  const done=Array.from(boxes).filter(b=>b.checked).length;
+  const boxes = listEl.querySelectorAll('input[type="checkbox"]');
+  const done = Array.from(boxes).filter(b => b.checked).length;
   progressEl.textContent=`${done} / ${boxes.length} выполнено`;
-  const percent=boxes.length?Math.round((done/boxes.length)*100):0;
-  progressBarEl.style.width=percent+'%';
-  progressBarEl.style.background=done<2?"linear-gradient(135deg,#ef4444,#b91c1c)":done<3?"linear-gradient(135deg,#f59e0b,#d97706)":"linear-gradient(135deg,#34d399,#059669)";
+  const percent = boxes.length?Math.round((done/boxes.length)*100):0;
+  progressBarEl.style.width = percent+'%';
+  progressBarEl.style.background = done<2?"linear-gradient(135deg,#ef4444,#b91c1c)":done<3?"linear-gradient(135deg,#f59e0b,#d97706)":"linear-gradient(135deg,#34d399,#059669)";
 }
 
 function getState(){ 
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY))||null; } catch { return null; }
 }
 
-// Генерация нового списка для просмотра
+// Генерация нового списка
 function generateNew(){
-  const newList = [randPick(POOLS.posture), randPick(POOLS.antiSlouch), randPick(POOLS.transverse)];
-  renderList(newList,[false,false,false]);
-  return newList;
+  currentList = [randPick(POOLS.posture), randPick(POOLS.antiSlouch), randPick(POOLS.transverse)];
+  renderList(currentList,[false,false,false]);
 }
 
 // Сохранение текущего списка
 function saveCurrent(){
-  const items = Array.from(listEl.querySelectorAll('li')).map(li => ({
-    name: li.querySelector('.title span').textContent,
-    desc: li.querySelector('.desc').textContent,
-    meta: li.querySelector('.meta').textContent
-  }));
+  if(!currentList.length) return;
   const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb => cb.checked);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({items, checks}));
-  
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({items: currentList, checks}));
+
   const btn = document.getElementById('save'); 
   btn.textContent = 'Сохранено ✓';
   setTimeout(()=>btn.textContent='Сохранить список',1200);
 }
 
-// Сброс — создаём новый список и сразу сохраняем
+// Сброс
 document.getElementById('clear').addEventListener('click', ()=>{
-  const newList = generateNew();
+  generateNew();
   const checks = [false,false,false];
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({items:newList,checks}));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({items: currentList, checks}));
 });
 
 document.getElementById('generate').addEventListener('click', generateNew);
@@ -231,30 +228,32 @@ document.getElementById('save').addEventListener('click', saveCurrent);
 (function init(){
   const saved = getState();
   if(saved?.items?.length===3){
-    renderList(saved.items,saved.checks||[false,false,false]);
+    currentList = saved.items;
+    renderList(currentList, saved.checks || [false,false,false]);
   } else {
-    const startList = [randPick(POOLS.posture), randPick(POOLS.antiSlouch), randPick(POOLS.transverse)];
-    renderList(startList,[false,false,false]);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({items:startList,checks:[false,false,false]}));
+    generateNew();
+    const checks = [false,false,false];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({items: currentList, checks}));
   }
 })();
 
 // Тема
 function toggleTheme(){
   document.body.classList.toggle('light-theme');
-  const btn=document.querySelector('.theme-toggle');
-  btn.textContent=document.body.classList.contains('light-theme')?"☀️":"🌙";
-  localStorage.setItem('theme',document.body.classList.contains('light-theme')?"light":"dark");
+  const btn = document.querySelector('.theme-toggle');
+  btn.textContent = document.body.classList.contains('light-theme')?"☀️":"🌙";
+  localStorage.setItem('theme', document.body.classList.contains('light-theme')?"light":"dark");
 }
 
-window.onload=function(){
-  const theme=localStorage.getItem('theme');
-  if(theme==='light')document.body.classList.add('light-theme');
-  document.querySelector('.theme-toggle').textContent=theme==='light'?"☀️":"🌙";
+window.onload = function(){
+  const theme = localStorage.getItem('theme');
+  if(theme==='light') document.body.classList.add('light-theme');
+  document.querySelector('.theme-toggle').textContent = theme==='light'?"☀️":"🌙";
 };
 </script>
 </body>
 </html>
+
 
 
 
