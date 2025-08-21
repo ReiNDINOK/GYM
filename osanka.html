@@ -402,6 +402,11 @@ const POOLS = {
   ]
 };
 
+const listEl = document.getElementById('list');
+const progressEl = document.getElementById('progress');
+const progressBarEl = document.getElementById('progress-bar');
+const progressContainerEl = document.getElementById('progress-container');
+
 function randPick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
@@ -481,8 +486,9 @@ function persist(state) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { console.warn("Не удалось сохранить:", e); }
 }
 
-// Генерация нового списка
+// Генерация нового списка и сброс предыдущего состояния
 function generateNew() {
+  localStorage.removeItem(STORAGE_KEY); // полная очистка предыдущего
   const selected = [
     randPick(POOLS.posture),
     randPick(POOLS.antiSlouch),
@@ -528,10 +534,7 @@ function saveProgress() {
 
   document.getElementById('generate').addEventListener('click', generateNew);
   document.getElementById('save').addEventListener('click', saveList);
-  document.getElementById('clear').addEventListener('click', () => {
-    localStorage.removeItem(STORAGE_KEY);
-    generateNew();
-  });
+  document.getElementById('clear').addEventListener('click', generateNew); // полный сброс и генерация нового
 
   document.querySelectorAll(".dropdown > a").forEach(el => {
     el.addEventListener("click", e => {
@@ -540,8 +543,8 @@ function saveProgress() {
     });
   });
 })();
-
-  </script>
+</script>
 </body>
 </html>
+
 
