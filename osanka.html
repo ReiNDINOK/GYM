@@ -1,23 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Чек-лист упражнений: осанка · сутулость · поперечная</title>
-
-  <script>
-    // Применяем сохранённую тему до рендера, чтобы не мелькала тёмная/светлая
-    (function() {
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "light") {
-        document.documentElement.classList.add("light-theme");
-      }
-    })();
-  </script>
-
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Чек-лист упражнений: осанка · сутулость · поперечная</title>
+<style>
 :root {
-  /* === Тёмная тема (по умолчанию) === */
   --bg-main: linear-gradient(135deg,#333 0%,#1c1c1c 100%);
   --bg-sidebar: #1b1b1b;
   --bg-container: #212121;
@@ -26,24 +14,16 @@
   --bg-input: #333;
   --bg-table: #444;
   --bg-table-header: #555;
-
   --text-main: #ddd;
   --text-secondary: #aaa;
   --text-title: #f0f0f0;
   --text-contrast: #fff;
-
   --border-color: #666;
   --header-bg: linear-gradient(135deg,#444 0%,#333 100%);
-
   --btn-bg: linear-gradient(135deg,#7f8c8d 0%,#5f6a6a 100%);
   --btn-text: #fff;
-
-  --error-bg: #a60000;
-  --error-text: #fff;
 }
-
 body.light-theme {
-  /* === Светлая тема === */
   --bg-main: linear-gradient(135deg,#f2f2f2 0%,#e8e8e8 100%);
   --bg-sidebar: #eaeaea;
   --bg-container: #fff;
@@ -52,435 +32,221 @@ body.light-theme {
   --bg-input: #fff;
   --bg-table: #f5f5f5;
   --bg-table-header: #ddd;
-
   --text-main: #222;
   --text-secondary: #444;
   --text-title: #111;
   --text-contrast: #000;
-
   --border-color: #bbb;
   --header-bg: linear-gradient(135deg,#ddd 0%,#bbb 100%);
-
   --btn-bg: linear-gradient(135deg,#bbb 0%,#999 100%);
   --btn-text: #222;
-
-  --error-bg: #ff5555;
-  --error-text: #fff;
 }
-
-/* === Общий стиль === */
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: var(--bg-main);
-  min-height:100vh; padding:20px;
-  display:flex;
-  color: var(--text-main);
-}
-
-/* === Боковое меню === */
-.sidebar {
-  width:220px;
-  background: var(--bg-sidebar);
-  border-radius:10px;
-  box-shadow:0 0 15px rgba(0,0,0,0.5);
-  padding:15px;
-  margin-right:20px;
-  height:fit-content;
-  position:sticky;
-  top:20px;
-}
-.sidebar h2 {
-  font-size:1.3em;
-  margin-bottom:10px;
-  color: var(--text-title);
-  text-align:center;
-}
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-main); min-height:100vh; padding:20px; display:flex; color: var(--text-main);}
+.sidebar { width:220px; background: var(--bg-sidebar); border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.5); padding:15px; margin-right:20px; height:fit-content; position:sticky; top:20px;}
+.sidebar h2 { font-size:1.3em; margin-bottom:10px; color: var(--text-title); text-align:center;}
 .sidebar ul { list-style:none; }
 .sidebar li { margin:8px 0; position:relative; }
-.sidebar a {
-  display:block;
-  padding:10px 12px;
-  text-decoration:none;
-  color: var(--text-main);
-  border-radius:8px;
-  transition:background .3s, color .3s;
-}
-.sidebar a:hover {
-  background: var(--bg-card);
-  color: var(--text-contrast);
-}
-.dropdown > a::after {
-  content:"▼";
-  float:right;
-  font-size:0.8em;
-  transition:transform .3s;
-}
+.sidebar a { display:block; padding:10px 12px; text-decoration:none; color: var(--text-main); border-radius:8px; transition:background .3s, color .3s; }
+.sidebar a:hover { background: var(--bg-card); color: var(--text-contrast);}
+.dropdown > a::after { content:"▼"; float:right; font-size:0.8em; transition:transform .3s; }
 .dropdown.open > a::after { transform:rotate(-180deg); }
 .dropdown ul { display:none; margin-left:10px; }
 .dropdown.open ul { display:block; }
-.dropdown ul a {
-  font-size:0.9em;
-  background: var(--bg-section);
-}
-
-/* === Основное приложение === */
-.app {
-  flex:1;
-  max-width:1200px;
-  background: var(--bg-container);
-  border-radius:15px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.7);
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-}
-
-header {
-  background: var(--header-bg);
-  color: var(--text-title);
-  padding:30px;
-  text-align:center;
-  border-bottom:2px solid var(--border-color);
-  position:relative;
-}
-header h1 {
-  font-size:2.2em;
-  margin:0;
-}
-
-.content {
-  padding:30px;
-  background: var(--bg-section);
-  flex:1;
-}
-.controls {
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  justify-content:center;
-  margin-bottom:20px;
-}
-button {
-  border:none;
-  padding:14px 24px;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:600;
-  font-size:16px;
-  transition:transform .2s, background .3s;
-}
-#generate {
-  background: var(--btn-bg);
-  color: var(--btn-text);
-}
-#save {
-  background: var(--bg-card);
-  color: var(--text-main);
-  border:2px solid var(--border-color);
-}
-#clear {
-  background: linear-gradient(135deg,#a60000,#6b0000);
-  color:white;
-}
-button:hover { transform:translateY(-2px); }
-.hint {
-  color: var(--text-secondary);
-  font-size:14px;
-  text-align:center;
-  margin-bottom:20px;
-}
-
-/* === Список упражнений === */
-.exercise-list {
-  list-style:none;
-  padding:0;
-  margin:0;
-  display:grid;
-  gap:20px;
-}
-.exercise-list li {
-  background: var(--bg-card);
-  border-radius:10px;
-  padding:18px;
-  box-shadow:0 2px 10px rgba(0,0,0,0.5);
-  display:grid;
-  gap:10px;
-}
-.title {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight:bold;
-  font-size:1.1em;
-  color: var(--text-title);
-}
-.badge {
-  font-size:12px;
-  padding:4px 10px;
-  border-radius:999px;
-  background: var(--bg-table-header);
-  color: var(--text-main);
-}
-label.exercise {
-  display:grid;
-  grid-template-columns:24px 1fr;
-  gap:12px;
-  cursor:pointer;
-}
-input[type="checkbox"] {
-  width:20px; height:20px; margin-top:2px;
-  accent-color:#34d399;
-}
+.dropdown ul a { font-size:0.9em; background: var(--bg-section);}
+.app { flex:1; max-width:1200px; background: var(--bg-container); border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.7); overflow:hidden; display:flex; flex-direction:column; }
+header { background: var(--header-bg); color: var(--text-title); padding:30px; text-align:center; border-bottom:2px solid var(--border-color); position:relative;}
+header h1 { font-size:2.2em; margin:0;}
+.content { padding:30px; background: var(--bg-section); flex:1;}
+.controls { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:20px;}
+button { border:none; padding:14px 24px; border-radius:8px; cursor:pointer; font-weight:600; font-size:16px; transition:transform .2s, background .3s;}
+#generate { background: var(--btn-bg); color: var(--btn-text);}
+#save { background: var(--bg-card); color: var(--text-main); border:2px solid var(--border-color);}
+#clear { background: linear-gradient(135deg,#a60000,#6b0000); color:white;}
+button:hover { transform:translateY(-2px);}
+.hint { color: var(--text-secondary); font-size:14px; text-align:center; margin-bottom:20px;}
+.exercise-list { list-style:none; padding:0; margin:0; display:grid; gap:20px;}
+.exercise-list li { background: var(--bg-card); border-radius:10px; padding:18px; box-shadow:0 2px 10px rgba(0,0,0,0.5); display:grid; gap:10px;}
+.title { display:flex; align-items:center; gap:10px; font-weight:bold; font-size:1.1em; color: var(--text-title);}
+.badge { font-size:12px; padding:4px 10px; border-radius:999px; background: var(--bg-table-header); color: var(--text-main);}
+label.exercise { display:grid; grid-template-columns:24px 1fr; gap:12px; cursor:pointer;}
+input[type="checkbox"] { width:20px; height:20px; margin-top:2px; accent-color:#34d399;}
 .desc { color: var(--text-main); font-size:14px; }
 .meta { color: var(--text-secondary); font-size:12px; }
-
-footer {
-  padding:20px;
-  background: var(--bg-section);
-  border-top:2px solid var(--border-color);
-  display:flex;
-  align-items:center;
-  font-size:13px;
-  color: var(--text-secondary);
-  gap:12px;
-}
-
-/* === Прогресс-бар в футере === */
-.progress-container {
-  flex:1;
-  height: 12px;
-  background: var(--bg-card);
-  border-radius: 6px;
-  margin: 0 15px;
-  overflow: hidden;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
-  min-width: 120px;
-}
-#progress-bar {
-  height: 100%;
-  width: 0%;
-  border-radius: 6px 0 0 6px;
-  transition: width 0.4s ease, background 0.4s ease;
-}
-
-/* === Кнопка переключения темы === */
-.theme-toggle {
-  position: fixed;
-  left: 20px; bottom: 20px;
-  background: #444;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 50px; height: 50px;
-  cursor: pointer;
-  font-size: 1.4em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 8px rgba(0,0,0,0.4);
-  transition: background .3s, transform .2s;
-  z-index: 1000;
-}
-body.light-theme .theme-toggle {
-  background: #ddd;
-  color: #222;
-}
-.theme-toggle:hover { transform: translateY(-2px); }
-
-@media (max-width: 768px) {
-  body {
-    flex-direction: column;
-    padding: 10px;
-  }
-  .sidebar {
-    width: 100%;
-    margin: 0 0 15px 0;
-    position: relative;
-    top: auto;
-  }
-  .app {
-    max-width: 100%;
-  }
-  footer { flex-direction: column; gap:8px; align-items:stretch; }
-  .progress-container { margin: 8px 0; width: 100%; min-width: auto; }
-}
-  </style>
+footer { padding:20px; background: var(--bg-section); border-top:2px solid var(--border-color); display:flex; align-items:center; font-size:13px; color: var(--text-secondary); gap:12px;}
+.progress-container { flex:1; height: 12px; background: var(--bg-card); border-radius: 6px; margin: 0 15px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4); min-width: 120px;}
+#progress-bar { height: 100%; width: 0%; border-radius: 6px 0 0 6px; transition: width 0.4s ease, background 0.4s ease;}
+.theme-toggle { position: fixed; left: 20px; bottom: 20px; background: #444; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 1.4em; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 8px rgba(0,0,0,0.4); transition: background .3s, transform .2s; z-index: 1000;}
+body.light-theme .theme-toggle { background: #ddd; color: #222;}
+.theme-toggle:hover { transform: translateY(-2px);}
+@media (max-width: 768px) { body { flex-direction: column; padding: 10px;} .sidebar { width: 100%; margin: 0 0 15px 0; position: relative; top: auto;} .app { max-width: 100%; } footer { flex-direction: column; gap:8px; align-items:stretch; } .progress-container { margin: 8px 0; width: 100%; min-width: auto; }}
+</style>
 </head>
 <body>
-  <!-- Боковое меню -->
-  <div class="sidebar" aria-hidden="false">
-    <h2>Меню</h2>
-    <ul>
-      <li><a href='/'>🏠 Главная</a></li>
-      <li class="dropdown">
-        <a href="#">📂 Разделы</a>
-        <ul>
-          <li><a href='/gum'>Моё тело - железо</a></li>
-          <li><a href='/osanka'>Позвоночник - титан</a></li>
-          <li><a href='/motor'>Сердце - мотор</a></li>
-        </ul>
-      </li>
-      <li><a href='/about'>ℹ️ О проекте</a></li>
-    </ul>
-  </div>
+<div class="sidebar">
+<h2>Меню</h2>
+<ul>
+<li><a href='/'>🏠 Главная</a></li>
+<li class="dropdown"><a href="#">📂 Разделы</a>
+<ul>
+<li><a href='/gum'>Моё тело - железо</a></li>
+<li><a href='/osanka'>Позвоночник - титан</a></li>
+<li><a href='/motor'>Сердце - мотор</a></li>
+</ul></li>
+<li><a href='/about'>ℹ️ О проекте</a></li>
+</ul>
+</div>
 
-  <!-- Основное приложение -->
-  <div class="app" role="application" aria-label="Чек-лист упражнений">
-    <header>
-      <h1>📋 Чек-лист на сегодня</h1>
-    </header>
+<div class="app">
+<header><h1>📋 Чек-лист на сегодня</h1></header>
+<div class="content">
+<div class="controls">
+<button id="generate">Сгенерировать новые</button>
+<button id="save">Сохранить список</button>
+<button id="clear" title="Очистить состояние и начать заново">Сбросить</button>
+</div>
+<p class="hint">Каждый раз генерируется <strong>1 упражнение на осанку</strong>, <strong>1 — против сутулости</strong> и <strong>1 — для поперечной мышцы живота</strong>.</p>
+<ul id="list" class="exercise-list" aria-live="polite" aria-atomic="true"></ul>
+</div>
+<footer>
+<span>Прогресс выполнения упражнений:</span>
+<div class="progress-container" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-container">
+<div id="progress-bar" aria-hidden="true"></div>
+</div>
+<span id="progress">0 / 3 выполнено</span>
+</footer>
+</div>
 
-    <div class="content">
-      <div class="controls">
-        <button id="generate">Сгенерировать новые</button>
-        <button id="save">Сохранить список</button>
-        <button id="clear" title="Очистить состояние и начать заново">Сбросить</button>
-      </div>
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Переключить тему">🌙</button>
 
-      <p class="hint">Каждый раз генерируется <strong>1 упражнение на осанку</strong>, <strong>1 — против сутулости</strong> и <strong>1 — для поперечной мышцы живота</strong>.</p>
+<script>
+const STORAGE_KEY = 'coreChecklistV1';
+const POOLS = {
+posture: [
+{name: 'Стена-ангелы', desc: 'Спиной к стене, руки от «W» к «Y», поясница прижата.', meta: '2×8–12 медленно'},
+{name: 'Подбородок к горлу', desc: 'Втягивай подбородок назад, держи 2–3 сек.', meta: '2×10–12'},
+{name: 'Удлинение позвоночника сидя', desc: 'Сидя, вытягивайся макушкой вверх.', meta: '2×60 сек'},
+{name: 'Упражнение «Стена»', desc: 'Прижми спину к стене, затем медленно поднимай-опускай руки вдоль неё.', meta: '1×1 мин'},
+{name: 'Кошка–собака', desc: 'На четвереньках прогибай и округляй спину, дыши глубоко.', meta: '2×10 движений'},
+{name: 'Поза ребёнка', desc: 'Сядь на колени, ляг животом, вытягивай руки, расслабь спину.', meta: '1–2 мин'},
+],
+antiSlouch: [
+{name: 'Распаковка лопаток', desc: 'Своди лопатки вниз и внутрь.', meta: '3×12–15'},
+{name: 'YTW лёжа', desc: 'Подними руки в формы Y, T, W.', meta: '2×6 каждого'},
+{name: 'Растяжка задней поверхности бедра лёжа', desc: 'Ляг, подтяни одну ногу к себе, выпрями её.', meta: '2–3×20–30 сек/нога'},
+{name: 'Прогиб в спине стоя', desc: 'Встань прямо, руки на талии, прогнись назад.', meta: '5×5 сек'},
+],
+transverse: [
+{name: 'Вакуум живота', desc: 'Выдох → подтяни живот внутрь и вверх.', meta: '3×10–20 сек'},
+{name: 'Dead Bug', desc: 'Поясница прижата, медленно опускай руку и ногу.', meta: '2×10/сторона'},
+{name: 'Ягодичный мостик', desc: 'Ляг на спину, подними таз, напряги поперечную мышцу.', meta: '3×8–10'},
+{name: 'Боковая планка', desc: 'Удерживай тело в прямой линии, опираясь на боковой локоть.', meta: '2×20–60 сек/сторона'},
+]
+};
 
-      <ul id="list" class="exercise-list" aria-live="polite" aria-atomic="true"></ul>
-    </div>
-
-    <footer>
-      <span>Прогресс выполнения упражнений:</span>
-
-      <!-- Прогресс-бар между подсказкой и текстом прогресса -->
-      <div class="progress-container" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-container">
-        <div id="progress-bar" aria-hidden="true"></div>
-      </div>
-
-      <span id="progress">0 / 3 выполнено</span>
-    </footer>
-  </div>
-
-  <!-- Кнопка переключения темы -->
-  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Переключить тему">🌙</button>
-
-  <script>
-    const STORAGE_KEY = 'coreChecklistV1';
-    const POOLS = {
-      posture: [
-        { name: 'Стена-ангелы', desc: 'Спиной к стене, руки от «W» к «Y», поясница прижата.', meta: '2×8–12 медленно' },
-        { name: 'Подбородок к горлу', desc: 'Втягивай подбородок назад, держи 2–3 сек.', meta: '2×10–12' },
-        { name: 'Удлинение позвоночника сидя', desc: 'Сидя, вытягивайся макушкой вверх.', meta: '2×60 сек' },
-        { name: 'Упражнение «Стена»', desc: 'Прижми спину к стене, затем медленно поднимай-опускай руки вдоль неё.', meta: '1×1 мин' },
-        { name: 'Кошка–собака', desc: 'На четвереньках прогибай и округляй спину, дыши глубоко.', meta: '2×10 движений' },
-        { name: 'Поза ребёнка', desc: 'Сядь на колени, ляг животом, вытягивай руки, расслабь спину.', meta: '1–2 мин' },
-      ],
-      antiSlouch: [
-        { name: 'Распаковка лопаток', desc: 'Своди лопатки вниз и внутрь.', meta: '3×12–15' },
-        { name: 'YTW лёжа', desc: 'Подними руки в формы Y, T, W.', meta: '2×6 каждого' },
-        { name: 'Растяжка задней поверхности бедра лёжа', desc: 'Ляг, подтяни одну ногу к себе, выпрями её.', meta: '2–3×20–30 сек/нога' },
-        { name: 'Прогиб в спине стоя', desc: 'Встань прямо, руки на талии, прогнись назад.', meta: '5×5 сек' },
-      ],
-      transverse: [
-        { name: 'Вакуум живота', desc: 'Выдох → подтяни живот внутрь и вверх.', meta: '3×10–20 сек' },
-        { name: 'Dead Bug', desc: 'Поясница прижата, медленно опускай руку и ногу.', meta: '2×10/сторона' },
-        { name: 'Ягодичный мостик', desc: 'Ляг на спину, подними таз, напряги поперечную мышцу.', meta: '3×8–10' },
-        { name: 'Боковая планка', desc: 'Удерживай тело в прямой линии, опираясь на боковой локоть.', meta: '2×20–60 сек/сторона' },
-      ]
-    };
-
-    const listEl = document.getElementById('list');
+const listEl = document.getElementById('list');
 const progressEl = document.getElementById('progress');
 const progressBarEl = document.getElementById('progress-bar');
 
-function randPick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function randPick(arr){return arr[Math.floor(Math.random()*arr.length)];}
 
-function buildItem(ex, category, idx) {
-  const li = document.createElement('li');
-  const title = document.createElement('div'); title.className = 'title';
-  const badge = document.createElement('span'); badge.className='badge';
-  badge.textContent = category==='posture'?'Осанка':category==='antiSlouch'?'Против сутулости':'Поперечная';
-  const span = document.createElement('span'); span.textContent=ex.name;
-  title.appendChild(badge); title.appendChild(span);
-
-  const label = document.createElement('label'); label.className='exercise';
-  const cb = document.createElement('input'); cb.type='checkbox'; cb.id='cb-'+idx;
-  cb.addEventListener('change', updateProgress);
-  label.appendChild(cb);
-
-  const descWrap = document.createElement('div');
-  const desc = document.createElement('div'); desc.className='desc'; desc.textContent=ex.desc;
-  const meta = document.createElement('div'); meta.className='meta'; meta.textContent=ex.meta;
-  descWrap.appendChild(desc); descWrap.appendChild(meta);
-  label.appendChild(descWrap);
-
-  li.appendChild(title); li.appendChild(label);
-  return li;
+function buildItem(ex, category, idx){
+const li=document.createElement('li');
+const title=document.createElement('div'); title.className='title';
+const badge=document.createElement('span'); badge.className='badge';
+badge.textContent=category==='posture'?'Осанка':category==='antiSlouch'?'Против сутулости':'Поперечная';
+const span=document.createElement('span'); span.textContent=ex.name;
+title.appendChild(badge); title.appendChild(span);
+const label=document.createElement('label'); label.className='exercise';
+const cb=document.createElement('input'); cb.type='checkbox'; cb.id='cb-'+idx; cb.addEventListener('change', updateProgress);
+label.appendChild(cb);
+const descWrap=document.createElement('div');
+const desc=document.createElement('div'); desc.className='desc'; desc.textContent=ex.desc;
+const meta=document.createElement('div'); meta.className='meta'; meta.textContent=ex.meta;
+descWrap.appendChild(desc); descWrap.appendChild(meta);
+label.appendChild(descWrap);
+li.appendChild(title); li.appendChild(label);
+return li;
 }
 
-function renderList(items, checks=[false,false,false]) {
-  listEl.innerHTML='';
-  items.forEach((ex,idx)=>{
-    const category = idx===0?'posture':idx===1?'antiSlouch':'transverse';
-    const li = buildItem(ex, category, idx);
-    li.querySelector('input').checked = !!checks[idx];
-    listEl.appendChild(li);
-  });
-  updateProgress();
+function renderList(items, checks=[false,false,false]){
+listEl.innerHTML='';
+items.forEach((ex,idx)=>{
+const category=idx===0?'posture':idx===1?'antiSlouch':'transverse';
+const li=buildItem(ex, category, idx);
+li.querySelector('input').checked=!!checks[idx];
+listEl.appendChild(li);
+});
+updateProgress();
 }
 
-function generateNew() {
-  const selected = [randPick(POOLS.posture), randPick(POOLS.antiSlouch), randPick(POOLS.transverse)];
-  renderList(selected);
+function updateProgress(){
+const boxes=listEl.querySelectorAll('input[type="checkbox"]');
+const done=Array.from(boxes).filter(b=>b.checked).length;
+progressEl.textContent=`${done} / ${boxes.length} выполнено`;
+const percent=boxes.length?Math.round((done/boxes.length)*100):0;
+progressBarEl.style.width=percent+'%';
+progressBarEl.style.background=done<2?"linear-gradient(135deg,#ef4444,#b91c1c)":done<3?"linear-gradient(135deg,#f59e0b,#d97706)":"linear-gradient(135deg,#34d399,#059669)";
 }
 
-function updateProgress() {
-  const boxes = listEl.querySelectorAll('input[type="checkbox"]');
-  const done = Array.from(boxes).filter(b=>b.checked).length;
-  progressEl.textContent = `${done} / ${boxes.length} выполнено`;
-  const percent = boxes.length?Math.round((done/boxes.length)*100):0;
-  progressBarEl.style.width = percent+'%';
-  progressBarEl.style.background = done<2?"linear-gradient(135deg,#ef4444,#b91c1c)":done<3?"linear-gradient(135deg,#f59e0b,#d97706)":"linear-gradient(135deg,#34d399,#059669)";
+function getState(){ 
+try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||null;}catch{return null;}
 }
 
-function getState(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || null; } catch { return null; } }
+// Генерация нового списка — только для просмотра
+function generateNew(){
+const newList=[randPick(POOLS.posture),randPick(POOLS.antiSlouch),randPick(POOLS.transverse)];
+renderList(newList,[false,false,false]);
+const saveBtn=document.getElementById('save');
+saveBtn.textContent='Сохранить список (ещё не сохранено)';
+saveBtn.style.background='linear-gradient(135deg,#facc15,#d97706)';
+}
 
-document.getElementById('generate').addEventListener('click', generateNew);
+document.getElementById('generate').addEventListener('click',generateNew);
 
-document.getElementById('save').addEventListener('click', () => {
-  const items = Array.from(listEl.querySelectorAll('li')).map(li=>{
-    return {
-      name: li.querySelector('.title span').textContent,
-      desc: li.querySelector('.desc').textContent,
-      meta: li.querySelector('.meta').textContent
-    };
-  });
-  const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb=>cb.checked);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ items, checks }));
-  const btn = document.getElementById('save'); btn.textContent='Сохранено ✓';
-  setTimeout(()=>btn.textContent='Сохранить список',1200);
+document.getElementById('save').addEventListener('click',()=>{
+const items=Array.from(listEl.querySelectorAll('li')).map(li=>({
+name: li.querySelector('.title span').textContent,
+desc: li.querySelector('.desc').textContent,
+meta: li.querySelector('.meta').textContent
+}));
+const checks=Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb=>cb.checked);
+localStorage.setItem(STORAGE_KEY, JSON.stringify({items,checks}));
+const btn=document.getElementById('save'); 
+btn.textContent='Сохранено ✓';
+btn.style.background='';
+setTimeout(()=>btn.textContent='Сохранить список',1200);
 });
 
 document.getElementById('clear').addEventListener('click',()=>{
-  localStorage.removeItem(STORAGE_KEY);
-  listEl.innerHTML=''; updateProgress();
+localStorage.removeItem(STORAGE_KEY);
+generateNew();
 });
 
+// Инициализация страницы
 (function init(){
-  const saved = getState();
-  if(saved?.items?.length===3) renderList(saved.items,saved.checks||[false,false,false]);
-  else generateNew();
+const saved=getState();
+if(saved?.items?.length===3){
+renderList(saved.items,saved.checks||[false,false,false]);
+}else{
+const startList=[randPick(POOLS.posture),randPick(POOLS.antiSlouch),randPick(POOLS.transverse)];
+renderList(startList,[false,false,false]);
+localStorage.setItem(STORAGE_KEY,JSON.stringify({items:startList,checks:[false,false,false]}));
+}
 })();
 
+// Тема
 function toggleTheme(){
-  document.body.classList.toggle('light-theme');
-  const btn=document.querySelector('.theme-toggle');
-  btn.textContent=document.body.classList.contains('light-theme')?"☀️":"🌙";
-  localStorage.setItem('theme', document.body.classList.contains('light-theme')?"light":"dark");
+document.body.classList.toggle('light-theme');
+const btn=document.querySelector('.theme-toggle');
+btn.textContent=document.body.classList.contains('light-theme')?"☀️":"🌙";
+localStorage.setItem('theme',document.body.classList.contains('light-theme')?"light":"dark");
 }
 
 window.onload=function(){
-  const theme = localStorage.getItem('theme');
-  if(theme==='light') document.body.classList.add('light-theme');
-  document.querySelector('.theme-toggle').textContent=theme==='light'?"☀️":"🌙";
+const theme=localStorage.getItem('theme');
+if(theme==='light')document.body.classList.add('light-theme');
+document.querySelector('.theme-toggle').textContent=theme==='light'?"☀️":"🌙";
 };
-  </script>
+</script>
 </body>
 </html>
-
-
