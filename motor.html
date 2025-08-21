@@ -181,6 +181,8 @@ body {
   font-size:18px; border-radius:8px;
   cursor:pointer; transition:transform .2s;
   display:block; margin:0 auto;
+  background: linear-gradient(135deg,#a60000,#6b0000);
+  color:white;
 }
 .calculate-btn:hover { transform:translateY(-2px); }
 
@@ -317,7 +319,7 @@ function calculate() {
   
   // Проверка на пустые поля или ноль
   if (!age || !weight || !height || age <= 0 || weight <= 0 || height <= 0) {
-    showError("⚠️ Ноль? Серьёзно?");
+    showError("Ноль? Серьёзно?");
     return;
   }
 
@@ -363,4 +365,5 @@ document.querySelectorAll(".dropdown > a").forEach(el=>{
 </script>
 </body>
 </html>
+
 
