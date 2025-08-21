@@ -144,7 +144,15 @@
     background: var(--bg-section);
   }
     .controls { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:20px; }
-    button { border:none; padding:14px 24px; border-radius:8px; cursor:pointer; font-weight:600; font-size:16px; transition:transform .2s, background .3s; }
+    button {
+  border:none;
+  padding:14px 24px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+  font-size:16px;
+  transition:transform .2s, background .35s ease, color .35s ease, border-color .35s ease;
+}
     #generate { background: var(--btn-bg); color: var(--btn-text); }
     #save { background: var(--bg-card); color: var(--text-main); border:2px solid var(--border-color); }
     #clear { background: linear-gradient(135deg,#a60000,#6b0000); color:white; }
@@ -412,6 +420,7 @@
   </noscript>
 </body>
 </html>
+
 
 
 
