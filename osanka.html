@@ -46,17 +46,73 @@ body.light-theme {
   --error-text: #fff;
 }
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-main); min-height:100vh; padding:20px; display:flex; color: var(--text-main);}
-.sidebar { width:220px; background: var(--bg-sidebar); border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.5); padding:15px; margin-right:20px; height:fit-content; position:sticky; top:20px;}
-.sidebar h2 { font-size:1.3em; margin-bottom:10px; color: var(--text-title); text-align:center;}
-.sidebar ul { list-style:none; }
-.sidebar li { margin:8px 0; position:relative; }
-.sidebar a { display:block; padding:10px 12px; text-decoration:none; color: var(--text-main); border-radius:8px; transition:background .3s, color .3s; }
-.sidebar a:hover { background: var(--bg-card); color: var(--text-contrast);}
-.dropdown > a::after { content:"▼"; float:right; font-size:0.8em; transition:transform .3s; }
-.dropdown.open > a::after { transform:rotate(-180deg); }
-.dropdown ul { display:none; margin-left:10px; }
-.dropdown.open ul { display:block; }
-.dropdown ul a { font-size:0.9em; background: var(--bg-section);}
+/* === Боковое меню === */
+.sidebar {
+  width: 220px;
+  background: var(--bg-sidebar);
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  padding: 15px;
+  margin-right: 20px;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+.sidebar h2 {
+  font-size: 1.3em;
+  margin-bottom: 10px;
+  color: var(--text-title);
+  text-align: center;
+}
+.sidebar ul {
+  list-style: none;
+  padding-left: 0;
+}
+.sidebar li {
+  margin: 8px 0;
+  position: relative;
+}
+.sidebar a {
+  display: block;
+  padding: 10px 12px;
+  text-decoration: none;
+  color: var(--text-main);
+  border-radius: 8px;
+  transition: background 0.3s, color 0.3s;
+}
+.sidebar a:hover {
+  background: var(--bg-card);
+  color: var(--text-contrast);
+}
+/* выпадающий список */
+.dropdown > a::after {
+  content: "▼";
+  float: right;
+  font-size: 0.8em;
+  transition: transform 0.3s;
+}
+.dropdown.open > a::after {
+  transform: rotate(-180deg);
+}
+.dropdown ul {
+  display: none;
+  margin-left: 10px;
+}
+.dropdown.open ul {
+  display: block;
+}
+.dropdown ul a {
+  font-size: 0.9em;
+  background: var(--bg-section);
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: block;
+  transition: background 0.3s, color 0.3s;
+}
+.dropdown ul a:hover {
+  background: var(--bg-card);
+  color: var(--text-contrast);
+}
 .app { flex:1; max-width:1200px; background: var(--bg-container); border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.7); overflow:hidden; display:flex; flex-direction:column; }
 header { background: var(--header-bg); color: var(--text-title); padding:30px; text-align:center; border-bottom:2px solid var(--border-color); position:relative;}
 header h1 { font-size:2.2em; margin:0;}
@@ -82,7 +138,30 @@ footer { padding:20px; background: var(--bg-section); border-top:2px solid var(-
 .theme-toggle { position: fixed; left: 20px; bottom: 20px; background: #444; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 1.4em; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 8px rgba(0,0,0,0.4); transition: background .3s, transform .2s; z-index: 1000;}
 body.light-theme .theme-toggle { background: #ddd; color: #222;}
 .theme-toggle:hover { transform: translateY(-2px); }
-@media (max-width: 768px) { body { flex-direction: column; padding: 10px;} .sidebar { width: 100%; margin: 0 0 15px 0; position: relative; top: auto;} .app { max-width: 100%; } footer { flex-direction: column; gap:8px; align-items:stretch; } .progress-container { margin: 8px 0; width: 100%; min-width: auto; }}
+@media (max-width: 768px) {
+  body {
+    flex-direction: column;
+    padding: 10px;
+  }
+  .sidebar {
+    width: 100%;
+    margin: 0 0 15px 0;
+    position: static;
+  }
+  .app {
+    max-width: 100%;
+  }
+  footer {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .progress-container {
+    margin: 8px 0;
+    width: 100%;
+    min-width: auto;
+  }
+}
 </style>
 </head>
 <body>
@@ -247,4 +326,5 @@ window.onload = function(){
 </script>
 </body>
 </html>
+
 
