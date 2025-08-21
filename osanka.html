@@ -127,17 +127,22 @@
 
     /* === Основное приложение === */
     .app {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; 
-  border-radius: 20px; 
-  box-shadow:0 10px 30px rgba(0,0,0,0.7); 
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.7);
+    overflow: hidden; 
   }
 
     header { background: var(--header-bg); color: var(--text-title); padding:30px; text-align:center; border-bottom:2px solid var(--border-color); position:relative; }
     header h1 { font-size:2.2em; margin:0; }
 
-    .content { padding:30px; background: var(--bg-section); flex:1; }
+    .content {
+    flex: 1 1 auto;
+    overflow-y: auto; 
+    padding:30px;
+    background: var(--bg-section);
+  }
     .controls { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:20px; }
     button { border:none; padding:14px 24px; border-radius:8px; cursor:pointer; font-weight:600; font-size:16px; transition:transform .2s, background .3s; }
     #generate { background: var(--btn-bg); color: var(--btn-text); }
@@ -156,7 +161,17 @@
     .desc { color: var(--text-main); font-size:14px; }
     .meta { color: var(--text-secondary); font-size:12px; }
 
-    footer { padding:20px; background: var(--bg-section); border-top:2px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; font-size:13px; color: var(--text-secondary); }
+    footer {
+    flex-shrink: 0;
+    padding:20px;
+    background: var(--bg-section);
+    border-top:2px solid var(--border-color);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13px;
+    color: var(--text-secondary);
+  }
 
     /* === Кнопка переключения темы === */
     .theme-toggle { position: fixed; left: 20px; bottom: 20px; background: #444; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 1.4em; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 8px rgba(0,0,0,0.4); transition: background .3s, transform .2s; z-index: 1000; }
@@ -397,6 +412,7 @@
   </noscript>
 </body>
 </html>
+
 
 
 
