@@ -485,7 +485,7 @@ function persist(state) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { console.warn("Не удалось сохранить:", e); }
 }
 
-// Генерация нового списка
+// Генерация нового списка и автоматическое сохранение
 function generateNew() {
   const selected = [
     randPick(POOLS.posture),
@@ -493,6 +493,7 @@ function generateNew() {
     randPick(POOLS.transverse)
   ];
   renderList(selected, [false, false, false]);
+  persist({ items: selected, checks: [false, false, false] });
 }
 
 // Сохраняем текущий список и прогресс
@@ -512,7 +513,7 @@ function saveList() {
 // Сохраняем прогресс при изменении чекбоксов
 function saveProgress() {
   const state = getState();
-  if (!state) return; // если список ещё не сохранён, не трогаем localStorage
+  if (!state) return; 
   const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb => cb.checked);
   persist({ items: state.items, checks });
   updateProgress();
@@ -531,7 +532,9 @@ function saveProgress() {
   document.getElementById('save').addEventListener('click', saveList);
   document.getElementById('clear').addEventListener('click', () => {
     localStorage.removeItem(STORAGE_KEY);
-    generateNew();
+    const boxes = listEl.querySelectorAll('input[type="checkbox"]');
+    boxes.forEach(cb => cb.checked = false);
+    updateProgress();
   });
 
   document.querySelectorAll(".dropdown > a").forEach(el => {
@@ -541,11 +544,6 @@ function saveProgress() {
     });
   });
 })();
-</script>
-
-
+  </script>
 </body>
 </html>
-
-
-
