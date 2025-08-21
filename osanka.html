@@ -127,34 +127,37 @@
 
     /* === Основное приложение === */
     .app {
-  display: flex;
-  flex-direction: column;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-  overflow: hidden;
-  height: auto;
-  min-height: 100%; 
+      display: flex;
+      flex-direction: column;
+      border-radius: 20px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.7);
+      overflow: hidden;
+
+      /* фикс для роста по содержимому */
+      height: auto;
+      /* Надёжно занимать хотя бы видимую область, учитывая padding body 20px сверху/снизу */
+      min-height: calc(100vh - 40px);
     }
 
     header { background: var(--header-bg); color: var(--text-title); padding:30px; text-align:center; border-bottom:2px solid var(--border-color); position:relative; }
     header h1 { font-size:2.2em; margin:0; }
 
     .content {
-  flex: 1 0 auto;  
-  overflow-y: visible; 
-  padding: 30px;
-  background: var(--bg-section);
-}
+      flex: 1 0 auto;   /* контент растёт по содержимому */
+      overflow: visible;
+      padding: 30px;
+      background: var(--bg-section);
+    }
     .controls { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:20px; }
     button {
-  border:none;
-  padding:14px 24px;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:600;
-  font-size:16px;
-  transition:transform .2s, background .35s ease, color .35s ease, border-color .35s ease;
-}
+      border:none;
+      padding:14px 24px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:16px;
+      transition:transform .2s, background .35s ease, color .35s ease, border-color .35s ease;
+    }
     #generate { background: var(--btn-bg); color: var(--btn-text); }
     #save { background: var(--bg-card); color: var(--text-main); border:2px solid var(--border-color); }
     #clear { background: linear-gradient(135deg,#a60000,#6b0000); color:white; }
@@ -172,16 +175,16 @@
     .meta { color: var(--text-secondary); font-size:12px; }
 
     footer {
-    flex-shrink: 0;
-    padding:20px;
-    background: var(--bg-section);
-    border-top:2px solid var(--border-color);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-size:13px;
-    color: var(--text-secondary);
-  }
+      flex-shrink: 0;
+      padding:20px;
+      background: var(--bg-section);
+      border-top:2px solid var(--border-color);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:13px;
+      color: var(--text-secondary);
+    }
 
     /* === Кнопка переключения темы === */
     .theme-toggle { position: fixed; left: 20px; bottom: 20px; background: #444; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 1.4em; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 8px rgba(0,0,0,0.4); transition: background .3s, transform .2s; z-index: 1000; }
@@ -190,35 +193,35 @@
 
     /* === Адаптив для телефонов === */
    @media (max-width: 768px) {
-  body { 
-    flex-direction: column; 
-    padding: 10px; 
-  }
-  .sidebar { 
-    width: 100%; 
-    margin: 0 0 15px 0; 
-    position: relative; 
-    top: auto; 
-  }
-  .app {
-    border-radius: 20px; 
-    overflow: hidden; 
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-  }
-  .exercise-list { 
-    display: flex; 
-    flex-direction: column; 
-  }
-  .content { 
-    flex: 1 1 auto; 
-    /* min-height: 0; <-- убрали ограничение высоты */
-    padding: 15px; 
-    overflow-y: visible; /* тоже без отдельного скролла */
-  }
+      body { 
+        flex-direction: column; 
+        padding: 10px; 
+      }
+      .sidebar { 
+        width: 100%; 
+        margin: 0 0 15px 0; 
+        position: relative; 
+        top: auto; 
+      }
+      .app {
+        border-radius: 20px; 
+        overflow: hidden; 
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        min-height: auto; /* на мобиле нет необходимости в calc(100vh - 40px) */
+      }
+      .exercise-list { 
+        display: flex; 
+        flex-direction: column; 
+      }
+      .content { 
+        flex: 1 0 auto; 
+        padding: 15px; 
+        overflow-y: visible; /* тоже без отдельного скролла */
+      }
 
-  .controls { 
-    justify-content: stretch; 
-  }
+      .controls { 
+        justify-content: stretch; 
+      }
     }
   </style>
 </head>
@@ -441,16 +444,3 @@
   </noscript>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
