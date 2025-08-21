@@ -150,107 +150,116 @@ const progressBarEl = document.getElementById('progress-bar');
 function randPick(arr){return arr[Math.floor(Math.random()*arr.length)];}
 
 function buildItem(ex, category, idx){
-const li=document.createElement('li');
-const title=document.createElement('div'); title.className='title';
-const badge=document.createElement('span'); badge.className='badge';
-badge.textContent=category==='posture'?'Осанка':category==='antiSlouch'?'Против сутулости':'Поперечная';
-const span=document.createElement('span'); span.textContent=ex.name;
-title.appendChild(badge); title.appendChild(span);
-const label=document.createElement('label'); label.className='exercise';
-const cb=document.createElement('input'); cb.type='checkbox'; cb.id='cb-'+idx; cb.addEventListener('change', updateProgress);
-label.appendChild(cb);
-const descWrap=document.createElement('div');
-const desc=document.createElement('div'); desc.className='desc'; desc.textContent=ex.desc;
-const meta=document.createElement('div'); meta.className='meta'; meta.textContent=ex.meta;
-descWrap.appendChild(desc); descWrap.appendChild(meta);
-label.appendChild(descWrap);
-li.appendChild(title); li.appendChild(label);
-return li;
+  const li=document.createElement('li');
+  const title=document.createElement('div'); title.className='title';
+  const badge=document.createElement('span'); badge.className='badge';
+  badge.textContent=category==='posture'?'Осанка':category==='antiSlouch'?'Против сутулости':'Поперечная';
+  const span=document.createElement('span'); span.textContent=ex.name;
+  title.appendChild(badge); title.appendChild(span);
+
+  const label=document.createElement('label'); label.className='exercise';
+  const cb=document.createElement('input'); cb.type='checkbox'; cb.id='cb-'+idx; cb.addEventListener('change', updateProgress);
+  label.appendChild(cb);
+
+  const descWrap=document.createElement('div');
+  const desc=document.createElement('div'); desc.className='desc'; desc.textContent=ex.desc;
+  const meta=document.createElement('div'); meta.className='meta'; meta.textContent=ex.meta;
+  descWrap.appendChild(desc); descWrap.appendChild(meta);
+  label.appendChild(descWrap);
+
+  li.appendChild(title); li.appendChild(label);
+  return li;
 }
 
 function renderList(items, checks=[false,false,false]){
-listEl.innerHTML='';
-items.forEach((ex,idx)=>{
-const category=idx===0?'posture':idx===1?'antiSlouch':'transverse';
-const li=buildItem(ex, category, idx);
-li.querySelector('input').checked=!!checks[idx];
-listEl.appendChild(li);
-});
-updateProgress();
+  listEl.innerHTML='';
+  items.forEach((ex,idx)=>{
+    const category=idx===0?'posture':idx===1?'antiSlouch':'transverse';
+    const li=buildItem(ex, category, idx);
+    li.querySelector('input').checked=!!checks[idx];
+    listEl.appendChild(li);
+  });
+  updateProgress();
 }
 
 function updateProgress(){
-const boxes=listEl.querySelectorAll('input[type="checkbox"]');
-const done=Array.from(boxes).filter(b=>b.checked).length;
-progressEl.textContent=`${done} / ${boxes.length} выполнено`;
-const percent=boxes.length?Math.round((done/boxes.length)*100):0;
-progressBarEl.style.width=percent+'%';
-progressBarEl.style.background=done<2?"linear-gradient(135deg,#ef4444,#b91c1c)":done<3?"linear-gradient(135deg,#f59e0b,#d97706)":"linear-gradient(135deg,#34d399,#059669)";
+  const boxes=listEl.querySelectorAll('input[type="checkbox"]');
+  const done=Array.from(boxes).filter(b=>b.checked).length;
+  progressEl.textContent=`${done} / ${boxes.length} выполнено`;
+  const percent=boxes.length?Math.round((done/boxes.length)*100):0;
+  progressBarEl.style.width=percent+'%';
+  progressBarEl.style.background=done<2?"linear-gradient(135deg,#ef4444,#b91c1c)":done<3?"linear-gradient(135deg,#f59e0b,#d97706)":"linear-gradient(135deg,#34d399,#059669)";
 }
 
 function getState(){ 
-try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||null;}catch{return null;}
+  try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||null;}catch{return null;}
 }
 
-// Генерация нового списка — только для просмотра
+// Генерация нового списка для просмотра
 function generateNew(){
-const newList=[randPick(POOLS.posture),randPick(POOLS.antiSlouch),randPick(POOLS.transverse)];
-renderList(newList,[false,false,false]);
-const saveBtn=document.getElementById('save');
-saveBtn.textContent='Сохранить список (ещё не сохранено)';
-saveBtn.style.background='linear-gradient(135deg,#facc15,#d97706)';
+  const newList=[randPick(POOLS.posture),randPick(POOLS.antiSlouch),randPick(POOLS.transverse)];
+  renderList(newList,[false,false,false]);
+
+  const saveBtn=document.getElementById('save');
+  saveBtn.textContent='Сохранить список (ещё не сохранено)';
+  saveBtn.style.background='linear-gradient(135deg,#facc15,#d97706)';
+  return newList;
 }
 
-document.getElementById('generate').addEventListener('click',generateNew);
+// Сохранение текущего списка
+function saveCurrent(){
+  const items=Array.from(listEl.querySelectorAll('li')).map(li=>({
+    name: li.querySelector('.title span').textContent,
+    desc: li.querySelector('.desc').textContent,
+    meta: li.querySelector('.meta').textContent
+  }));
+  const checks=Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb=>cb.checked);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({items,checks}));
 
-document.getElementById('save').addEventListener('click',()=>{
-const items=Array.from(listEl.querySelectorAll('li')).map(li=>({
-name: li.querySelector('.title span').textContent,
-desc: li.querySelector('.desc').textContent,
-meta: li.querySelector('.meta').textContent
-}));
-const checks=Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb=>cb.checked);
-localStorage.setItem(STORAGE_KEY, JSON.stringify({items,checks}));
-const btn=document.getElementById('save'); 
-btn.textContent='Сохранено ✓';
-btn.style.background='';
-setTimeout(()=>btn.textContent='Сохранить список',1200);
-});
+  const btn=document.getElementById('save'); 
+  btn.textContent='Сохранено ✓';
+  btn.style.background='';
+  setTimeout(()=>btn.textContent='Сохранить список',1200);
+}
 
-document.getElementById('clear').addEventListener('click',()=>{
-    localStorage.removeItem(STORAGE_KEY);
-    const newList=[randPick(POOLS.posture),randPick(POOLS.antiSlouch),randPick(POOLS.transverse)];
-    renderList(newList,[false,false,false]);
-    const checks=[false,false,false];
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({items:newList,checks}));
+document.getElementById('generate').addEventListener('click', generateNew);
+document.getElementById('save').addEventListener('click', saveCurrent);
+
+// Сброс — удаляем старый и создаём новый, сразу сохраняя
+document.getElementById('clear').addEventListener('click', ()=>{
+  localStorage.removeItem(STORAGE_KEY);
+  const newList = generateNew();
+  const checks = [false,false,false];
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({items:newList,checks}));
 });
 
 // Инициализация страницы
 (function init(){
-const saved=getState();
-if(saved?.items?.length===3){
-renderList(saved.items,saved.checks||[false,false,false]);
-}else{
-const startList=[randPick(POOLS.posture),randPick(POOLS.antiSlouch),randPick(POOLS.transverse)];
-renderList(startList,[false,false,false]);
-localStorage.setItem(STORAGE_KEY,JSON.stringify({items:startList,checks:[false,false,false]}));
-}
+  const saved = getState();
+  if(saved?.items?.length===3){
+    renderList(saved.items,saved.checks||[false,false,false]);
+  } else {
+    const startList = [randPick(POOLS.posture),randPick(POOLS.antiSlouch),randPick(POOLS.transverse)];
+    renderList(startList,[false,false,false]);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({items:startList,checks:[false,false,false]}));
+  }
 })();
 
 // Тема
 function toggleTheme(){
-document.body.classList.toggle('light-theme');
-const btn=document.querySelector('.theme-toggle');
-btn.textContent=document.body.classList.contains('light-theme')?"☀️":"🌙";
-localStorage.setItem('theme',document.body.classList.contains('light-theme')?"light":"dark");
+  document.body.classList.toggle('light-theme');
+  const btn=document.querySelector('.theme-toggle');
+  btn.textContent=document.body.classList.contains('light-theme')?"☀️":"🌙";
+  localStorage.setItem('theme',document.body.classList.contains('light-theme')?"light":"dark");
 }
 
 window.onload=function(){
-const theme=localStorage.getItem('theme');
-if(theme==='light')document.body.classList.add('light-theme');
-document.querySelector('.theme-toggle').textContent=theme==='light'?"☀️":"🌙";
+  const theme=localStorage.getItem('theme');
+  if(theme==='light')document.body.classList.add('light-theme');
+  document.querySelector('.theme-toggle').textContent=theme==='light'?"☀️":"🌙";
 };
 </script>
 </body>
 </html>
+
 
