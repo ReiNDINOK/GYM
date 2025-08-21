@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Калькулятор зон пульса</title>
+<style>
+:root {
+  /* === Тёмная тема (по умолчанию) === */
+  --bg-main: linear-gradient(135deg,#333 0%,#1c1c1c 100%);
+  --bg-sidebar: #1b1b1b;
+  --bg-container: #212121;
+  --bg-section: #282828;
+  --bg-card: #333;
+  --bg-input: #333;
+  --bg-table: #444;
+  --bg-table-header: #555;
+
+  --text-main: #ddd;
+  --text-secondary: #aaa;
+  --text-title: #f0f0f0;
+  --text-contrast: #fff;
+
+  --border-color: #666;
+  --header-bg: linear-gradient(135deg,#444 0%,#333 100%);
+
+  --btn-bg: linear-gradient(135deg,#4caf50 0%,#388e3c 100%);
+  --btn-text: #fff;
+
+  --error-bg: #a60000;
+  --error-text: #fff;
+}
+
+body.light-theme {
+  /* === Светлая тема === */
+  --bg-main: linear-gradient(135deg,#f2f2f2 0%,#e8e8e8 100%);
+  --bg-sidebar: #eaeaea;
+  --bg-container: #fff;
+  --bg-section: #f9f9f9;
+  --bg-card: #f5f5f5;
+  --bg-input: #fff;
+  --bg-table: #f5f5f5;
+  --bg-table-header: #ddd;
+
+  --text-main: #222;
+  --text-secondary: #444;
+  --text-title: #111;
+  --text-contrast: #000;
+
+  --border-color: #bbb;
+  --header-bg: linear-gradient(135deg,#ddd 0%,#bbb 100%);
+
+  --btn-bg: linear-gradient(135deg,#2ecc71,#27ae60);
+  --btn-text: #fff;
+
+  --error-bg: #ff5555;
+  --error-text: #fff;
+}
+
+/* === Общий стиль === */
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-main);
+  min-height:100vh; padding:20px;
+  display:flex;
+  color: var(--text-main);
+}
+
+/* === Боковое меню === */
+.sidebar {
+  width:220px;
+  background: var(--bg-sidebar);
+  border-radius:10px;
+  box-shadow:0 0 15px rgba(0,0,0,0.5);
+  padding:15px;
+  margin-right:20px;
+  height:fit-content;
+  position:sticky;
+  top:20px;
+}
+.sidebar h2 {
+  font-size:1.3em;
+  margin-bottom:10px;
+  color: var(--text-title);
+  text-align:center;
+}
+.sidebar ul { list-style:none; }
+.sidebar li { margin:8px 0; position:relative; }
+.sidebar a {
+  display:block;
+  padding:10px 12px;
+  text-decoration:none;
+  color: var(--text-main);
+  border-radius:8px;
+  transition:background .3s, color .3s;
+}
+.sidebar a:hover {
+  background: var(--bg-card);
+  color: var(--text-contrast);
+}
+/* выпадающий список */
+.dropdown > a::after {
+  content:"▼";
+  float:right;
+  font-size:0.8em;
+  transition:transform .3s;
+}
+.dropdown.open > a::after { transform:rotate(-180deg); }
+.dropdown ul { display:none; margin-left:10px; }
+.dropdown.open ul { display:block; }
+.dropdown ul a {
+  font-size:0.9em;
+  background: var(--bg-section);
+}
+
+/* === Контейнер === */
+.container {
+  flex:1;
+  max-width:1200px;
+  background: var(--bg-container);
+  border-radius:15px; 
+  box-shadow:0 10px 30px rgba(0,0,0,0.7); 
+  overflow:hidden;
+}
+.header {
+  background: var(--header-bg);
+  color: var(--text-title);
+  padding:30px; text-align:center;
+  border-bottom:2px solid var(--border-color);
+}
+.header h1 { font-size:2.2em; margin-bottom:10px; }
+.header p { font-size:1.1em; opacity:0.9; }
+
+/* === Инпуты === */
+.input-section { padding:30px; background: var(--bg-section); position:relative; }
+.input-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px;
+  margin-bottom:30px;
+}
+.input-group {
+  background: var(--bg-card);
+  padding:20px; border-radius:10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.5);
+}
+.input-group label {
+  display:block; font-weight:bold; margin-bottom:10px;
+  color: var(--text-secondary); font-size:1em;
+}
+.input-group input {
+  width:100%; padding:12px;
+  border:2px solid var(--border-color);
+  border-radius:8px; font-size:16px;
+  background: var(--bg-input);
+  color: var(--text-main);
+  transition:border-color .3s;
+}
+.input-group input:focus { outline:none; border-color:#4caf50; }
+
+/* === Ошибка === */
+#error-message {
+  opacity:0;
+  background-color: var(--error-bg);
+  color: var(--error-text);
+  padding:12px; margin-bottom:20px;
+  border-radius:5px; text-align:center;
+  max-width:600px; margin-left:auto; margin-right:auto;
+  transition: opacity .4s ease-in-out;
+  pointer-events:none; user-select:none;
+  box-shadow:0 0 15px rgba(180,0,0,0.9);
+  position:relative;
+}
+#error-message.show { opacity:1; pointer-events:auto; user-select:auto; }
+
+/* === Кнопки === */
+.calculate-btn {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border:none; padding:15px 30px;
+  font-size:18px; border-radius:8px;
+  cursor:pointer; transition:transform .2s;
+  display:block; margin:0 auto;
+}
+.calculate-btn:hover { transform:translateY(-2px); }
+
+/* === Результаты === */
+.results {
+  padding:30px;
+  background: var(--bg-card);
+  border-radius:10px;
+  margin:20px;
+}
+.results table {
+  width:100%; border-collapse:collapse; margin-top:15px;
+}
+.results th, .results td {
+  padding:10px; text-align:center;
+  border:1px solid var(--border-color);
+}
+.results th {
+  background: var(--bg-table-header);
+  color: var(--text-contrast);
+}
+.results td { background: var(--bg-table); }
+
+/* === Кнопка переключения темы === */
+.theme-toggle {
+  position: fixed;
+  left: 20px; bottom: 20px;
+  background: #444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px; height: 50px;
+  cursor: pointer;
+  font-size: 1.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 8px rgba(0,0,0,0.4);
+  transition: background .3s, transform .2s;
+  z-index: 1000;}
+body.light-theme .theme-toggle {
+  background: #ddd;
+  color: #222;
+}
+.theme-toggle:hover { transform: translateY(-2px); }
+
+@media (max-width:768px) {
+  body { flex-direction:column; }
+  .sidebar { width:100%; margin-bottom:20px; position:static; }
+}
+</style>
+</head>
+<body>
+<!-- Боковое меню -->
+  <div class="sidebar">
+    <h2>Меню</h2>
+    <ul>
+      <li><a href='/'>🏠 Главная</a></li>
+      <li class="dropdown">
+        <a href="#">📂 Разделы</a>
+        <ul>
+          <li><a href='/gum'>Моё тело - железо</a></li>
+          <li><a href='/osanka'>Позвоночник - титан</a></li>
+          <li><a href='/motor'>Мотор</a></li>
+        </ul>
+      </li>
+      <li><a href='/about'>ℹ️ О проекте</a></li>
+    </ul>
+  </div>
+
+<div class="container">
+  <div class="header">
+    <h1>❤️ Калькулятор зон пульса</h1>
+    <p>Введите ваши данные для расчёта пульсовых зон и ИМТ</p>
+  </div>
+
+  <div class="input-section">
+    <div id="error-message">Ошибка: пустое значение или ноль недопустимы!</div>
+
+    <div class="input-grid">
+      <div class="input-group">
+        <label for="age">Возраст:</label>
+        <input type="number" id="age" placeholder="Например: 30" />
+      </div>
+      <div class="input-group">
+        <label for="weight">Вес (кг):</label>
+        <input type="number" id="weight" placeholder="Например: 70" />
+      </div>
+      <div class="input-group">
+        <label for="height">Рост (см):</label>
+        <input type="number" id="height" placeholder="Например: 175" />
+      </div>
+    </div>
+
+    <button class="calculate-btn" onclick="calculate()">Рассчитать</button>
+  </div>
+
+  <div class="results" id="result" style="display:none;"></div>
+</div>
+
+<!-- Кнопка темы -->
+<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+<script>
+/* === Переключение темы === */
+function toggleTheme() {
+  document.body.classList.toggle("light-theme");
+  const isLight = document.body.classList.contains("light-theme");
+  localStorage.setItem("theme", isLight ? "light" : "dark");
+  document.querySelector(".theme-toggle").textContent = isLight ? "☀️" : "🌙";
+}
+(function restoreTheme(){
+  const theme = localStorage.getItem("theme");
+  if (theme==="light") document.body.classList.add("light-theme");
+  document.querySelector(".theme-toggle").textContent = theme==="light" ? "☀️" : "🌙";
+})();
+
+/* === Уведомление об ошибке === */
+function showError(msg) {
+  const err = document.getElementById("error-message");
+  err.textContent = msg;
+  err.classList.add("show");
+  setTimeout(() => err.classList.remove("show"), 2500);
+}
+
+/* === Логика калькулятора === */
+function calculate() {
+  const age = parseInt(document.getElementById("age").value);
+  const weight = parseFloat(document.getElementById("weight").value);
+  const height = parseFloat(document.getElementById("height").value) / 100;
+
+  let resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = "";
+  
+  // Проверка на пустые поля или ноль
+  if (!age || !weight || !height || age <= 0 || weight <= 0 || height <= 0) {
+    showError("⚠️ Ноль? Серьёзно?");
+    return;
+  }
+
+  const hrMaxClassic = 220 - age;
+  const hrMaxTanaka = Math.round(208 - 0.7 * age);
+
+  const zones = [
+    { name: "Лёгкая активность (50–60%)", min: Math.round(hrMaxClassic*0.5), max: Math.round(hrMaxClassic*0.6) },
+    { name: "Аэробная зона (60–70%)", min: Math.round(hrMaxClassic*0.6), max: Math.round(hrMaxClassic*0.7) },
+    { name: "Анаэробный порог (70–80%)", min: Math.round(hrMaxClassic*0.7), max: Math.round(hrMaxClassic*0.8) },
+    { name: "VO₂max (80–90%)", min: Math.round(hrMaxClassic*0.8), max: Math.round(hrMaxClassic*0.9) },
+    { name: "Красная зона (90–100%)", min: Math.round(hrMaxClassic*0.9), max: hrMaxClassic }
+  ];
+
+  const bmi = (weight / (height*height)).toFixed(1);
+  let bmiComment = "";
+  if (bmi < 18.5) bmiComment = "Недостаточный вес";
+  else if (bmi < 25) bmiComment = "Норма ✅";
+  else if (bmi < 30) bmiComment = "Избыточный вес";
+  else bmiComment = "Ожирение ⚠️";
+
+  let html = `
+    <p><b>Макс. пульс (220−возраст):</b> ${hrMaxClassic} уд/мин</p>
+    <p><b>Макс. пульс (Tanaka):</b> ${hrMaxTanaka} уд/мин</p>
+    <p><b>Ваш ИМТ:</b> ${bmi} (${bmiComment})</p>
+    <table>
+      <tr><th>Зона</th><th>Диапазон (уд/мин)</th></tr>
+  `;
+  zones.forEach(z => {
+    html += `<tr><td>${z.name}</td><td>${z.min} – ${z.max}</td></tr>`;
+  });
+  html += "</table>";
+
+  resultDiv.style.display="block";
+  resultDiv.innerHTML = html;
+}
+document.querySelectorAll(".dropdown > a").forEach(el=>{
+  el.addEventListener("click",e=>{
+    e.preventDefault();
+    el.parentElement.classList.toggle("open");
+  });
+});
+</script>
+</body>
+</html>
