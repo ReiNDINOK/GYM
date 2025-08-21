@@ -1,11 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Чек-лист упражнений: осанка · сутулость · поперечная</title>
+
   <script>
+    // Применяем сохранённую тему до рендера, чтобы не мелькала тёмная/светлая
     (function() {
       const savedTheme = localStorage.getItem("theme");
       if (savedTheme === "light") {
@@ -13,6 +14,7 @@
       }
     })();
   </script>
+
   <style>
 :root {
   /* === Тёмная тема (по умолчанию) === */
@@ -109,7 +111,6 @@ body {
   background: var(--bg-card);
   color: var(--text-contrast);
 }
-/* выпадающий список */
 .dropdown > a::after {
   content:"▼";
   float:right;
@@ -240,10 +241,28 @@ footer {
   background: var(--bg-section);
   border-top:2px solid var(--border-color);
   display:flex;
-  justify-content:space-between;
   align-items:center;
   font-size:13px;
   color: var(--text-secondary);
+  gap:12px;
+}
+
+/* === Прогресс-бар в футере === */
+.progress-container {
+  flex:1;
+  height: 12px;
+  background: var(--bg-card);
+  border-radius: 6px;
+  margin: 0 15px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+  min-width: 120px;
+}
+#progress-bar {
+  height: 100%;
+  width: 0%;
+  border-radius: 6px 0 0 6px;
+  transition: width 0.4s ease, background 0.4s ease;
 }
 
 /* === Кнопка переключения темы === */
@@ -270,7 +289,6 @@ body.light-theme .theme-toggle {
 }
 .theme-toggle:hover { transform: translateY(-2px); }
 
-/* === Адаптив для телефонов === */
 @media (max-width: 768px) {
   body {
     flex-direction: column;
@@ -285,23 +303,25 @@ body.light-theme .theme-toggle {
   .app {
     max-width: 100%;
   }
+  footer { flex-direction: column; gap:8px; align-items:stretch; }
+  .progress-container { margin: 8px 0; width: 100%; min-width: auto; }
 }
   </style>
 </head>
 <body>
   <!-- Боковое меню -->
-  <div class="sidebar">
+  <div class="sidebar" aria-hidden="false">
     <h2>Меню</h2>
     <ul>
       <li><a href='/'>🏠 Главная</a></li>
       <li class="dropdown">
         <a href="#">📂 Разделы</a>
         <ul>
-          <li><a href='gum.html'>Моё тело - железо</a></li>
-          <li><a href='osanka.html'>Позвоночник - титан</a></li>
+          <li><a href='/gum'>Моё тело - железо</a></li>
+          <li><a href='/osanka'>Позвоночник - титан</a></li>
         </ul>
       </li>
-      <li><a href='about.html'>ℹ️ О проекте</a></li>
+      <li><a href='/about'>ℹ️ О проекте</a></li>
     </ul>
   </div>
 
@@ -317,34 +337,28 @@ body.light-theme .theme-toggle {
         <button id="save">Сохранить список</button>
         <button id="clear" title="Очистить состояние и начать заново">Сбросить</button>
       </div>
+
       <p class="hint">Каждый раз генерируется <strong>1 упражнение на осанку</strong>, <strong>1 — против сутулости</strong> и <strong>1 — для поперечной мышцы живота</strong>.</p>
-      <ul id="list" class="exercise-list" aria-live="polite"></ul>
+
+      <ul id="list" class="exercise-list" aria-live="polite" aria-atomic="true"></ul>
     </div>
 
     <footer>
-      <span>Подсказка: сохраняй список, чтобы он остался после перезагрузки страницы.</span>
+      <span>Прогресс выполнения упражнений:</span>
+
+      <!-- Прогресс-бар между подсказкой и текстом прогресса -->
+      <div class="progress-container" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-container">
+        <div id="progress-bar" aria-hidden="true"></div>
+      </div>
+
       <span id="progress">0 / 3 выполнено</span>
     </footer>
   </div>
-<!-- Кнопка переключения темы -->
-<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+  <!-- Кнопка переключения темы -->
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Переключить тему">🌙</button>
 
   <script>
-function toggleTheme() {
-  document.body.classList.toggle("light-theme");
-  const isLight = document.body.classList.contains("light-theme");
-  localStorage.setItem("theme", isLight ? "light" : "dark");
-
-  document.querySelector(".theme-toggle").textContent = isLight ? "☀️" : "🌙";
-}
-
-window.onload = function() {
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "light") {
-    document.body.classList.add("light-theme");
-    document.querySelector(".theme-toggle").textContent = "☀️"; 
-  }
-};
     const STORAGE_KEY = 'coreChecklistV1';
     const POOLS = {
       posture: [
@@ -371,11 +385,14 @@ window.onload = function() {
 
     const listEl = document.getElementById('list');
     const progressEl = document.getElementById('progress');
+    const progressBarEl = document.getElementById('progress-bar');
+    const progressContainerEl = document.getElementById('progress-container');
 
     const randPick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-    function buildItem(ex, category) {
+    function buildItem(ex, category, idx) {
       const li = document.createElement('li');
+
       const title = document.createElement('div');
       title.className = 'title';
       const badge = document.createElement('span');
@@ -388,9 +405,15 @@ window.onload = function() {
 
       const label = document.createElement('label');
       label.className = 'exercise';
+      label.setAttribute('for', 'cb-' + idx);
+
       const cb = document.createElement('input');
       cb.type = 'checkbox';
-      cb.addEventListener('change', () => saveProgress());
+      cb.id = 'cb-' + idx;
+      cb.setAttribute('aria-label', ex.name + ' — отметить как выполненное');
+      cb.addEventListener('change', () => {
+        saveProgress();
+      });
 
       const descWrap = document.createElement('div');
       const desc = document.createElement('div');
@@ -411,8 +434,12 @@ window.onload = function() {
     }
 
     function generateNew() {
-      const selected = [ randPick(POOLS.posture), randPick(POOLS.antiSlouch), randPick(POOLS.transverse) ];
-      renderList(selected);
+      const selected = [
+        randPick(POOLS.posture),
+        randPick(POOLS.antiSlouch),
+        randPick(POOLS.transverse)
+      ];
+      renderList(selected, [false, false, false]);
       persist({ items: selected, checks: [false, false, false] });
     }
 
@@ -420,9 +447,10 @@ window.onload = function() {
       listEl.innerHTML = '';
       items.forEach((ex, idx) => {
         const category = idx === 0 ? 'posture' : idx === 1 ? 'antiSlouch' : 'transverse';
-        const el = buildItem(ex, category);
+        const el = buildItem(ex, category, idx);
         const cb = el.querySelector('input[type="checkbox"]');
         cb.checked = !!checks[idx];
+        // Вешаем делегирование на изменение — уже добавлено в buildItem
         listEl.appendChild(el);
       });
       updateProgress();
@@ -432,6 +460,21 @@ window.onload = function() {
       const boxes = listEl.querySelectorAll('input[type="checkbox"]');
       const done = Array.from(boxes).filter(b => b.checked).length;
       progressEl.textContent = `${done} / ${boxes.length} выполнено`;
+
+      const percent = boxes.length ? Math.round((done / boxes.length) * 100) : 0;
+      progressBarEl.style.width = percent + "%";
+      progressContainerEl.setAttribute('aria-valuenow', percent);
+
+      // Цвет по состоянию: 0-1 красный, 2 — жёлтый, 3 — зелёный
+      if (done === 0 || done === 1) {
+        progressBarEl.style.background = "linear-gradient(135deg,#ef4444,#b91c1c)"; // красный
+      } else if (done === 2) {
+        progressBarEl.style.background = "linear-gradient(135deg,#f59e0b,#d97706)"; // жёлтый
+      } else if (done === 3) {
+        progressBarEl.style.background = "linear-gradient(135deg,#34d399,#059669)"; // зелёный
+      } else {
+        progressBarEl.style.background = "linear-gradient(135deg,#6b7280,#374151)"; // запасной
+      }
     }
 
     function getState() {
@@ -439,41 +482,94 @@ window.onload = function() {
     }
 
     function persist(state) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.warn("Не удалось сохранить в localStorage:", e);
+      }
     }
 
     function saveProgress() {
       const state = getState();
-      if (!state) return;
+      // Если состояния нет (напр. список не сохранён) — создадим его динамически
+      let items = state?.items || Array.from(listEl.querySelectorAll('.title span')).map(s => ({ name: s.textContent }));
       const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb => cb.checked);
-      persist({ ...state, checks });
+      persist({ items, checks });
       updateProgress();
     }
 
-    document.getElementById('generate').addEventListener('click', generateNew);
-    document.getElementById('save').addEventListener('click', saveProgress);
+    // Кнопки
+    document.getElementById('generate').addEventListener('click', () => {
+      generateNew();
+    });
+    document.getElementById('save').addEventListener('click', () => {
+      // Просто перезаписываем текущие items+checks (на случай, если пользователь что-то поменял)
+      const items = Array.from(listEl.querySelectorAll('.title span')).map((sp) => {
+        return { name: sp.textContent };
+      });
+      const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb => cb.checked);
+      persist({ items, checks });
+      // Короткая визуальная подсказка (можно заменить на тост)
+      document.getElementById('save').textContent = 'Сохранено ✓';
+      setTimeout(()=> document.getElementById('save').textContent = 'Сохранить список', 1200);
+    });
     document.getElementById('clear').addEventListener('click', () => {
       localStorage.removeItem(STORAGE_KEY);
       listEl.innerHTML = '';
       progressEl.textContent = '0 / 3 выполнено';
+      progressBarEl.style.width = '0%';
+      progressBarEl.style.background = "linear-gradient(135deg,#ef4444,#b91c1c)";
+      progressContainerEl.setAttribute('aria-valuenow', 0);
     });
 
-    const saved = getState();
-    if (saved?.items?.length === 3) {
-      renderList(saved.items, saved.checks);
-    } else {
-      generateNew();
+    // Инициализация
+    (function init() {
+      // Восстанавливаем состояние, если есть
+      const saved = getState();
+      if (saved?.items?.length === 3) {
+        // Попробуем восстановить полные объекты упражнений: если в saved.items есть full info - используем, иначе возьмём из POOLS по имени
+        const itemsRestored = saved.items.map(it => {
+          // если объект похож на полный (name + desc), используем как есть
+          if (it.desc || it.meta) return it;
+          // иначе ищем в пулах по имени
+          for (const key of Object.keys(POOLS)) {
+            const found = POOLS[key].find(p => p.name === it.name);
+            if (found) return found;
+          }
+          // запасной — просто имя
+          return { name: it.name || 'Упражнение', desc: '', meta: '' };
+        });
+        renderList(itemsRestored, saved.checks || [false, false, false]);
+      } else {
+        generateNew();
+      }
+
+      // Выпадающее меню
+      document.querySelectorAll(".dropdown > a").forEach(el=>{
+        el.addEventListener("click",e=>{
+          e.preventDefault();
+          el.parentElement.classList.toggle("open");
+        });
+      });
+    })();
+
+    // Тема
+    function toggleTheme() {
+      document.body.classList.toggle("light-theme");
+      const isLight = document.body.classList.contains("light-theme");
+      localStorage.setItem("theme", isLight ? "light" : "dark");
+      document.querySelector(".theme-toggle").textContent = isLight ? "☀️" : "🌙";
     }
 
-    // выпадающее меню
-    document.querySelectorAll(".dropdown > a").forEach(el=>{
-      el.addEventListener("click",e=>{
-        e.preventDefault();
-        el.parentElement.classList.toggle("open");
-      });
-    });
+    window.onload = function() {
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "light") {
+        document.body.classList.add("light-theme");
+        document.querySelector(".theme-toggle").textContent = "☀️";
+      } else {
+        document.querySelector(".theme-toggle").textContent = "🌙";
+      }
+    };
   </script>
 </body>
 </html>
-
-
