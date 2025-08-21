@@ -306,20 +306,23 @@ body.light-theme .theme-toggle {
   .app {
     margin: 0 12px 12px 12px; 
     border-radius: 18px;
-    overflow: hidden;     
+    overflow: visible;     
   }
   .content {
     flex: 0 1 auto;       
   }
   footer {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     text-align: center;
   }
   .progress-container {
-    width: 100%;
-    min-width: auto;
-    margin: 6px 0;
+    width: 90%;
+    min-width: 120px;
+    margin: 6px auto;
+  }
+  #progress-bar {
+    background: linear-gradient(135deg,#ef4444,#b91c1c);
   }
 }
   </style>
@@ -589,6 +592,7 @@ body.light-theme .theme-toggle {
   </script>
 </body>
 </html>
+
 
 
 
