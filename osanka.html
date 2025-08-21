@@ -382,41 +382,38 @@ body.light-theme .theme-toggle {
 const STORAGE_KEY = 'coreChecklistV1';
 const POOLS = {
   posture: [
-    { name: 'Стена-ангелы', desc: 'Спиной к стене, руки от «W» к «Y», поясница прижата.', meta: '2×8–12 медленно' },
-    { name: 'Подбородок к горлу', desc: 'Втягивай подбородок назад, держи 2–3 сек.', meta: '2×10–12' },
-    { name: 'Удлинение позвоночника сидя', desc: 'Сидя, вытягивайся макушкой вверх.', meta: '2×60 сек' },
-    { name: 'Упражнение «Стена»', desc: 'Прижми спину к стене, затем медленно поднимай-опускай руки вдоль неё.', meta: '1×1 мин' },
-    { name: 'Кошка–собака', desc: 'На четвереньках прогибай и округляй спину, дыши глубоко.', meta: '2×10 движений' },
-    { name: 'Поза ребёнка', desc: 'Сядь на колени, ляг животом, вытягивай руки, расслабь спину.', meta: '1–2 мин' },
+    { name: 'Стена-ангелы', desc: 'Спиной к стене, руки от «W» к «Y», поясница прижата.', meta: '2×8–12 медленно', category: 'posture' },
+    { name: 'Подбородок к горлу', desc: 'Втягивай подбородок назад, держи 2–3 сек.', meta: '2×10–12', category: 'posture' },
+    { name: 'Удлинение позвоночника сидя', desc: 'Сидя, вытягивайся макушкой вверх.', meta: '2×60 сек', category: 'posture' },
+    { name: 'Упражнение «Стена»', desc: 'Прижми спину к стене, затем медленно поднимай-опускай руки вдоль неё.', meta: '1×1 мин', category: 'posture' },
+    { name: 'Кошка–собака', desc: 'На четвереньках прогибай и округляй спину, дыши глубоко.', meta: '2×10 движений', category: 'posture' },
+    { name: 'Поза ребёнка', desc: 'Сядь на колени, ляг животом, вытягивай руки, расслабь спину.', meta: '1–2 мин', category: 'posture' },
   ],
   antiSlouch: [
-    { name: 'Распаковка лопаток', desc: 'Своди лопатки вниз и внутрь.', meta: '3×12–15' },
-    { name: 'YTW лёжа', desc: 'Подними руки в формы Y, T, W.', meta: '2×6 каждого' },
-    { name: 'Прогиб в спине стоя', desc: 'Встань прямо, руки на талии, прогнись назад.', meta: '5×5 сек' },
+    { name: 'Распаковка лопаток', desc: 'Своди лопатки вниз и внутрь.', meta: '3×12–15', category: 'antiSlouch' },
+    { name: 'YTW лёжа', desc: 'Подними руки в формы Y, T, W.', meta: '2×6 каждого', category: 'antiSlouch' },
+    { name: 'Прогиб в спине стоя', desc: 'Встань прямо, руки на талии, прогнись назад.', meta: '5×5 сек', category: 'antiSlouch' },
   ],
   transverse: [
-    { name: 'Вакуум живота', desc: 'Выдох → подтяни живот внутрь и вверх.', meta: '3×10–20 сек' },
-    { name: 'Dead Bug', desc: 'Поясница прижата, медленно опускай руку и ногу.', meta: '2×10/сторона' },
-    { name: 'Ягодичный мостик', desc: 'Ляг на спину, подними таз, напряги поперечную мышцу.', meta: '3×8–10' },
-    { name: 'Боковая планка', desc: 'Удерживай тело в прямой линии, опираясь на боковой локоть.', meta: '2×20–60 сек/сторона' },
+    { name: 'Вакуум живота', desc: 'Выдох → подтяни живот внутрь и вверх.', meta: '3×10–20 сек', category: 'transverse' },
+    { name: 'Dead Bug', desc: 'Поясница прижата, медленно опускай руку и ногу.', meta: '2×10/сторона', category: 'transverse' },
+    { name: 'Ягодичный мостик', desc: 'Ляг на спину, подними таз, напряги поперечную мышцу.', meta: '3×8–10', category: 'transverse' },
+    { name: 'Боковая планка', desc: 'Удерживай тело в прямой линии, опираясь на боковой локоть.', meta: '2×20–60 сек/сторона', category: 'transverse' },
   ]
 };
 
-const listEl = document.getElementById('list');
-const progressEl = document.getElementById('progress');
-const progressBarEl = document.getElementById('progress-bar');
-const progressContainerEl = document.getElementById('progress-container');
+function randPick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
-const randPick = arr => arr[Math.floor(Math.random() * arr.length)];
-
-function buildItem(ex, category, idx) {
+function buildItem(ex, idx) {
   const li = document.createElement('li');
 
   const title = document.createElement('div');
   title.className = 'title';
   const badge = document.createElement('span');
   badge.className = 'badge';
-  badge.textContent = category === 'posture' ? 'Осанка' : category === 'antiSlouch' ? 'Против сутулости' : 'Поперечная';
+  badge.textContent = ex.category === 'posture' ? 'Осанка' : ex.category === 'antiSlouch' ? 'Против сутулости' : 'Поперечная';
   const span = document.createElement('span');
   span.textContent = ex.name;
   title.appendChild(badge);
@@ -453,8 +450,7 @@ function buildItem(ex, category, idx) {
 function renderList(items, checks = []) {
   listEl.innerHTML = '';
   items.forEach((ex, idx) => {
-    const category = idx === 0 ? 'posture' : idx === 1 ? 'antiSlouch' : 'transverse';
-    const el = buildItem(ex, category, idx);
+    const el = buildItem(ex, idx);
     const cb = el.querySelector('input[type="checkbox"]');
     cb.checked = !!checks[idx];
     listEl.appendChild(el);
@@ -471,7 +467,7 @@ function updateProgress() {
   progressBarEl.style.width = percent + "%";
   progressContainerEl.setAttribute('aria-valuenow', percent);
 
-  if (done === 0 || done === 1) progressBarEl.style.background = "linear-gradient(135deg,#ef4444,#b91c1c)";
+  if (done <= 1) progressBarEl.style.background = "linear-gradient(135deg,#ef4444,#b91c1c)";
   else if (done === 2) progressBarEl.style.background = "linear-gradient(135deg,#f59e0b,#d97706)";
   else if (done === 3) progressBarEl.style.background = "linear-gradient(135deg,#34d399,#059669)";
   else progressBarEl.style.background = "linear-gradient(135deg,#6b7280,#374151)";
@@ -485,7 +481,7 @@ function persist(state) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { console.warn("Не удалось сохранить:", e); }
 }
 
-// Генерация нового списка и автоматическое сохранение
+// Генерация нового списка
 function generateNew() {
   const selected = [
     randPick(POOLS.posture),
@@ -498,8 +494,10 @@ function generateNew() {
 
 // Сохраняем текущий список и прогресс
 function saveList() {
-  const items = Array.from(listEl.querySelectorAll('li')).map((li, idx) => ({
-    category: idx === 0 ? 'posture' : idx === 1 ? 'antiSlouch' : 'transverse',
+  const items = Array.from(listEl.querySelectorAll('li')).map(li => ({
+    category: li.querySelector('.badge').textContent === 'Осанка' ? 'posture'
+            : li.querySelector('.badge').textContent === 'Против сутулости' ? 'antiSlouch'
+            : 'transverse',
     name: li.querySelector('.title span').textContent,
     desc: li.querySelector('.desc')?.textContent || '',
     meta: li.querySelector('.meta')?.textContent || ''
@@ -532,9 +530,7 @@ function saveProgress() {
   document.getElementById('save').addEventListener('click', saveList);
   document.getElementById('clear').addEventListener('click', () => {
     localStorage.removeItem(STORAGE_KEY);
-    const boxes = listEl.querySelectorAll('input[type="checkbox"]');
-    boxes.forEach(cb => cb.checked = false);
-    updateProgress();
+    generateNew();
   });
 
   document.querySelectorAll(".dropdown > a").forEach(el => {
@@ -544,6 +540,8 @@ function saveProgress() {
     });
   });
 })();
+
   </script>
 </body>
 </html>
+
