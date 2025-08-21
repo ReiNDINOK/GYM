@@ -204,13 +204,12 @@ function generateNew(){
 
 // Сохранение текущего списка
 function saveCurrent(){
-  const items = Array.from(listEl.querySelectorAll('li')).map(li=>({
+  const items = Array.from(listEl.querySelectorAll('li')).map(li => ({
     name: li.querySelector('.title span').textContent,
     desc: li.querySelector('.desc').textContent,
     meta: li.querySelector('.meta').textContent
   }));
-  const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb=>cb.checked);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({items,checks}));
+  const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb => cb.checked);
 
   const btn = document.getElementById('save'); 
   btn.textContent = 'Сохранено ✓';
@@ -255,6 +254,7 @@ window.onload=function(){
 </script>
 </body>
 </html>
+
 
 
 
