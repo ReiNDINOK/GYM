@@ -306,7 +306,6 @@ body.light-theme .theme-toggle {
 
 .theme-toggle:hover { transform: translateY(-2px); }
 
-/* === Адаптивность для мобильных === */
 @media (max-width: 768px) {
   body {
     flex-direction: column;
@@ -315,7 +314,7 @@ body.light-theme .theme-toggle {
 
   .sidebar {
     width: 100%;
-    margin: 0;
+    margin: 0 0 15px 0;
     padding: 15px;
     box-sizing: border-box;
     position: static;
@@ -329,7 +328,9 @@ body.light-theme .theme-toggle {
   footer {
     flex-direction: column;
     gap: 8px;
-    align-items: stretch;
+    align-items: center; 
+    justify-content: center; 
+    text-align: center;
   }
 
   .progress-container {
@@ -502,6 +503,7 @@ window.onload = function(){
 </script>
 </body>
 </html>
+
 
 
 
