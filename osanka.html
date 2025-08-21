@@ -22,6 +22,8 @@
   --header-bg: linear-gradient(135deg,#444 0%,#333 100%);
   --btn-bg: linear-gradient(135deg,#7f8c8d 0%,#5f6a6a 100%);
   --btn-text: #fff;
+  --error-bg: #a60000;
+  --error-text: #fff;
 }
 body.light-theme {
   --bg-main: linear-gradient(135deg,#f2f2f2 0%,#e8e8e8 100%);
@@ -40,54 +42,21 @@ body.light-theme {
   --header-bg: linear-gradient(135deg,#ddd 0%,#bbb 100%);
   --btn-bg: linear-gradient(135deg,#bbb 0%,#999 100%);
   --btn-text: #222;
+  --error-bg: #ff5555;
+  --error-text: #fff;
 }
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg-main); min-height:100vh; padding:20px; display:flex; color: var(--text-main);}
-/* === Боковое меню === */
-.sidebar {
-  width:220px;
-  background: var(--bg-sidebar);
-  border-radius:10px;
-  box-shadow:0 0 15px rgba(0,0,0,0.5);
-  padding:15px;
-  margin-right:20px;
-  height:fit-content;
-  position:sticky;
-  top:20px;
-}
-.sidebar h2 {
-  font-size:1.3em;
-  margin-bottom:10px;
-  color: var(--text-title);
-  text-align:center;
-}
+.sidebar { width:220px; background: var(--bg-sidebar); border-radius:10px; box-shadow:0 0 15px rgba(0,0,0,0.5); padding:15px; margin-right:20px; height:fit-content; position:sticky; top:20px;}
+.sidebar h2 { font-size:1.3em; margin-bottom:10px; color: var(--text-title); text-align:center;}
 .sidebar ul { list-style:none; }
 .sidebar li { margin:8px 0; position:relative; }
-.sidebar a {
-  display:block;
-  padding:10px 12px;
-  text-decoration:none;
-  color: var(--text-main);
-  border-radius:8px;
-  transition:background .3s, color .3s;
-}
-.sidebar a:hover {
-  background: var(--bg-card);
-  color: var(--text-contrast);
-}
-/* выпадающий список */
-.dropdown > a::after {
-  content:"▼";
-  float:right;
-  font-size:0.8em;
-  transition:transform .3s;
-}
+.sidebar a { display:block; padding:10px 12px; text-decoration:none; color: var(--text-main); border-radius:8px; transition:background .3s, color .3s; }
+.sidebar a:hover { background: var(--bg-card); color: var(--text-contrast);}
+.dropdown > a::after { content:"▼"; float:right; font-size:0.8em; transition:transform .3s; }
 .dropdown.open > a::after { transform:rotate(-180deg); }
 .dropdown ul { display:none; margin-left:10px; }
 .dropdown.open ul { display:block; }
-.dropdown ul a {
-  font-size:0.9em;
-  background: var(--bg-section);
-}
+.dropdown ul a { font-size:0.9em; background: var(--bg-section);}
 .app { flex:1; max-width:1200px; background: var(--bg-container); border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.7); overflow:hidden; display:flex; flex-direction:column; }
 header { background: var(--header-bg); color: var(--text-title); padding:30px; text-align:center; border-bottom:2px solid var(--border-color); position:relative;}
 header h1 { font-size:2.2em; margin:0;}
@@ -112,8 +81,8 @@ footer { padding:20px; background: var(--bg-section); border-top:2px solid var(-
 #progress-bar { height: 100%; width: 0%; border-radius: 6px 0 0 6px; transition: width 0.4s ease, background 0.4s ease;}
 .theme-toggle { position: fixed; left: 20px; bottom: 20px; background: #444; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; font-size: 1.4em; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 8px rgba(0,0,0,0.4); transition: background .3s, transform .2s; z-index: 1000;}
 body.light-theme .theme-toggle { background: #ddd; color: #222;}
-.theme-toggle:hover { transform: translateY(-2px);}
-@media (max-width: 768px) { body { flex-direction: column; padding: 10px;}  .sidebar { width:100%; margin-bottom:20px; position:static; } .app { max-width: 100%; } footer { flex-direction: column; gap:8px; align-items:stretch; } .progress-container { margin: 8px 0; width: 100%; min-width: auto; }}
+.theme-toggle:hover { transform: translateY(-2px); }
+@media (max-width: 768px) { body { flex-direction: column; padding: 10px;} .sidebar { width: 100%; margin: 0 0 15px 0; position: relative; top: auto;} .app { max-width: 100%; } footer { flex-direction: column; gap:8px; align-items:stretch; } .progress-container { margin: 8px 0; width: 100%; min-width: auto; }}
 </style>
 </head>
 <body>
@@ -154,6 +123,15 @@ body.light-theme .theme-toggle { background: #ddd; color: #222;}
 <button class="theme-toggle" onclick="toggleTheme()" aria-label="Переключить тему">🌙</button>
 
 <script>
+// === Боковое меню ===
+document.querySelectorAll(".dropdown > a").forEach(el=>{
+  el.addEventListener("click",e=>{
+    e.preventDefault();
+    el.parentElement.classList.toggle("open");
+  });
+});
+
+// === Чек-лист ===
 const STORAGE_KEY = 'coreChecklistV1';
 const POOLS = {
 posture: [
@@ -181,11 +159,9 @@ transverse: [
 const listEl = document.getElementById('list');
 const progressEl = document.getElementById('progress');
 const progressBarEl = document.getElementById('progress-bar');
-
-let currentList = []; // текущий сгенерированный список
+let currentList = [];
 
 function randPick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-
 function buildItem(ex, category, idx){
   const li = document.createElement('li');
   const title = document.createElement('div'); title.className='title';
@@ -207,7 +183,6 @@ function buildItem(ex, category, idx){
   li.appendChild(title); li.appendChild(label);
   return li;
 }
-
 function renderList(items, checks=[false,false,false]){
   listEl.innerHTML='';
   items.forEach((ex, idx) => {
@@ -218,7 +193,6 @@ function renderList(items, checks=[false,false,false]){
   });
   updateProgress();
 }
-
 function updateProgress(){
   const boxes = listEl.querySelectorAll('input[type="checkbox"]');
   const done = Array.from(boxes).filter(b => b.checked).length;
@@ -227,39 +201,25 @@ function updateProgress(){
   progressBarEl.style.width = percent+'%';
   progressBarEl.style.background = done<2?"linear-gradient(135deg,#ef4444,#b91c1c)":done<3?"linear-gradient(135deg,#f59e0b,#d97706)":"linear-gradient(135deg,#34d399,#059669)";
 }
-
 function getState(){ 
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY))||null; } catch { return null; }
 }
-
-// Генерация нового списка
-function generateNew(){
-  currentList = [randPick(POOLS.posture), randPick(POOLS.antiSlouch), randPick(POOLS.transverse)];
-  renderList(currentList,[false,false,false]);
-}
-
-// Сохранение текущего списка
+function generateNew(){ currentList = [randPick(POOLS.posture), randPick(POOLS.antiSlouch), randPick(POOLS.transverse)]; renderList(currentList,[false,false,false]); }
 function saveCurrent(){
   if(!currentList.length) return;
   const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb => cb.checked);
   localStorage.setItem(STORAGE_KEY, JSON.stringify({items: currentList, checks}));
-
   const btn = document.getElementById('save'); 
   btn.textContent = 'Сохранено ✓';
   setTimeout(()=>btn.textContent='Сохранить список',1200);
 }
-
-// Сброс
 document.getElementById('clear').addEventListener('click', ()=>{
   generateNew();
   const checks = [false,false,false];
   localStorage.setItem(STORAGE_KEY, JSON.stringify({items: currentList, checks}));
 });
-
 document.getElementById('generate').addEventListener('click', generateNew);
 document.getElementById('save').addEventListener('click', saveCurrent);
-
-// Инициализация страницы
 (function init(){
   const saved = getState();
   if(saved?.items?.length===3){
@@ -271,15 +231,12 @@ document.getElementById('save').addEventListener('click', saveCurrent);
     localStorage.setItem(STORAGE_KEY, JSON.stringify({items: currentList, checks}));
   }
 })();
-
-// Тема
 function toggleTheme(){
   document.body.classList.toggle('light-theme');
   const btn = document.querySelector('.theme-toggle');
   btn.textContent = document.body.classList.contains('light-theme')?"☀️":"🌙";
   localStorage.setItem('theme', document.body.classList.contains('light-theme')?"light":"dark");
 }
-
 window.onload = function(){
   const theme = localStorage.getItem('theme');
   if(theme==='light') document.body.classList.add('light-theme');
@@ -288,11 +245,3 @@ window.onload = function(){
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
