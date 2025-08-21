@@ -7,15 +7,16 @@
 
   <!-- Применяем тему до рендера, чтобы избежать мигания -->
   <script>
-    (function() {
-      try {
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-          document.documentElement.classList.add('light-theme');
-        }
-      } catch (e) 
+     (function() {
+    try {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.add('light-theme');
       }
-    })();
+    } catch (e) {
+      console.error(e);
+    }
+  })();
   </script>
 
   <style>
@@ -394,5 +395,6 @@
   </noscript>
 </body>
 </html>
+
 
 
