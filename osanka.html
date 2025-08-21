@@ -138,11 +138,12 @@
     header h1 { font-size:2.2em; margin:0; }
 
     .content {
-    flex: 1 1 auto;
-    overflow-y: visible; 
-    padding:30px;
-    background: var(--bg-section);
-  }
+  flex: 1 1 auto;
+  overflow-y: auto;  
+  overflow-y: visible; 
+  padding: 30px;
+  background: var(--bg-section);
+}
     .controls { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:20px; }
     button {
   border:none;
@@ -187,17 +188,35 @@
     .theme-toggle:hover { transform: translateY(-2px); }
 
     /* === Адаптив для телефонов === */
-    @media (max-width: 768px) {
-      body { flex-direction: column; padding: 10px; }
-      .sidebar { width: 100%; margin: 0 0 15px 0; position: relative; top: auto; }
-      .app {border-radius: 20px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+   @media (max-width: 768px) {
+  body { 
+    flex-direction: column; 
+    padding: 10px; 
   }
-  .exercise-list { display: flex; flex-direction: column; }
-  .content { flex: 1 1 auto; min-height: 0; padding: 15px; overflow-y: visible;}
-      .controls { justify-content: stretch; }
-      .exercise-list {
-    display: flex;
-    flex-direction: column;
+  .sidebar { 
+    width: 100%; 
+    margin: 0 0 15px 0; 
+    position: relative; 
+    top: auto; 
+  }
+  .app {
+    border-radius: 20px; 
+    overflow: hidden; 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+  }
+  .exercise-list { 
+    display: flex; 
+    flex-direction: column; 
+  }
+  .content { 
+    flex: 1 1 auto; 
+    /* min-height: 0; <-- убрали ограничение высоты */
+    padding: 15px; 
+    overflow-y: visible; /* тоже без отдельного скролла */
+  }
+
+  .controls { 
+    justify-content: stretch; 
   }
     }
   </style>
@@ -421,6 +440,7 @@
   </noscript>
 </body>
 </html>
+
 
 
 
