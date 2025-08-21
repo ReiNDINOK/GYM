@@ -210,7 +210,8 @@ function saveCurrent(){
     meta: li.querySelector('.meta').textContent
   }));
   const checks = Array.from(listEl.querySelectorAll('input[type="checkbox"]')).map(cb => cb.checked);
-
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({items, checks}));
+  
   const btn = document.getElementById('save'); 
   btn.textContent = 'Сохранено ✓';
   setTimeout(()=>btn.textContent='Сохранить список',1200);
@@ -254,6 +255,7 @@ window.onload=function(){
 </script>
 </body>
 </html>
+
 
 
 
