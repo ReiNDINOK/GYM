@@ -203,10 +203,30 @@
   }
   .updates .desc { color: var(--text-secondary); }
 
-  @media (max-width:768px) {
-    body { flex-direction:column; }
-    .sidebar { width:100%; margin-bottom:20px; position:static; }
-    .header h1 { font-size:2em; }
+  @media (max-width: 768px) {
+  #error-message {
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    opacity: 0;
+    background-color: var(--error-bg);
+    color: var(--error-text);
+    padding: 14px 20px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 90%;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    transition: opacity .4s ease-in-out, top .4s ease-in-out;
+    pointer-events: none;
+  }
+
+  #error-message.show {
+    opacity: 1;
+    top: 25px; 
+    pointer-events: auto;
   }
 
   /* === Уведомления === */
@@ -376,3 +396,4 @@ notifyBtn.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
