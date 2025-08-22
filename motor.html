@@ -275,6 +275,24 @@ body.light-theme .theme-toggle { background: #ddd; color: #222; }
 .theme-toggle:hover { transform: translateY(-2px); }
 
 @media (max-width: 768px) {
+  body {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin: 0 0 15px 0;
+    position: relative;
+    top: 0;
+    border-radius: 12px;
+  }
+
+  .container {
+    width: 100%;
+    margin: 0;
+  }
+
   #error-message {
     position: fixed;
     top: 50%;
@@ -292,8 +310,9 @@ body.light-theme .theme-toggle { background: #ddd; color: #222; }
   }
 
   #error-message.show {
+    display: block;
     opacity: 1;
-    transform: translate(-50%, -50%); 
+    transform: translate(-50%, -50%);
     pointer-events: auto;
   }
 </style>
@@ -510,5 +529,6 @@ document.querySelectorAll(".dropdown > a").forEach(el => {
 
 </body>
 </html>
+
 
 
