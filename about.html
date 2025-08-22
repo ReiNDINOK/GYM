@@ -203,33 +203,7 @@
   }
   .updates .desc { color: var(--text-secondary); }
 
-  @media (max-width: 768px) {
-  #error-message {
-    position: fixed;
-    top: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2000;
-    opacity: 0;
-    background-color: var(--error-bg);
-    color: var(--error-text);
-    padding: 14px 20px;
-    border-radius: 8px;
-    text-align: center;
-    max-width: 90%;
-    font-weight: bold;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-    transition: opacity .4s ease-in-out, top .4s ease-in-out;
-    pointer-events: none;
-  }
-
-  #error-message.show {
-    opacity: 1;
-    top: 25px; 
-    pointer-events: auto;
-  }
-
-  /* === Уведомления === */
+  /* === Кнопка уведомлений === */
   #notify-btn {
     position: fixed;
     right: 20px;
@@ -271,7 +245,7 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* === Кнопка переключения темы === */
+  /* === Кнопка переключения темы (круглая всегда) === */
   .theme-toggle {
     position: fixed;
     left: 20px; bottom: 20px;
@@ -368,15 +342,6 @@ window.addEventListener("load", () => {
 
   // выставляем иконку сразу под сохранённую тему
   document.querySelector(".theme-toggle").textContent = isLight ? "☀️" : "🌙";
-
-  // восстановление значений полей (если они есть на странице)
-  ["deadlift","bench","squat","biceps"].forEach(id=>{
-    const saved = localStorage.getItem(id);
-    if (saved !== null) {
-      const el = document.getElementById(id);
-      if (el) el.value = saved;
-    }
-  });
 });
 
 // выпадающее меню
@@ -396,4 +361,3 @@ notifyBtn.addEventListener("click", () => {
 </script>
 </body>
 </html>
-
