@@ -274,10 +274,28 @@ body {
 body.light-theme .theme-toggle { background: #ddd; color: #222; }
 .theme-toggle:hover { transform: translateY(-2px); }
 
-@media (max-width:768px) {
-  body { flex-direction:column; }
-  .sidebar { width:100%; margin-bottom:20px; position:static; }
-}
+@media (max-width: 768px) {
+  #error-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    z-index: 2000;
+    max-width: 90%;
+    font-size: 1.1em;
+    padding: 16px 22px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+    opacity: 0;
+    transition: opacity .4s ease, transform .4s ease;
+    pointer-events: none;
+  }
+
+  #error-message.show {
+    opacity: 1;
+    transform: translate(-50%, -50%); 
+    pointer-events: auto;
+  }
 </style>
 </head>
 <body>
@@ -492,4 +510,5 @@ document.querySelectorAll(".dropdown > a").forEach(el => {
 
 </body>
 </html>
+
 
