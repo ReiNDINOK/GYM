@@ -321,8 +321,8 @@
 
 <script>
 function toggleTheme() {
-  document.body.classList.toggle("light-theme");
-  const isLight = document.body.classList.contains("light-theme");
+  document.documentElement.classList.toggle("light-theme");
+  const isLight = document.documentElement.classList.contains("light-theme");
   localStorage.setItem("theme", isLight ? "light" : "dark");
   document.querySelector(".theme-toggle").textContent = isLight ? "☀️" : "🌙";
 }
@@ -333,7 +333,7 @@ window.addEventListener("load", () => {
   const isLight = savedTheme === "light";
 
   if (isLight) {
-    document.body.classList.add("light-theme");
+    document.documentElement.classList.add("light-theme");
   }
 
   // выставляем иконку сразу под сохранённую тему
@@ -366,6 +366,7 @@ notifyBtn.addEventListener("click", () => {
 </script>
 </body>
 </html>
+
 
 
 
