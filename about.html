@@ -4,6 +4,17 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Калькулятор рабочих весов</title>
+
+<!-- Скрипт для мгновенной установки темы -->
+<script>
+(function() {
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "light") {
+    document.documentElement.classList.add("light-theme");
+  }
+})();
+</script>
+
 <style>
   :root {
     /* === Тёмная тема (по умолчанию) === */
@@ -287,7 +298,6 @@
     <div class="header">
       <h1>Данный сайт создан для помощи себе и паре близких друзей</h1>
       <p>P.S. Make love, not war</p>
-      <!-- картинка из ПЕРВОГО кода -->
       <img src="https://sun9-61.userapi.com/impf/KR3Ta8-TIzygTtoDjL3mnXwe7fUq6Ip8nO1H7g/WjGm2D6u0XI.jpg?size=1920x768&quality=95&crop=0,98,1280,511&sign=ddd973290c26e1dfb3115ea6247bafcd&type=cover_group" 
            alt="IMAGE" class="header-img">  
     </div>
@@ -317,7 +327,7 @@
   <!-- Уведомление -->
   <div id="notify-box">Если у тебя есть доступ к данному сайту - его автора ты знаешь. Найдёшь ошибки - сообщи, не будь бякой! 😉</div>
   <!-- Кнопка переключения темы -->
-<button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+  <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
 
 <script>
 function toggleTheme() {
@@ -366,20 +376,3 @@ notifyBtn.addEventListener("click", () => {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
