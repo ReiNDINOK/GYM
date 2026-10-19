@@ -6,14 +6,13 @@
 <title>Калькулятор рабочих повторений</title>
 <style>
 :root {
-  /* === Тёмная тема (по умолчанию) === */
   --bg-main: linear-gradient(135deg,#333 0%,#1c1c1c 100%);
   --bg-sidebar: #1b1b1b;
   --bg-container: #212121;
   --bg-section: #282828;
   --bg-card: #333;
-  --bg-input: #333;
-  --bg-table: #444;
+  --bg-input: #2a2a2a;
+  --bg-table: #3a3a3a;
   --bg-table-header: #555;
 
   --text-main: #ddd;
@@ -21,398 +20,645 @@
   --text-title: #f0f0f0;
   --text-contrast: #fff;
 
-  --border-color: #666;
+  --border-color: #4a4a4a;
   --header-bg: linear-gradient(135deg,#444 0%,#333 100%);
-
+  --accent: #7f8c8d;
   --btn-bg: linear-gradient(135deg,#7f8c8d 0%,#5f6a6a 100%);
   --btn-text: #fff;
-
   --error-bg: #a60000;
   --error-text: #fff;
+  --shadow: 0 8px 24px rgba(0,0,0,.45);
+  --radius: 16px;
 }
-
 body.light-theme {
-  /* === Светлая тема === */
   --bg-main: linear-gradient(135deg,#f2f2f2 0%,#e8e8e8 100%);
   --bg-sidebar: #eaeaea;
   --bg-container: #fff;
   --bg-section: #f9f9f9;
-  --bg-card: #f5f5f5;
+  --bg-card: #f1f1f1;
   --bg-input: #fff;
   --bg-table: #f5f5f5;
   --bg-table-header: #ddd;
-
   --text-main: #222;
-  --text-secondary: #444;
+  --text-secondary: #555;
   --text-title: #111;
   --text-contrast: #000;
-
-  --border-color: #bbb;
+  --border-color: #ccc;
   --header-bg: linear-gradient(135deg,#ddd 0%,#bbb 100%);
-
   --btn-bg: linear-gradient(135deg,#bbb 0%,#999 100%);
   --btn-text: #222;
-
-  --error-bg: #ff5555;
-  --error-text: #fff;
+  --shadow: 0 8px 24px rgba(0,0,0,.12);
 }
 
-/* === Общий стиль === */
 * { margin:0; padding:0; box-sizing:border-box; }
-
+html { scroll-behavior:smooth; }
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: var(--bg-main);
+  font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+  background: var(--bg-main); background-attachment: fixed;
   min-height:100vh; padding:20px;
-  display:flex;
+  display:flex; gap:20px; align-items:flex-start;
   color: var(--text-main);
 }
 
-/* === Боковое меню === */
+/* ---------- Меню ---------- */
 .sidebar {
-  width:220px;
+  width:230px; flex-shrink:0;
   background: var(--bg-sidebar);
-  border-radius:10px;
-  box-shadow:0 0 15px rgba(0,0,0,0.5);
-  padding:15px;
-  margin-right:20px;
-  height:fit-content;
-  position:sticky;
-  top:20px;
+  border:1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding:16px; position:sticky; top:20px;
 }
 .sidebar h2 {
-  font-size:1.3em;
-  margin-bottom:10px;
-  color: var(--text-title);
-  text-align:center;
+  font-size:.85em; letter-spacing:.14em; text-transform:uppercase;
+  margin-bottom:12px; color: var(--text-secondary); text-align:center;
 }
 .sidebar ul { list-style:none; }
-.sidebar li { margin:8px 0; position:relative; }
+.sidebar li { margin:4px 0; }
 .sidebar a {
-  display:block;
-  padding:10px 12px;
-  text-decoration:none;
-  color: var(--text-main);
-  border-radius:8px;
-  transition:background .3s, color .3s;
+  display:block; padding:10px 12px; text-decoration:none;
+  color: var(--text-main); border-radius:10px;
+  transition: background .2s, color .2s, transform .2s;
 }
-.sidebar a:hover {
-  background: var(--bg-card);
-  color: var(--text-contrast);
-}
-/* выпадающий список */
-.dropdown > a::after {
-  content:"▼";
-  float:right;
-  font-size:0.8em;
-  transition:transform .3s;
-}
-.dropdown.open > a::after { transform:rotate(-180deg); }
-.dropdown ul { display:none; margin-left:10px; }
+.sidebar a:hover { background: var(--bg-card); color: var(--text-contrast); transform: translateX(2px); }
+.dropdown > a::after { content:"▾"; float:right; transition: transform .3s; }
+.dropdown.open > a::after { transform: rotate(-180deg); }
+.dropdown ul { display:none; margin:4px 0 4px 10px; padding-left:8px; border-left:2px solid var(--border-color); }
 .dropdown.open ul { display:block; }
-.dropdown ul a {
-  font-size:0.9em;
-  background: var(--bg-section);
-}
+.dropdown ul a { font-size:.92em; }
 
-/* === Контейнер контента === */
+/* ---------- Контейнер ---------- */
 .container {
-  flex:1;
-  max-width:1200px;
+  flex:1; min-width:0; max-width:1100px; margin:0 auto;
   background: var(--bg-container);
-  border-radius:15px; 
-  box-shadow:0 10px 30px rgba(0,0,0,0.7); 
-  overflow:hidden;
+  border:1px solid var(--border-color);
+  border-radius:20px; box-shadow: var(--shadow); overflow:hidden;
 }
 .header {
-  background: var(--header-bg);
-  color: var(--text-title);
-  padding:30px; text-align:center;
-  border-bottom:2px solid var(--border-color);
+  position:relative;
+  background: var(--header-bg); color: var(--text-title);
+  padding:32px 24px; text-align:center;
+  border-bottom:1px solid var(--border-color);
 }
-.header h1 { font-size:2.5em; margin-bottom:10px; }
-.header p { font-size:1.2em; opacity:0.9; }
-.input-section { padding:30px; background: var(--bg-section); position:relative; }
+.header h1 { font-size:2.1em; margin-bottom:8px; letter-spacing:-.01em; }
+.header p { opacity:.85; }
+
+#splash {
+  position:absolute; right:22px; bottom:16px;
+  width:calc(var(--w, 80) * var(--px, 3px));
+  height:calc(var(--h, 9) * var(--px, 3px));
+  image-rendering: pixelated; image-rendering: crisp-edges;
+  transform: rotate(-12deg);
+  animation: splash-pulse 1s ease-in-out infinite alternate;
+  pointer-events:none; user-select:none;
+}
+@keyframes splash-pulse {
+  from { transform: rotate(-12deg) scale(1); }
+  to   { transform: rotate(-12deg) scale(1.1); }
+}
+
+/* ---------- Ввод ---------- */
+.input-section { padding:28px; background: var(--bg-section); }
+
+.mode-title { text-align:center; font-size:.8em; text-transform:uppercase; letter-spacing:.12em; color: var(--text-secondary); margin-bottom:10px; }
+.modes { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:10px; }
+.mode-btn {
+  background: var(--bg-card); color: var(--text-main);
+  border:2px solid var(--border-color); border-radius:999px;
+  padding:8px 18px; font-size:.95em; cursor:pointer; font-weight:600;
+  transition: border-color .2s, background .2s, transform .2s;
+}
+.mode-btn:hover { border-color: var(--accent); transform: translateY(-1px); }
+.mode-btn.active { background: var(--btn-bg); color: var(--btn-text); border-color: transparent; }
+.mode-desc { text-align:center; color: var(--text-secondary); font-size:.9em; margin:0 auto 22px; max-width:640px; line-height:1.5; min-height:2.8em; }
+
 .input-grid {
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px;
-  margin-bottom:30px;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px;
+  margin-bottom:24px;
 }
 .input-group {
-  background: var(--bg-card);
-  padding:20px; border-radius:10px;
-  box-shadow:0 2px 10px rgba(0,0,0,0.5);
-}
-.input-group label {
-  display:block; font-weight:bold; margin-bottom:10px;
-  color: var(--text-secondary); font-size:1em;
-}
-.input-group input {
-  width:100%; padding:12px;
-  border:2px solid var(--border-color);
-  border-radius:8px; font-size:16px;
-  background: var(--bg-input);
-  color: var(--text-main);
-  transition:border-color .3s;
-}
-.input-group input:focus { outline:none; border-color:#7f8c8d; }
-.calculate-btn {
-  background: var(--btn-bg);
-  color: var(--btn-text);
-  border:none; padding:15px 30px;
-  font-size:18px; border-radius:8px;
-  cursor:pointer; transition:transform .2s;
-  display:block; margin:0 auto;
-}
-.calculate-btn:hover { transform:translateY(-2px); }
-.results { padding:30px; display:none; background: var(--bg-card); border-radius:10px; }
-
-/* === Красивое оформление блоков подходов === */
-.result-block {
-  background: var(--bg-card);
-  margin: 20px auto;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-  transition: transform .2s;
-  max-width: 600px;
-}
-
-.result-block:hover {
-  transform: translateY(-3px);
-}
-
-.result-block h3 {
-  text-align: center;
-  margin-bottom: 15px;
-  color: var(--text-title);
-  font-size: 1.4em;
-  border-bottom: 2px solid var(--border-color);
-  padding-bottom: 8px;
-}
-
-.result-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.result-table th,
-.result-table td {
-  padding: 12px;
-  text-align: center;
-  border-bottom: 1px solid var(--border-color);
-  font-size: 1em;
-}
-
-.result-table th {
-  background: var(--bg-table-header);
-  color: var(--text-contrast);
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.result-table tr:last-child td {
-  border-bottom: none;
-}
-
-.result-table tbody tr:hover {
-  background: var(--bg-section);
-  transition: background .3s;
-}
-
-.emoji { font-size:1.2em; margin-right:10px; }
-
-@media (max-width:768px) {
-  body { flex-direction:column; }
-  .sidebar { width:100%; margin-bottom:20px; position:static; }
-  .weight-tables { grid-template-columns:1fr; }
-  .header h1 { font-size:2em; }
-}
-
-#error-message {
-  opacity:0;
-  background-color: var(--error-bg);
-  color: var(--error-text);
-  padding:12px; margin-bottom:20px;
-  border-radius:5px; text-align:center;
-  max-width:600px; margin-left:auto; margin-right:auto;
-  transition: opacity .4s ease-in-out;
-  pointer-events:none; user-select:none;
-  box-shadow:0 0 15px rgba(180,0,0,0.9);
   position:relative;
+  background: var(--bg-card); padding:16px 18px; border-radius:14px;
+  border:1px solid var(--border-color); border-top:3px solid var(--c, var(--accent));
+  transition: transform .2s, box-shadow .2s;
 }
-#error-message.show { opacity:1; pointer-events:auto; user-select:auto; }
+.input-group:focus-within { transform: translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,.35); }
+.input-group label { display:block; font-weight:600; margin-bottom:10px; color: var(--text-secondary); font-size:.92em; padding-right:22px; }
+.input-wrap { position:relative; }
+.input-wrap input { padding-right:56px; }
+.input-wrap span {
+  position:absolute; right:14px; top:50%; transform:translateY(-50%);
+  color: var(--text-secondary); font-size:.82em; pointer-events:none;
+}
+.x-btn {
+  position:absolute; top:8px; right:8px; background:transparent; border:none;
+  color: var(--text-secondary); cursor:pointer; font-size:1em; line-height:1; padding:4px 6px; border-radius:6px;
+}
+.x-btn:hover { color:#fff; background:#a60000; }
 
-/* === Кнопка переключения темы === */
+input[type=number], input[type=text], select {
+  width:100%; padding:11px 12px;
+  border:2px solid var(--border-color); border-radius:10px; font-size:16px;
+  background: var(--bg-input); color: var(--text-main);
+  transition: border-color .2s, box-shadow .2s; font-family:inherit;
+}
+input:focus, select:focus { outline:none; border-color: var(--accent); box-shadow:0 0 0 3px rgba(127,140,141,.25); }
+
+.actions { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+button { font-family:inherit; }
+.calculate-btn {
+  background: var(--btn-bg); color: var(--btn-text);
+  border:none; padding:14px 34px; font-size:17px; font-weight:600;
+  border-radius:10px; cursor:pointer; transition: transform .2s, box-shadow .2s;
+}
+.calculate-btn:hover { transform:translateY(-2px); box-shadow:0 6px 14px rgba(0,0,0,.35); }
+.ghost-btn {
+  background: transparent; color: var(--text-main);
+  border:2px dashed var(--border-color); padding:12px 22px; font-size:16px;
+  border-radius:10px; cursor:pointer; transition: border-color .2s, color .2s, transform .2s;
+}
+.ghost-btn:hover { border-color: var(--accent); color: var(--text-contrast); transform:translateY(-2px); }
+
+/* ---------- Форма своего упражнения ---------- */
+#custom-form {
+  display:none; margin-bottom:24px; padding:20px;
+  background: var(--bg-card); border:1px solid var(--border-color);
+  border-radius:14px; box-shadow: var(--shadow);
+}
+#custom-form.open { display:block; animation: pop .25s ease; }
+#custom-form h3 { margin-bottom:12px; color: var(--text-title); }
+#custom-form label { display:block; margin:10px 0 6px; font-size:.9em; color: var(--text-secondary); }
+.form-row { display:grid; grid-template-columns: 1fr 110px 150px; gap:12px; }
+.form-actions { display:flex; gap:10px; margin-top:16px; }
+
+/* ---------- Результаты ---------- */
+.results { display:none; padding:28px; }
+.results.show { display:block; }
+.res-head { text-align:center; margin-bottom:20px; }
+.res-head h2 { font-size:1.2em; color: var(--text-title); }
+.res-head p { color: var(--text-secondary); font-size:.9em; margin-top:4px; }
+
+.result-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:20px; }
+.result-block {
+  background: var(--bg-table); border:1px solid var(--border-color);
+  border-radius:14px; overflow:hidden;
+  box-shadow:0 2px 10px rgba(0,0,0,.3); animation: pop .3s ease;
+}
+.rb-head {
+  padding:13px 18px; font-weight:700; letter-spacing:.02em;
+  display:flex; justify-content:space-between; align-items:center; gap:8px;
+  background: linear-gradient(135deg, var(--c), var(--c2));
+  color: var(--on, #fff);
+}
+.rb-head .badge { font-size:.75em; padding:2px 10px; border-radius:999px; background:rgba(0,0,0,.25); white-space:nowrap; }
+.rb-body { padding:14px; }
+.result-table { width:100%; border-collapse:collapse; }
+.result-table th, .result-table td { padding:9px 6px; text-align:center; border-bottom:1px solid var(--border-color); }
+.result-table th { background: var(--bg-table-header); color: var(--text-contrast); font-size:.78em; text-transform:uppercase; letter-spacing:.05em; }
+.result-table th:first-child { border-radius:8px 0 0 8px; }
+.result-table th:last-child { border-radius:0 8px 8px 0; }
+.result-table tbody tr:last-child td { border-bottom:none; }
+.result-table td:nth-child(2) { font-weight:700; color: var(--text-title); font-variant-numeric: tabular-nums; }
+.result-table tbody tr:hover { background: rgba(127,140,141,.15); }
+.sum { margin-top:10px; padding:8px 12px; border-radius:8px; background: var(--bg-card); font-size:.85em; color: var(--text-secondary); text-align:center; }
+.warn { margin-top:10px; padding:8px 12px; border-radius:8px; background: rgba(230,126,34,.15); border:1px solid #e67e22; font-size:.85em; line-height:1.4; }
+
+.tips { margin-top:26px; padding:18px 20px; border-radius:14px; background: var(--bg-card); border:1px solid var(--border-color); font-size:.88em; line-height:1.6; color: var(--text-secondary); }
+.tips h3 { color: var(--text-title); font-size:1em; margin-bottom:8px; }
+.tips ul { padding-left:18px; }
+.tips li { margin:3px 0; }
+
+/* ---------- Тост ---------- */
+#error-message {
+  position:fixed; top:20px; left:50%; transform:translate(-50%,-30px);
+  background: var(--error-bg); color: var(--error-text);
+  padding:12px 22px; border-radius:10px; text-align:center;
+  max-width:min(90vw,520px); opacity:0; pointer-events:none;
+  box-shadow:0 0 20px rgba(180,0,0,.6);
+  transition: opacity .3s, transform .3s; z-index:2000;
+}
+#error-message.show { opacity:1; transform:translate(-50%,0); }
+
+/* ---------- Тема ---------- */
 .theme-toggle {
-  position: fixed;
-  left: 20px; bottom: 20px;
-  background: #444;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 50px; height: 50px;
-  cursor: pointer;
-  font-size: 1.4em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 8px rgba(0,0,0,0.4);
-  transition: background .3s, transform .2s;
-  z-index: 1000;}
-body.light-theme .theme-toggle {
-  background: #ddd;
-  color: #222;
+  position:fixed; left:20px; bottom:20px;
+  background:#444; color:#fff; border:none; border-radius:50%;
+  width:50px; height:50px; cursor:pointer; font-size:1.4em;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 10px rgba(0,0,0,.4); transition: background .3s, transform .2s; z-index:1000;
 }
-.theme-toggle:hover { transform: translateY(-2px); }
-</style></head>
+body.light-theme .theme-toggle { background:#ddd; color:#222; }
+.theme-toggle:hover { transform: translateY(-2px) rotate(15deg); }
+
+@keyframes pop { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+@media (prefers-reduced-motion: reduce) { * { animation:none !important; transition:none !important; } }
+
+@media (max-width:820px) {
+  body { flex-direction:column; padding:12px; gap:14px; }
+  .sidebar { width:100%; position:static; }
+  .header h1 { font-size:1.6em; }
+  .header { padding-bottom:52px; }
+  #splash { --px:2px; right:14px; bottom:12px; }
+  .input-section, .results { padding:16px; }
+  .form-row { grid-template-columns:1fr 1fr; }
+  .form-row > :first-child { grid-column:1 / -1; }
+  .result-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
 <body>
-<!-- Боковое меню -->
-  <div class="sidebar">
-    <h2>Меню</h2>
-    <ul>
-      <li><a href='/'>🏠 Главная</a></li>
-      <li class="dropdown">
-        <a href="#">📂 Разделы</a>
-        <ul>
-          <li><a href='/gum'>Моё тело - железо</a></li>
-          <li><a href='/osanka'>Позвоночник - титан</a></li>
-          <li><a href='/motor'>Сердце - мотор</a></li>
-        </ul>
-      </li>
-      <li><a href='/about'>ℹ️ О проекте</a></li>
-    </ul>
-  </div>
-<div class="container">
-  <div class="header">
+
+<nav class="sidebar">
+  <h2>Меню</h2>
+  <ul>
+    <li><a href="/">🏠 Главная</a></li>
+    <li class="dropdown">
+      <a href="#">📂 Разделы</a>
+      <ul>
+        <li><a href="/gum">Моё тело — железо</a></li>
+        <li><a href="/osanka">Позвоночник — титан</a></li>
+        <li><a href="/motor">Сердце — мотор</a></li>
+      </ul>
+    </li>
+    <li><a href="/about">ℹ️ О проекте</a></li>
+  </ul>
+</nav>
+
+<main class="container">
+  <header class="header">
     <h1>🏋🏻 Калькулятор рабочих повторений</h1>
-    <p>Введите ваше максимальное количество повторений</p>
-  </div>
+    <p>Введите свой максимум в каждом упражнении — получите план подходов</p>
+    <canvas id="splash" role="img" aria-label="Сделано с любовью"></canvas>
+  </header>
 
-  <div class="input-section">
-    <div id="error-message">Ага, давай ещё воздух попинаем!</div>
+  <section class="input-section">
+    <div class="mode-title">Режим тренировки</div>
+    <div class="modes" id="modes"></div>
+    <p class="mode-desc" id="mode-desc"></p>
 
-    <div class="input-grid">
-      <div class="input-group">
-        <label for="pullups-reps">Подтягивания (макс. повторы):</label>
-        <input type="number" id="pullups-reps" min="1" placeholder="Например, 8" />
+    <div class="input-grid" id="input-grid"></div>
+
+    <div id="custom-form">
+      <h3>➕ Новое упражнение</h3>
+      <div class="form-row">
+        <div>
+          <label for="cf-name">Название</label>
+          <input type="text" id="cf-name" placeholder="Например: Австралийские отжимания" maxlength="40" autocomplete="off">
+        </div>
+        <div>
+          <label for="cf-emoji">Эмодзи</label>
+          <input type="text" id="cf-emoji" placeholder="🏹" maxlength="4" autocomplete="off">
+        </div>
+        <div>
+          <label for="cf-unit">Считаем в</label>
+          <select id="cf-unit"><option value="reps">повторениях</option><option value="sec">секундах</option></select>
+        </div>
       </div>
-      <div class="input-group">
-        <label for="dips-reps">Брусья (макс. повторы):</label>
-        <input type="number" id="dips-reps" min="1" placeholder="Например, 12" />
-      </div>
-      <div class="input-group">
-        <label for="pushups-reps">Отжимания (макс. повторы):</label>
-        <input type="number" id="pushups-reps" min="1" placeholder="Например, 20" />
+      <div class="form-actions">
+        <button class="calculate-btn" id="cf-add" type="button">Добавить</button>
+        <button class="ghost-btn" id="cf-cancel" type="button">Отмена</button>
       </div>
     </div>
 
-    <button class="calculate-btn" onclick="calculate()">Рассчитать</button>
-  </div>
+    <div class="actions">
+      <button class="calculate-btn" id="calc-btn" type="button">Рассчитать</button>
+      <button class="ghost-btn" id="open-form" type="button">➕ Своё упражнение</button>
+    </div>
+  </section>
 
-  <div class="results" id="results"></div>
-</div>
-<!-- Кнопка переключения темы -->
-<button class="theme-toggle" id="themeToggle">🌙</button>
+  <section class="results" id="results"></section>
+</main>
+
+<button class="theme-toggle" id="theme-toggle" type="button" aria-label="Сменить тему">🌙</button>
+<div id="error-message" role="alert"></div>
 
 <script>
-function calculate() {
-  const exercises = [
-    { name: "Подтягивания", repsInput: document.getElementById("pullups-reps").value.trim() },
-    { name: "Брусья", repsInput: document.getElementById("dips-reps").value.trim() },
-    { name: "Отжимания", repsInput: document.getElementById("pushups-reps").value.trim() }
+(function () {
+  'use strict';
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (t) => String(t).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+  /* ===================== Конфигурация ===================== */
+  // unit: reps — повторения, sec — секунды (планка, вис)
+  const EXERCISES = [
+    { id:'pullups',   name:'Подтягивания',                emoji:'🧗', unit:'reps', limit:100, ph:8,  a:'#2980b9', b:'#1d4f73' },
+    { id:'dips',      name:'Брусья',                      emoji:'🤸', unit:'reps', limit:150, ph:12, a:'#27ae60', b:'#1a6f3e' },
+    { id:'pushups',   name:'Отжимания',                   emoji:'💪', unit:'reps', limit:300, ph:20, a:'#c0392b', b:'#7f2a20' },
+    { id:'rows',      name:'Австралийские подтягивания',  emoji:'🚣', unit:'reps', limit:100, ph:15, a:'#16a085', b:'#0e6655' },
+    { id:'legraises', name:'Подъём ног в висе',           emoji:'🦿', unit:'reps', limit:80,  ph:10, a:'#e67e22', b:'#a04f10' },
+    { id:'squats',    name:'Приседания без веса',         emoji:'🦵', unit:'reps', limit:300, ph:30, a:'#8e44ad', b:'#5e3370' },
+    { id:'plank',     name:'Планка (макс. время)',        emoji:'🧱', unit:'sec',  limit:900, ph:60, a:'#fbc531', b:'#e1b12c', dark:true },
+    { id:'hang',      name:'Вис на перекладине (макс. время)', emoji:'🤲', unit:'sec', limit:600, ph:30, a:'#7f8c8d', b:'#566061' }
   ];
 
-  const errorDiv = document.getElementById("error-message");
-  const resultsDiv = document.getElementById("results");
+  // Доли от максимума на каждый подход. Один и тот же вход всегда даёт один и тот же план.
+  const MODES = {
+    volume:  { label:'Объём',    sets:[70,70,65,65,60], rest:'2 мин',
+      desc:'5 подходов по 60–70% максимума, запас 30–40% повторений. Для выносливости и набора массы.' },
+    heavy:   { label:'Тяжёлый',  sets:[85,80,80,75],    rest:'3 мин',
+      desc:'4 подхода по 75–85% максимума, запас 1–3 повтора. Для силы: отдых длиннее, техника строгая.' },
+    pyramid: { label:'Пирамида', sets:[50,60,70,80,70,60,50], rest:'90 сек',
+      desc:'Нагрузка растёт до 80% и снова снижается. Хороший вариант для разминки в работу и отработки техники.' },
+    gtg:     { label:'GtG',      sets:[50,50,50,50,50], rest:'30–60 мин',
+      desc:'«Смазка» (Grease the Groove): 5 лёгких подходов по ~50% максимума, распределённых по дню. До утомления не доводить.' }
+  };
 
-  let output = "";
-  let hasData = false;
+  const CUSTOM_KEY = 'repsCustom';
+  const INPUT_KEY = 'repsInputs';
+  const MODE_KEY = 'repsMode';
 
-  for (const ex of exercises) {
-    if (ex.repsInput === "") continue;
+  /* ===================== Хранилище ===================== */
+  function loadCustom() {
+    try {
+      const l = JSON.parse(load(CUSTOM_KEY) || '[]');
+      return Array.isArray(l) ? l.filter(x => x && x.id && x.name) : [];
+    } catch (e) { return []; }
+  }
+  function saveCustom(l) { store(CUSTOM_KEY, JSON.stringify(l)); }
+  function loadInputs() {
+    try { const o = JSON.parse(load(INPUT_KEY) || '{}'); return o && typeof o === 'object' ? o : {}; }
+    catch (e) { return {}; }
+  }
+  function saveInputs(o) { store(INPUT_KEY, JSON.stringify(o)); }
 
-    const reps = parseInt(ex.repsInput, 10);
-    if (isNaN(reps) || reps < 1) {
-      resultsDiv.style.display = "none";
-      errorDiv.classList.add("show");
-      setTimeout(() => errorDiv.classList.remove("show"), 2500);
+  function allExercises() {
+    const custom = loadCustom().map(c => ({
+      id:c.id, name:c.name, emoji:c.emoji || '🏋️', unit:c.unit === 'sec' ? 'sec' : 'reps',
+      limit: c.unit === 'sec' ? 3600 : 500, ph:'', a:'#2980b9', b:'#2c3e50', custom:true
+    }));
+    return EXERCISES.concat(custom);
+  }
+
+  let mode = MODES[load(MODE_KEY)] ? load(MODE_KEY) : 'volume';
+
+  /* ===================== Тема ===================== */
+  function applyTheme(light) {
+    document.body.classList.toggle('light-theme', light);
+    $('theme-toggle').textContent = light ? '☀️' : '🌙';
+  }
+  $('theme-toggle').addEventListener('click', () => {
+    const light = !document.body.classList.contains('light-theme');
+    applyTheme(light);
+    store('theme', light ? 'light' : 'dark');
+  });
+  window.addEventListener('storage', e => { if (e.key === 'theme') applyTheme(e.newValue === 'light'); });
+
+  /* ===================== Ошибки ===================== */
+  let errTimer = null;
+  function showError(msg) {
+    const el = $('error-message');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(errTimer);
+    errTimer = setTimeout(() => el.classList.remove('show'), 2500);
+  }
+
+  /* ===================== Интерфейс ввода ===================== */
+  function buildModes() {
+    $('modes').innerHTML = Object.keys(MODES).map(k =>
+      `<button type="button" class="mode-btn${k === mode ? ' active' : ''}" data-mode="${k}">${MODES[k].label}</button>`).join('');
+    $('mode-desc').textContent = MODES[mode].desc;
+  }
+
+  function buildInputs() {
+    const saved = loadInputs();
+    $('input-grid').innerHTML = allExercises().map(ex => {
+      const lim = ex.limit;
+      const val = saved[ex.id] !== undefined ? esc(saved[ex.id]) : '';
+      return `
+      <div class="input-group" style="--c:${ex.a}">
+        ${ex.custom ? `<button class="x-btn" type="button" data-remove="${esc(ex.id)}" title="Удалить упражнение">✕</button>` : ''}
+        <label for="in-${esc(ex.id)}">${esc(ex.emoji)} ${esc(ex.name)}</label>
+        <div class="input-wrap">
+          <input type="number" id="in-${esc(ex.id)}" data-id="${esc(ex.id)}" min="1" max="${lim}" step="1"
+                 inputmode="numeric" placeholder="${ex.ph ? 'Например, ' + ex.ph : '0'}" value="${val}">
+          <span>${ex.unit === 'sec' ? 'сек' : 'повт.'}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function collectInputs() {
+    const o = {};
+    document.querySelectorAll('#input-grid input[data-id]').forEach(i => { o[i.dataset.id] = i.value; });
+    return o;
+  }
+
+  /* ===================== Расчёт ===================== */
+  // Подход = доля от максимума. Для времени округляем до 5 с, для повторений — до целого.
+  function setValue(max, pct, unit) {
+    const raw = max * pct / 100;
+    return unit === 'sec' ? Math.max(5, Math.round(raw / 5) * 5) : Math.max(1, Math.round(raw));
+  }
+  function fmtTime(s) {
+    if (s < 60) return s + ' с';
+    const m = Math.floor(s / 60), r = s % 60;
+    return r ? `${m} мин ${r} с` : `${m} мин`;
+  }
+  const fmtVal = (v, unit) => unit === 'sec' ? fmtTime(v) : String(v);
+
+  function blockHtml(ex, max) {
+    const m = MODES[mode];
+    let total = 0, rows = '';
+    m.sets.forEach((p, i) => {
+      const v = Math.min(setValue(max, p, ex.unit), max);
+      total += v;
+      const real = Math.round(v / max * 100);
+      const reserve = max - v;
+      rows += `<tr><td>${i + 1}</td><td>${fmtVal(v, ex.unit)}</td><td>${real}%</td><td>${ex.unit === 'sec' ? fmtTime(reserve) : reserve}</td></tr>`;
+    });
+
+    const style = `--c:${ex.a};--c2:${ex.b};` + (ex.dark ? '--on:#333;' : '');
+    const warn = (ex.unit === 'reps' && max <= 3)
+      ? `<div class="warn">⚠️ При максимуме ${max} процентное деление теряет смысл. Берите облегчённые варианты (негативные повторения, резинка, наклонные отжимания) и работайте подходами по 1–2 повтора.</div>` : '';
+
+    return `
+    <article class="result-block" style="${style}">
+      <div class="rb-head">
+        <span>${esc(ex.emoji)} ${esc(ex.name.toUpperCase())}</span>
+        <span class="badge">макс ${fmtVal(max, ex.unit)}</span>
+      </div>
+      <div class="rb-body">
+        <table class="result-table">
+          <thead><tr><th>Подход</th><th>${ex.unit === 'sec' ? 'Время' : 'Повторы'}</th><th>% макс.</th><th>Запас</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+        <div class="sum">Отдых: <b>${m.rest}</b> · Всего: <b>${ex.unit === 'sec' ? fmtTime(total) : total + ' повт.'}</b></div>
+        ${warn}
+      </div>
+    </article>`;
+  }
+
+  function calculate(scroll, silent) {
+    const exs = allExercises();
+    const blocks = [];
+    for (const ex of exs) {
+      const inp = document.querySelector(`#input-grid input[data-id="${CSS.escape(ex.id)}"]`);
+      const raw = inp ? inp.value.trim().replace(',', '.') : '';
+      if (raw === '') continue;
+      const v = parseFloat(raw);
+      if (isNaN(v) || v < 1) { if (!silent) showError('Ага, давай ещё воздух попинаем!'); return; }
+      if (v > ex.limit) { if (!silent) showError(`«${ex.name}»: больше ${ex.limit}? Рекордсмен, не иначе. Проверь число.`); return; }
+      blocks.push(blockHtml(ex, Math.round(v)));
+    }
+    const res = $('results');
+    if (!blocks.length) {
+      if (!silent) showError('Введи хоть одно, чего жмотишься?');
+      res.classList.remove('show'); res.innerHTML = '';
       return;
     }
-
-    hasData = true;
-
-    const maxWorkReps = Math.round(reps * 0.8);
-    const sets = Math.floor(Math.random() * 2) + 5;
-    let currentReps = maxWorkReps;
-    let rows = "";
-
-    for (let i = 1; i <= sets; i++) {
-      if (currentReps < 1) currentReps = 1;
-      const percent1RM = Math.round((currentReps / reps) * 100);
-      rows += `<tr><td>${currentReps}</td><td>${percent1RM}%</td></tr>`;
-      currentReps -= Math.floor(Math.random() * 2) + 1;
-    }
-
-    output += `<div class="result-block">
-      <h3>${ex.name}</h3>
-      <table class="result-table">
-        <thead><tr><th>Повторения</th><th>% от 1ПМ</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-    </div>`;
+    saveInputs(collectInputs());
+    res.innerHTML = `
+      <div class="res-head"><h2>План: режим «${MODES[mode].label}»</h2>
+        <p>Столбец «Запас» — сколько повторений остаётся до отказа в свежем состоянии.</p></div>
+      <div class="result-grid">${blocks.join('')}</div>
+      <div class="tips">
+        <h3>Как использовать</h3>
+        <ul>
+          <li>Максимум — это чистые повторения со строгой техникой, не до разрыва формы. Перетестируйте его раз в 2–4 недели.</li>
+          <li>К концу серии усталость накапливается: последние подходы будут ощущаться тяжелее, чем показывает запас.</li>
+          <li>Если вы легко делаете все подходы и максимум превышает 12–15 повторений, усложните упражнение (доп. вес, пауза, узкий хват) и пересчитайте максимум.</li>
+          <li>Время (планка, вис) округляется до 5 секунд.</li>
+        </ul>
+      </div>`;
+    res.classList.add('show');
+    if (scroll) res.scrollIntoView({ behavior:'smooth', block:'start' });
   }
 
-  if (!hasData) {
-    resultsDiv.innerHTML = "<p style='text-align:center; color:#f55;'>Введи хоть одно, чего жмотишься?</p>";
-  } else {
-    resultsDiv.innerHTML = output;
+  /* ===================== Свои упражнения ===================== */
+  function openForm() { $('custom-form').classList.add('open'); $('cf-name').focus(); }
+  function closeForm() {
+    $('custom-form').classList.remove('open');
+    $('cf-name').value = ''; $('cf-emoji').value = ''; $('cf-unit').value = 'reps';
   }
-  resultsDiv.style.display = "block";
-  resultsDiv.scrollIntoView({behavior: "smooth"});
-}
-document.querySelectorAll(".dropdown > a").forEach(el=>{
-  el.addEventListener("click",e=>{
-    e.preventDefault();
-    el.parentElement.classList.toggle("open");
+  function uniqueId(name) {
+    const taken = new Set(allExercises().map(e => e.id));
+    const base = 'c_' + (name.toLowerCase().replace(/[^a-z0-9а-яё]+/gi, '_').replace(/^_+|_+$/g, '') || 'exercise');
+    let id = base, i = 1;
+    while (taken.has(id)) id = base + '_' + (i++);
+    return id;
+  }
+  function addCustom() {
+    const name = $('cf-name').value.trim();
+    if (!name) { showError('Назови упражнение — хоть как-нибудь!'); return; }
+    saveInputs(collectInputs());
+    const list = loadCustom();
+    list.push({ id: uniqueId(name), name, emoji: $('cf-emoji').value.trim() || '🏋️', unit: $('cf-unit').value });
+    saveCustom(list);
+    closeForm();
+    buildInputs();
+    const last = $('input-grid').lastElementChild;
+    if (last) { last.scrollIntoView({ behavior:'smooth', block:'center' }); last.querySelector('input').focus(); }
+  }
+  function removeCustom(id) {
+    if (!confirm('Удалить упражнение?')) return;
+    saveInputs(collectInputs());
+    saveCustom(loadCustom().filter(x => x.id !== id));
+    const o = loadInputs(); delete o[id]; saveInputs(o);
+    buildInputs();
+    calculate(false, true);
+  }
+
+  /* ===================== Инициализация ===================== */
+  document.addEventListener('DOMContentLoaded', () => {
+    applyTheme(load('theme') === 'light');
+    buildModes();
+    buildInputs();
+    calculate(false, true);     // тихо показать сохранённый расчёт
+
+    $('modes').addEventListener('click', e => {
+      const b = e.target.closest('[data-mode]');
+      if (!b) return;
+      mode = b.dataset.mode;
+      store(MODE_KEY, mode);
+      buildModes();
+      if ($('results').classList.contains('show')) calculate(false, true);
+    });
+
+    $('input-grid').addEventListener('input', () => saveInputs(collectInputs()));
+    $('input-grid').addEventListener('keydown', e => { if (e.key === 'Enter') calculate(true, false); });
+    $('input-grid').addEventListener('click', e => {
+      const b = e.target.closest('[data-remove]');
+      if (b) removeCustom(b.dataset.remove);
+    });
+
+    $('calc-btn').addEventListener('click', () => calculate(true, false));
+    $('open-form').addEventListener('click', openForm);
+    $('cf-cancel').addEventListener('click', closeForm);
+    $('cf-add').addEventListener('click', addCustom);
+    $('custom-form').addEventListener('keydown', e => {
+      if (e.key === 'Enter') addCustom();
+      if (e.key === 'Escape') closeForm();
+    });
+
+    document.querySelectorAll('.dropdown > a').forEach(a => {
+      a.addEventListener('click', e => { e.preventDefault(); a.parentElement.classList.toggle('open'); });
+    });
   });
-});
+})();
+</script>
 
-// === Переключение темы ===
-const btn = document.getElementById('themeToggle');
-const currentTheme = localStorage.getItem('theme');
+<script>
+/* Пиксельная надпись в стиле сплэшей Minecraft (шрифт 5x8, офлайн) */
+(function () {
+  'use strict';
+  const G = {
+    'С': ['.XXX.','X...X','X....','X....','X....','X...X','.XXX.'],
+    'д': [null,null,'..XXX','..X.X','.X..X','.X..X','XXXXX','X...X'],
+    'е': [null,null,'.XXX.','X...X','XXXXX','X....','.XXX.'],
+    'л': [null,null,'..XXX','.X..X','.X..X','X...X','X...X'],
+    'а': [null,null,'.XXX.','....X','.XXXX','X...X','.XXXX'],
+    'н': [null,null,'X...X','X...X','XXXXX','X...X','X...X'],
+    'о': [null,null,'.XXX.','X...X','X...X','X...X','.XXX.'],
+    'с': [null,null,'.XXXX','X....','X....','X....','.XXXX'],
+    'ю': [null,null,'X..XX.','X.X..X','XXX..X','X.X..X','X..XX.'],
+    'б': ['..XXX','.X...','XXXX.','X...X','X...X','X...X','.XXX.'],
+    'в': [null,null,'XXXX.','X...X','XXXX.','X...X','XXXX.'],
+    'ь': [null,null,'X....','X....','XXXX.','X...X','XXXX.'],
+    '♥': [null,'.XX.XX.','XXXXXXX','XXXXXXX','.XXXXX.','..XXX..','...X...']
+  };
+  const TEXT = 'Сделано с любовью ♥';
+  const ROWS = 8;
 
-if (currentTheme === 'light') {
-  document.body.classList.add('light-theme');
-  btn.textContent = '☀️';
-}
-
-btn.addEventListener('click', () => {
-  document.body.classList.toggle('light-theme');
-  let theme = 'dark';
-  if (document.body.classList.contains('light-theme')) {
-    theme = 'light';
-    btn.textContent = '☀️';
-  } else {
-    btn.textContent = '🌙';
-  }
-  localStorage.setItem('theme', theme);
-});
-
-window.addEventListener('storage', (e) => {
-  if (e.key === 'theme') {
-    if (e.newValue === 'light') {
-      document.body.classList.add('light-theme');
-      btn.textContent = '☀️';
-    } else {
-      document.body.classList.remove('light-theme');
-      btn.textContent = '🌙';
+  function build() {
+    const cells = []; let x = 1;
+    for (const ch of TEXT) {
+      if (ch === ' ') { x += 3; continue; }
+      const g = G[ch]; if (!g) continue;
+      const w = Math.max(...g.map(r => r ? r.length : 0));
+      g.forEach((row, y) => {
+        if (!row) return;
+        for (let i = 0; i < row.length; i++) if (row[i] === 'X') cells.push({ x: x + i, y, heart: ch === '♥' });
+      });
+      x += w + 1;
     }
+    return { cells, width: x };
   }
-});
+
+  function draw() {
+    const c = document.getElementById('splash'); if (!c) return;
+    const light = document.body.classList.contains('light-theme');
+    const main = light ? '#f0b400' : '#ffff55';
+    const shadow = light ? '#4a3800' : '#3f3f15';
+    const { cells, width } = build();
+    const W = width + 1, H = ROWS + 1;
+    c.width = W; c.height = H;
+    c.style.setProperty('--w', W); c.style.setProperty('--h', H);
+    const ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = shadow;
+    cells.forEach(p => ctx.fillRect(p.x + 1, p.y + 1, 1, 1));
+    cells.forEach(p => { ctx.fillStyle = p.heart ? '#ff3b3b' : main; ctx.fillRect(p.x, p.y, 1, 1); });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    draw();
+    new MutationObserver(draw).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  });
+})();
 </script>
 </body>
 </html>
-
-
-
